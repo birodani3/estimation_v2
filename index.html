@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Estimation</title>
+        <script src="dist/bundle.js"></script>
+    </head>
+    <body ng-controller="MainController as vm">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <span class="navbar-brand">Estimation</span>
+                </div>
+                <p class="navbar-text navbar-right" ng-show="vm.hasChannel()">{{ vm.getUserName() }} at channel {{ vm.getChannelName() }}</p>
+                <div class="btn btn-default navbar-right" ng-click="vm.leaveChannel()" ng-show="vm.hasChannel()">Leave channel</div>
+            </div>
+        </nav>
+
+        <div id="main-view" ng-view></div>
+    </body>
+</html>

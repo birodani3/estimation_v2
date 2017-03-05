@@ -1,0 +1,12 @@
+<div class="loginmodal-container">
+    <div class="btn btn-default btn-left" ng-click="vm.back()">
+        <i class="fa fa-arrow-left"></i>&nbsp;Back
+    </div>
+    <h1 class="title">Join channel</h1>
+    <div class="input-group">
+        <span class="input-group-addon" id="username-addon">Username</span>
+        <input type="text" class="form-control" ng-model="vm.username" aria-describedby="username-addon">
+    </div>
+    <div class="btn btn-primary btn-wide" ng-repeat="channel in vm.channels" ng-click="vm.joinChannel(vm.username, channel.name)">{{channel.name}}</div>
+    <div class="text-center channel-message" ng-show="!vm.channels.length">No channels available</div>
+</div>
