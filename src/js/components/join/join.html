@@ -1,12 +1,17 @@
 <div class="loginmodal-container">
-    <div class="btn btn-default btn-left" ng-click="vm.back()">
+    <md-button class="btn-left" ng-click="vm.back()">
         <i class="fa fa-arrow-left"></i>&nbsp;Back
-    </div>
+    </md-button>
     <h1 class="title">Join channel</h1>
-    <div class="input-group">
-        <span class="input-group-addon" id="username-addon">Username</span>
-        <input type="text" class="form-control" ng-model="vm.username" aria-describedby="username-addon">
-    </div>
-    <div class="btn btn-primary btn-wide" ng-repeat="channel in vm.channels" ng-click="vm.joinChannel(vm.username, channel.name)">{{channel.name}}</div>
+    <form name="userform">
+        <md-input-container class="md-block">
+            <label>Username</label>
+            <input required name="username" ng-model="vm.username">
+            <div ng-messages="userform.username.$error" role="alert">
+                <ng-message when="required">This is required.</ng-message>
+            </div>
+        </md-input-container>
+    </form>
+    <md-button class="md-primary md-raised btn-wide" ng-repeat="channel in vm.channels" ng-click="vm.joinChannel(vm.username, channel.name)">{{channel.name}}</md-button>
     <div class="text-center channel-message" ng-show="!vm.channels.length">No channels available</div>
 </div>

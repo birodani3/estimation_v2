@@ -1,4 +1,5 @@
-import io from 'socket.io-client';
+import io from "socket.io-client";
+import _ from "lodash";
 
 /*@ngInject*/
 export default class SocketService {
@@ -11,20 +12,24 @@ export default class SocketService {
         });
     }
 
-    on(event, callback) {
-        this.socket.on(event, (...args) => {
-            this.$rootScope.$apply(() => callback.apply(this.socket, args));
+    on(event, scope, callback) {
+        let listener = (...args) => this.$rootScope.$evalAsync(() => callback.apply(this.socket, args));
+        this.socket.on(event, listener);
+
+        scope.$on("$destroy", () => {
+            this.off(event, listener);
         });
     }
 
-    off(event, callback) {
-        this.socket.removeListener(event, callback);
+    off(event, listener) {
+        this.socket.removeListener(event, listener);
+        listener = undefined;
     }
 
-    emit(event, data, callback) {
+    emit(event, data, callback = _.noop) {
         this.socket.emit(event, data, (...args) => {
-            this.$rootScope.$apply(() => {
-                callback && callback.apply(this.socket, args);
+            this.$rootScope.$evalAsync(() => {
+                callback.apply(this.socket, args);
             });
         });
     }

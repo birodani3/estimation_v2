@@ -10,6 +10,7 @@ const config = {
     path: __dirname + '/dist',
     filename: 'bundle.js',
     publicPath: "/assets/",
+    devtoolLineToLine: true
   },
   resolve: {
       alias: {
@@ -50,11 +51,8 @@ const config = {
       }
     ]
   },
-  devServer: {
-    contentBase: __dirname + '/dist',
-  },
 
-  devtool: "eval-source-map" 
+  devtool: "source-map" 
 };
 
 if (process.env.NODE_ENV === "production") {

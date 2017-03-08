@@ -1,12 +1,22 @@
+const resultsPath = "/results/:channel"
+
 /*@ngInject*/
 export default class MainController {
-    constructor($rootScope, $location) {
+    constructor($rootScope, $location, socket) {
         this.$rootScope = $rootScope;
         this.$location = $location;
+        this.socket = socket;
+
+        $rootScope.$on("$routeChangeSuccess", (event, current, prev = {}) => {
+            if (this.hasChannel() && prev.originalPath === resultsPath) {
+                this.$rootScope.channel = null;
+                socket.emit("DELETE_CHANNEL");
+            }
+        });
     }
 
     getUserName() {
-        return this.$rootScope.user;
+        return this.$rootScope.username;
     }
 
     getChannelName() {
@@ -18,7 +28,6 @@ export default class MainController {
     }
 
     leaveChannel() {
-        this.$rootScope.channel = null;
         this.$location.path("/");
     }
 }

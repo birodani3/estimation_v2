@@ -1,0 +1,387 @@
+.title {
+  font-size: 52px;
+}
+hr {
+  border-color: #b9b9b9;
+}
+.btn-wide {
+  font-size: 40px;
+  margin: 4px 0;
+  width: 100%;
+  height: 65px;
+}
+.disabled {
+  cursor: not-allowed;
+}
+.spinner {
+  animation: rotator 1.4s linear infinite;
+}
+.path {
+  stroke-dasharray: 187;
+  stroke-dashoffset: 0;
+  stroke: blue;
+  transform-origin: center;
+  animation: dash 1.4s ease-in-out infinite;
+}
+@keyframes dash {
+  0% {
+    stroke-dashoffset: 187;
+  }
+  50% {
+    stroke-dashoffset: 46.75;
+    transform: rotate(135deg);
+  }
+  100% {
+    stroke-dashoffset: 187;
+    transform: rotate(450deg);
+  }
+}
+@keyframes blink {
+  0% {
+    opacity: .2;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: .2;
+  }
+}
+@keyframes rotator {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(270deg);
+  }
+}
+.dots {
+  margin: 50px 0;
+}
+.dots span {
+  animation-duration: 1.4s;
+  animation-fill-mode: both;
+  animation-iteration-count: infinite;
+  animation-name: blink;
+}
+.dots span:nth-child(2) {
+  animation-delay: .2s;
+}
+.dots span:nth-child(3) {
+  animation-delay: .4s;
+}
+html,
+body {
+  background-color: #f2f2f2;
+  height: 100%;
+  margin: 0;
+  width: 100%;
+}
+header {
+  background: #111111;
+}
+div[ng-view] {
+  background-color: #f2f2f2;
+  height: calc(100% - 72px);
+}
+label {
+  font-weight: normal;
+  user-select: none;
+}
+form {
+  margin-bottom: 0;
+}
+nav.navbar {
+  margin: 0;
+}
+nav.navbar .navbar-header {
+  display: inline-block;
+  float: left;
+}
+nav.navbar p {
+  display: inline-block;
+}
+nav.navbar .navbar-right {
+  float: right;
+}
+nav.navbar .navbar-text {
+  margin: 15px;
+}
+nav.navbar .container-fluid .btn {
+  margin: 8px 0;
+}
+.login-container {
+  width: 100%;
+}
+.loginmodal-container {
+  background-color: #F7F7F7;
+  border-radius: 2px;
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.3);
+  left: 50%;
+  margin: 0 auto;
+  max-width: 500px;
+  overflow: hidden;
+  padding: 30px;
+  position: absolute;
+  top: 120px;
+  transform: translateX(-50%);
+  width: 100% !important;
+}
+.loginmodal-container h1 {
+  text-align: center;
+  margin-top: 40px;
+}
+.loginmodal-container input[type=submit] {
+  display: block;
+  margin-bottom: 10px;
+  position: relative;
+  width: 100%;
+}
+.loginmodal-container .input-group {
+  margin-bottom: 10px;
+}
+.loginmodal-container input[type=text] {
+  -moz-box-sizing: border-box;
+  -webkit-appearance: none;
+  background: #ffffff;
+  border-top: 1px solid #c0c0c0;
+  border: 1px solid #d9d9d9;
+  box-sizing: border-box;
+  font-size: 16px;
+  height: 44px;
+  padding: 0 8px;
+  width: 100%;
+}
+.loginmodal-container input[type=text]:hover {
+  -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  border-top: 1px solid #a0a0a0;
+  border: 1px solid #b9b9b9;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+.loginmodal-container .channel-message {
+  padding-top: 15px;
+  font-size: 26px;
+}
+.loginmodal-container .btn-left {
+  left: 0;
+  margin-left: 30px;
+  position: absolute;
+}
+.loginmodal-container .btn-right {
+  font-size: 16px;
+  margin-right: 30px;
+  position: absolute;
+  right: 0;
+}
+.loginmodal-container .color-input {
+  display: inline-block;
+  height: 20px;
+  padding: 0;
+  width: 40px;
+}
+.loginmodal-container .form-group label {
+  padding-left: 26px;
+}
+.loginmodal-container .radio + .radio {
+  margin-top: 0px;
+}
+.loginmodal-container .values-container .values-label {
+  float: left;
+}
+.loginmodal-container .values-container .checkbox-container {
+  float: left;
+}
+.loginmodal-container .values-container .checkbox-container .checkbox {
+  display: inline-block;
+}
+.loginmodal-container .values-container label {
+  width: 52px;
+}
+.loginmodal-container .button-container div {
+  width: 210px;
+}
+.loginmodal-container .button-container div:nth-child(1) {
+  float: left;
+}
+.loginmodal-container .button-container div:nth-child(2) {
+  float: right;
+}
+input[type=password] {
+  -moz-box-sizing: border-box;
+  -webkit-appearance: none;
+  background: #ffffff;
+  border-top: 1px solid #c0c0c0;
+  border: 1px solid #d9d9d9;
+  box-sizing: border-box;
+  font-size: 16px;
+  height: 44px;
+  padding: 0 8px;
+  width: 100%;
+}
+input[type=password]:hover {
+  -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  border-top: 1px solid #a0a0a0;
+  border: 1px solid #b9b9b9;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+.loginmodal {
+  font-family: 'Arial', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  height: 36px;
+  padding: 0 8px;
+  text-align: center;
+}
+.loginmodal-submit {
+  background-color: #4d90fe;
+  border: 0px;
+  color: #ffffff;
+  font-family: roboto;
+  font-size: 14px;
+  padding: 17px 0px;
+  text-shadow: 0 1px rgba(0, 0, 0, 0.1);
+}
+.loginmodal-submit:hover {
+  background-color: #357ae8;
+  border: 0px;
+  text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+}
+.checkbox + .checkbox {
+  margin-top: 0px;
+}
+.result-buttons {
+  font-size: 38px;
+  height: 45px;
+  padding: 10px;
+  width: 100%;
+}
+.result-buttons > div {
+  margin-right: 5px;
+  float: left;
+}
+.result-container {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+.result-container.flip .card-container .front {
+  transform: rotateY(180deg);
+}
+.result-container.flip .card-container .back {
+  transform: rotateY(0deg);
+}
+.result-container .card-container {
+  height: 300px;
+  margin: 10px;
+  width: 200px;
+  float: left;
+  position: relative;
+}
+.result-container .card-container.selected-card .front,
+.result-container .card-container.selected-card .back {
+  box-shadow: 0 4px 8px 0 #ff0000;
+}
+.result-container .front,
+.result-container .back {
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  backface-visibility: hidden;
+  transition: 0s;
+  transform-style: preserve-3d;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.result-container .front:hover,
+.result-container .back:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+.result-container .front .card-value,
+.result-container .back .card-value {
+  color: #f2f2f2;
+  border-radius: 5px 5px 0 0;
+  display: table;
+  font-size: 72px;
+  font-weight: bold;
+  height: 80%;
+  text-align: center;
+  width: 100%;
+}
+.result-container .front .card-value > span,
+.result-container .back .card-value > span {
+  display: table-cell;
+  vertical-align: middle;
+}
+.result-container .front .user-name,
+.result-container .back .user-name {
+  font-weight: bold;
+  height: 20%;
+  padding: 10% 0;
+  text-align: center;
+}
+.result-container .front {
+  z-index: 2;
+  transform: rotateY(0deg);
+}
+.result-container .back {
+  transform: rotateY(-180deg);
+}
+.result-container .back span {
+  font-size: 126px;
+}
+.card-pick-container {
+  padding: 6px;
+  text-align: center;
+  user-select: none;
+}
+.card-pick-container .card {
+  background-color: #f2f2f2;
+  border-radius: 5px;
+  color: #f2f2f2;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 120px;
+  height: 192px;
+  line-height: 176px;
+  margin: 10px;
+  text-align: center;
+  width: 176px;
+}
+.card-pick-container .selected-card-container {
+  display: inline-block;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  width: 176px;
+}
+.card-pick-container .selected-card-container .card-picked {
+  margin-bottom: 0;
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 10px;
+}
+.card-pick-container .spinner-container {
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate3d(-50%, -50%, 0);
+}
+.card-pick-container .spinner-container i {
+  font-size: 150px;
+}
+md-toast.md-error-theme div.md-toast-content {
+  color: #a94442 !important;
+  background-color: #f2dede !important;
+}
+md-toast.md-warning-theme div.md-toast-content {
+  color: #8a6d3b !important;
+  background-color: #fcf8e3 !important;
+}
+md-toast.md-success-theme div.md-toast-content {
+  color: #3c763d !important;
+  background-color: #dff0d8 !important;
+}

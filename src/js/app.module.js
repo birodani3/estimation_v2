@@ -2,23 +2,26 @@ import angular from "angular";
 import ngRoute from "angular-route";
 import ngCookies from "angular-cookies";
 import ngAnimate from "angular-animate";
-import toastr from "angular-toastr";
+import ngAria from "angular-aria";
+import ngMaterial from "angular-material";
+import ngMessages from "angular-messages";
 import config from "./app.config.js";
 import SocketService from "./services/socket.service.js";
+import ToastService from "./services/toast.service.js";
 import {
     MainController,
     HomeController,
     CreateController,
     JoinController,
     ResultsController,
-    EstimateController
+    PlayController
 } from "./components/controllers.js";
 
 // Import styles
 import "bootstrap/dist/css/bootstrap.css";
 import "../style/font-awesome.min.css"
-import "../style/toastr.min.css"
-import "../style/app.less";
+import "../style/angular-material.min.css"
+import "../style/app.css";
 
 const moduleName = "estimation";
 const settings = { strictDi: true };
@@ -26,7 +29,9 @@ const dependencies = [
     ngRoute,
     ngCookies,
     ngAnimate,
-    toastr
+    ngMessages,
+    ngAria,
+    ngMaterial
 ];
 
 /*
@@ -38,12 +43,13 @@ angular
     .module(moduleName, dependencies)
     .config(config)
     .service("socket", SocketService)
+    .service("toast", ToastService)
     .controller("MainController", MainController)
     .controller("HomeController", HomeController)
     .controller("CreateController", CreateController)
     .controller("JoinController", JoinController)
     .controller("ResultsController", ResultsController)
-    .controller("EstimateController", EstimateController);
+    .controller("PlayController", PlayController);
 
 angular.element(() => {
     angular.bootstrap(document, [moduleName], settings);

@@ -1,0 +1,22 @@
+<md-sidenav
+    class="md-sidenav-left"
+    md-component-id="left"
+    md-is-locked-open="true"
+    md-whiteframe="4">
+
+    <md-toolbar class="md-theme-indigo">
+        <h1 class="md-toolbar-tools">Tickets</h1>
+    </md-toolbar>
+    <md-content layout-padding>
+        <md-content>
+            <md-list flex>
+                <md-list-item class="md-3-line" ng-repeat="ticket in vm.tickets track by $index" ng-click="null">
+                    <div class="md-list-item-text" layout="column">
+                        <h3>{{ ticket.name }}</h3>
+                        <p>{{ ticket.description }}</p>
+                    </div>
+                </md-list-item>
+            </md-list>
+        </md-content>
+    </md-content>
+</md-sidenav>

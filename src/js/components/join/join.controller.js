@@ -1,36 +1,33 @@
 /*@ngInject*/
 export default class JoinController {
-    constructor($scope, $location, $cookies, toastr, socket) {
+    constructor($scope, $rootScope, $location, $cookies, socket, toast) {
         this.$scope = $scope
+        this.$rootScope = $rootScope;
         this.$location = $location;
-        this.$cookies = $cookies;
-        this.toastr = toastr;
         this.socket = socket;
+        this.toast = toast;
+        
         this.channels = [];
         this.username = $cookies.get("username") || "";
 
-        socket.emit("GET_CHANNELS", null, this.onChannelListChanged.bind(this));
-        socket.on("CHANNEL_LIST", this.onChannelListChanged.bind(this));
+        this.initSocket();
+    }
 
-        $scope.$on("$destroy", () => {
-            socket.off("CHANNEL_LIST", this.onChannelListChanged.bind(this));
-        });
+    initSocket() {
+        this.socket.emit("GET_CHANNELS", null, this.onChannelListChanged.bind(this));
+        this.socket.on("CHANNEL_LIST", this.$scope, this.onChannelListChanged.bind(this));
     }
 
     joinChannel(username, channel) {
         username = username.trim();
 
         if (!username) {
-            this.toastr.warning("Username can not be empty!", "Warning");
+            this.toast.warning("Username can not be empty!");
             return;
         }
 
-        this.socket.emit("JOIN_CHANNEL", channel, (data) => {
-            console.log("join channel, data: ", data);
-            if (!data.error) {
-                this.$location.path("/estimate");
-            }
-        });
+        this.$rootScope.username = username;
+        this.$location.path(`/play/${channel}`);
     }
 
     back() {

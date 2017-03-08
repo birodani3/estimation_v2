@@ -1,19 +1,18 @@
 /*@ngInject*/
 export default class CreateController {
-    constructor($rootScope, $location, $cookies, toastr, socket) {
+    constructor($rootScope, $location, $cookies, socket, toast) {
         this.$rootScope = $rootScope;
         this.$location = $location;
         this.$cookies = $cookies;
-        this.toastr = toastr;
         this.socket = socket;
-        this.channel = $cookies.get("channel");
+        this.toast = toast;
+        this.channel = $cookies.get("channel") || "";
     }
 
     createChannel(channel) {
         channel = channel.trim();
 
         if (!channel) {
-            this.toastr.warning("Room name can not be empty", "Warning");
             return;
         }
 
@@ -21,11 +20,11 @@ export default class CreateController {
             if (!data.error) {
                 this.$cookies.put("channel", channel);
                 this.$rootScope.channel = channel;
-                this.$location.path("/results");
+                this.$location.path(`/results/${channel}`);
             } else if (data.error === "NAME_ALREADY_EXISTS") {
-                this.toastr.warning("Room already exists with this name!", "Warning");
+                this.toast.warning("Room already exists with this name!");
             } else {
-                this.toastr.error("Something went wrong, can not create room", "Error");
+                this.toast.error("Something went wrong, can not create room");
             }
         });
     }

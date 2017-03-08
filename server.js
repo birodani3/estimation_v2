@@ -20,6 +20,7 @@ io.on('connection', (socket) => {
     let channel = null;
 
     socket.on('CREATE_CHANNEL', (name, callback) => {
+        console.log("create channel: ", name);
         // Not exists yet
         if (!findChannelByName(name)) {
             channel = name;
@@ -31,12 +32,11 @@ io.on('connection', (socket) => {
         }
     });
 
-    socket.on("JOIN_CHANNEL", (name, callback) => {
-        console.log("join to: ", name);
-        console.log("letezo channelek: ", channels);
-        if (findChannelByName(name)) {
-            channel = name;
-            joinChannel(socket, name);
+    socket.on("JOIN_CHANNEL", (data, callback) => {
+        console.log("join channel to: ", data.channel);
+        if (findChannelByName(data.channel)) {
+            channel = data.channel;
+            joinChannel(socket, data);
 
             callback({});
         } else {
@@ -45,14 +45,18 @@ io.on('connection', (socket) => {
     });
 
     socket.on("GET_CHANNELS", (data, callback) => {
-        callback(channels);
+        let channelList = getChannelListForSending();
+
+        callback(channelList);
     });
 
     socket.on("DELETE_CHANNEL", () => {
-        leaveChannel(socket, channel);
+        console.log("delete channel: ", channel);
+        deleteChannel(socket, channel);
     });
 
     socket.on("disconnect", () => {
+        console.log("disconnect, channel was: ", channel);
         leaveChannel(socket, channel);
 
         channel = null;
@@ -66,24 +70,55 @@ function findChannelByName(name) {
 function createChannel(socket, channel) {
     channels.push({
         name: channel,
-        hasPassword: false
+        hasPassword: false,
+        host: socket
     });
 
     socket.join(channel);
-    io.emit("CHANNEL_LIST", channels);
+    sendChannelList(socket);
 }
 
-function joinChannel(socket, channel) {
-    socket.join(channel);
-    socket.in(channel).emit("USER_JOINED", "kecske");
+function joinChannel(socket, data) {
+    socket.join(data.channel);
+    socket.in(data.channel).emit("USER_JOINED", { name: data.username, id: socket.id });
+}
+
+function deleteChannel(socket, channel) {
+    socket.in(channel).emit("CHANNEL_DELETED");
+    socket.leave(channel);
+
+    removeChannel(channel);
+    sendChannelList(socket);
 }
 
 function leaveChannel(socket, channel) {
-    socket.leave(channel);
-    socket.in(channel).emit("CHANNEL_DELETED");
+    if (!channel) return;
 
-    _.pull(channels, channel);
-    io.emit("CHANNEL_LIST", channels);
+    if (isChannelHost(socket)) {
+        deleteChannel(socket, channel);
+    } else {
+        socket.in(channel).emit("USER_LEFT", { id: socket.id });
+    }
+
+    socket.leave(channel);
+}
+
+function removeChannel(name) {
+    _.remove(channels, (channel) => channel.name === name);
+}
+
+function sendChannelList(socket) {
+    let channelList = getChannelListForSending();
+
+    socket.emit("CHANNEL_LIST", channelList);
+}
+
+function getChannelListForSending() {
+    return _.map(channels, (channel) => _.omit(channel, "host"));
+}
+
+function isChannelHost(socket) {
+    return channels.some(channel => channel.host === socket);
 }
 
 // Start server
