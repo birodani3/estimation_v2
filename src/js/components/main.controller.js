@@ -8,8 +8,7 @@ export default class MainController {
         this.socket = socket;
 
         $rootScope.$on("$routeChangeSuccess", (event, current, prev = {}) => {
-            if (this.hasChannel() && prev.originalPath === resultsPath) {
-                this.$rootScope.channel = null;
+            if (prev.originalPath === resultsPath) {
                 socket.emit("DELETE_CHANNEL");
             }
         });
@@ -28,6 +27,7 @@ export default class MainController {
     }
 
     leaveChannel() {
+        this.$rootScope.channel = null;
         this.$location.path("/");
     }
 }

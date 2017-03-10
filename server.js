@@ -13,15 +13,21 @@ app.use('/*', (req, res) => {
     res.sendFile(path.join(__dirname, '/index.html'));
 });
 
+/* [{
+ *     name: string,
+ *     hasPassword: boolean,
+ *     host: socket
+ * }]
+ */
 let channels = [];
 
-// User connected
 io.on('connection', (socket) => {
+    // String
     let channel = null;
 
     socket.on('CREATE_CHANNEL', (name, callback) => {
         console.log("create channel: ", name);
-        // Not exists yet
+
         if (!findChannelByName(name)) {
             channel = name;
             createChannel(socket, name);
@@ -75,20 +81,21 @@ function createChannel(socket, channel) {
     });
 
     socket.join(channel);
-    sendChannelList(socket);
+    sendChannelList();
 }
 
 function joinChannel(socket, data) {
     socket.join(data.channel);
-    socket.in(data.channel).emit("USER_JOINED", { name: data.username, id: socket.id });
+
+    emit.toChannelHost(data.channel, "USER_JOINED", { name: data.username, id: socket.id });
 }
 
 function deleteChannel(socket, channel) {
-    socket.in(channel).emit("CHANNEL_DELETED");
+    emit.toChannel(channel, "CHANNEL_DELETED");
     socket.leave(channel);
 
     removeChannel(channel);
-    sendChannelList(socket);
+    sendChannelList();
 }
 
 function leaveChannel(socket, channel) {
@@ -97,7 +104,7 @@ function leaveChannel(socket, channel) {
     if (isChannelHost(socket)) {
         deleteChannel(socket, channel);
     } else {
-        socket.in(channel).emit("USER_LEFT", { id: socket.id });
+        emit.toChannelHost(channel, "USER_LEFT", { id: socket.id });
     }
 
     socket.leave(channel);
@@ -107,10 +114,10 @@ function removeChannel(name) {
     _.remove(channels, (channel) => channel.name === name);
 }
 
-function sendChannelList(socket) {
+function sendChannelList() {
     let channelList = getChannelListForSending();
 
-    socket.emit("CHANNEL_LIST", channelList);
+    emit.toAll("CHANNEL_LIST", channelList);
 }
 
 function getChannelListForSending() {
@@ -120,6 +127,29 @@ function getChannelListForSending() {
 function isChannelHost(socket) {
     return channels.some(channel => channel.host === socket);
 }
+
+/////////////////////////////////////// Socket emit helpers ///////////////////////////////////////
+
+const emit = {
+    toAll: (event, data) => {
+        io.emit(event, data);
+    },
+
+    toChannel: (channelName, event, data) => {
+        io.to(channelName).emit(event, data);
+    },
+
+    toChannelHost: (channelName, event, data) => {
+        let channel = findChannelByName(channelName);
+
+        if (channel) {
+            let hostSocket = io.sockets.connected[channel.host.id];
+            hostSocket.emit(event, data);
+        }
+    }
+};
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Start server
 server.listen(port, (err) => {

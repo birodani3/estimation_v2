@@ -9,7 +9,7 @@
     <form name="channelform">
         <md-input-container class="md-block">
             <label>Channel name</label>
-            <input required name="channel" ng-model="vm.channel">
+            <input required md-no-asterisk name="channel" ng-model="vm.channel">
             <div ng-messages="channelform.channel.$error" role="alert">
                 <ng-message when="required">This is required.</ng-message>
             </div>

@@ -6,7 +6,7 @@
     <form name="userform">
         <md-input-container class="md-block">
             <label>Username</label>
-            <input required name="username" ng-model="vm.username">
+            <input required md-no-asterisk name="username" ng-model="vm.username">
             <div ng-messages="userform.username.$error" role="alert">
                 <ng-message when="required">This is required.</ng-message>
             </div>
