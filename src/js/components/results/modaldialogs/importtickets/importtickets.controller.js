@@ -2,7 +2,6 @@ export default function ImportTicketsController($scope, $http, $mdDialog) {
     const jiraUrl = "https://jira.cas.de";
     let tickets = [];
 
-
     $scope.hide = () => {
         $mdDialog.hide();
     };

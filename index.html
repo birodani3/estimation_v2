@@ -5,17 +5,7 @@
         <title>Estimation</title>
         <script src="dist/bundle.js"></script>
     </head>
-    <body ng-cloak ng-controller="MainController as vm" layout="column">
-        <md-toolbar>
-            <div class="md-toolbar-tools">
-                <h2 flex md-truncate>Estimation</h2>
-                <h3 flex hide>
-                    {{ vm.getUserName() }} at channel {{ vm.getChannelName() }}
-                </h3>
-                <md-button class="md-raised" ng-click="vm.leaveChannel()" ng-show="vm.hasChannel()">Leave channel</md-button>
-            </div>
-        </md-toolbar>
-        
+    <body ng-cloak ng-controller="MainController as main" layout="column"> 
         <div id="main-view" ng-view layout="column" flex></div>
     </body>
 </html>

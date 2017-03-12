@@ -308,6 +308,7 @@ input[type=password]:hover {
   font-weight: bold;
   height: 80%;
   text-align: center;
+  background-color: #64B5F6;
   width: 100%;
 }
 .result-container .front .card-value > span,

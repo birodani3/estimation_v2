@@ -2,6 +2,7 @@ import NewTicketController from "./modaldialogs/newticket/newticket.controller.j
 import ImportTicketsController from "./modaldialogs/importtickets/importtickets.controller.js";
 import newTicketTemplate from "./modaldialogs/newticket/newticket.html";
 import importTicketsTemplate from "./modaldialogs/importtickets/importtickets.html";
+import _ from "lodash";
 
 /*@ngInject*/
 export default class ResultController {
@@ -10,7 +11,7 @@ export default class ResultController {
         this.socket = socket;
         this.$mdDialog = $mdDialog;
 
-        this.users = [];
+        this.cards = [];
         this.tickets = [{
             title: "Ticket name",
             description: "Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás "
@@ -27,11 +28,15 @@ export default class ResultController {
     }
 
     onUserJoined(user) {
-        this.users.push(user);
+        this.cards.push({
+            name: user.name,
+            id: user.id,
+            value: null
+        });
     }
 
     onUserLeft(user) {
-        _.remove(this.users, u => u.id === user.id);
+        _.remove(this.cards, card => card.id === user.id);
     }
 
     openMenu($mdMenu, event) {
@@ -68,5 +73,14 @@ export default class ResultController {
         .catch(() => {
             // Dialog cancelled
         });
+    }
+
+    reset() {
+        this.cards.forEach(card => card.value = null);
+        this.socket.emit("RESET");
+    }
+
+    selectCard(card) {
+        card.isSelected = true;
     }
 }

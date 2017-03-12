@@ -14,7 +14,7 @@
                         <md-icon md-menu-origin md-font-icon="fa-ellipsis-v" class="fa fa-lg"></i></md-icon>
                     </md-button>
                     <md-menu-content width="4">
-                        <md-menu-item>
+                        <md-menu-item class="active">
                             <md-button ng-click="vm.openImportTicketsDialog($event)" aria-label="Import tickets from JIRA">
                                 <md-icon md-menu-align-target md-font-icon="fa-upload" class="fa fa-lg"></md-icon>
                                 Import tickets from JIRA
@@ -35,11 +35,49 @@
             <md-list flex>
                 <md-list-item class="md-3-line" ng-repeat="ticket in vm.tickets track by $index" ng-click="null">
                     <div class="md-list-item-text" layout="column">
-                        <h3>{{ ticket.title }}</h3>
-                        <p>{{ ticket.description }}</p>
+                        <h3 flex md-truncate>{{ ticket.title }}</h3>
+                        <p>{{ ticket.description | limitTo: 65 }}{{ ticket.description.length > 65 ? "..." : "" }}</p>
                     </div>
                 </md-list-item>
             </md-list>
         </md-content>
     </md-sidenav>
+
+    <div flex layout="column" style="backgroud-color: #f2f2f2">
+        <md-toolbar class="md-theme-green">
+            <div class="md-toolbar-tools">
+                <h2 flex md-truncate>Estimation</h2>
+                <md-button class="md-icon-button" ng-click="vm.reset()" aria-label="Reset">
+                    <md-icon md-font-icon="fa-reply-all" class="fa fa-lg"></md-icon>
+                    <md-tooltip md-direction="bottom">Reset</md-tooltip>
+                </md-button>
+                <md-button class="md-icon-button" ng-click="main.leaveChannel()" aria-label="Leave channel">
+                    <md-icon md-font-icon="fa-sign-out" class="fa fa-lg"></md-icon>
+                    <md-tooltip md-direction="bottom">Leave channel</md-tooltip>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <div layout="column">
+            <md-content class="result-container" flex layout-padding>
+                <div ng-repeat="card in vm.cards" class="card-container" ng-click="vm.selectCard(card)" ng-class="{ 'selected-card': card.isSelected }">
+                    <div class="front" ng-style="{ 'transition': settings.animation ? '0.6s' : '0.6s' }">
+                        <div class="card-value">
+                            <div ng-show="card.value == null">
+                                <div class="dots"><span>.</span><span>.</span><span>.</span></div>
+                            </div>
+                            <span ng-show="card.value != null"><i class="fa fa-check"></i></span>
+                        </div>
+                        <div class="user-name">{{card.name}}</div>
+                    </div>
+                    <div class="back" ng-style="{ 'transition': settings.animation ? '0.6s' : '0.6s' }">
+                        <div class="card-value">
+                            <span>{{card.value}}</span>
+                        </div>
+                        <div class="user-name">{{card.name}}</div>
+                    </div>
+                </div>
+            </md-content>
+        </div>
+    </div>
 </div>

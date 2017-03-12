@@ -1,18 +1,27 @@
-const path    = require('path');
-const express = require('express');
-const _       = require("lodash");
-const app     = express();
-const JiraApi = require('jira').JiraApi;
-const server  = require("http").createServer(app);
-const io      = require("socket.io")(server);
+const path       = require('path');
+const _          = require("lodash");
+const JiraClient = require('jira-connector');
+const express    = require('express');
+const app        = express();
+const server     = require("http").createServer(app);
+const io         = require("socket.io")(server);
 
 const port = 3008;
 
 app.use(express.static(__dirname));
 app.use("*/dist", express.static(__dirname + '/dist'));
-app.use('/*', (req, res) => {
+app.use("/*", (req, res) => {
     res.sendFile(path.join(__dirname, '/index.html'));
 });
+/*app.get("/jira/auth", (req, res) => {
+    const Jira = new JiraClient({
+        host: 'jira.cas.de',
+        basic_auth: {
+            username: '',
+            password: ''
+        }
+    });
+});*/
 
 /* [{
  *     name: string,
@@ -25,10 +34,6 @@ let channels = [];
 io.on('connection', (socket) => {
     // String
     let channel = null;
-
-    var jira = new JiraApi('https', "jira.cas.de", 403, "daniel.biro", "asd", '2.0.alpha1');
-
-    jira.getLastSprintForRapidView(306, (asd) => console.log(asd))
 
     socket.on('CREATE_CHANNEL', (name, callback) => {
         console.log("create channel: ", name);

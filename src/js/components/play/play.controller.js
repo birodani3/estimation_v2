@@ -14,7 +14,7 @@ export default class PlayController {
 
         if (!$rootScope.username) {
             this.openUsernameDialog()
-                .then((username) => this.joinChannel(username))
+                .then(this.joinChannel.bind(this))
                 .catch(() => $location.path("/join"));
         } else {
             this.joinChannel($rootScope.username);
@@ -23,20 +23,7 @@ export default class PlayController {
 
     initSocket(socket) {
         this.socket.on("CHANNEL_DELETED", this.$scope, this.onChannelDeleted.bind(this));
-    }
-
-    openUsernameDialog() {
-        let confirmDialog = this.$mdDialog.prompt({
-            title: "Type in your username",
-            placeholder: "Username",
-            initialValue: this.$cookies.get("username") || "",
-            ok: "Ok",
-            cancel: "Cancel"
-        });
-
-        return this.$mdDialog
-            .show(confirmDialog)
-            .finally(() => confirmDialog = undefined);
+        this.socket.on("RESET", this.$scope, this.onReset.bind(this));
     }
 
     joinChannel(username) {
@@ -54,10 +41,28 @@ export default class PlayController {
         });
     }
 
+    openUsernameDialog() {
+        let confirmDialog = this.$mdDialog.prompt({
+            title: "Type in your username",
+            placeholder: "Username",
+            initialValue: this.$cookies.get("username") || "",
+            ok: "Ok",
+            cancel: "Cancel"
+        });
+
+        return this.$mdDialog
+            .show(confirmDialog)
+            .finally(() => confirmDialog = undefined);
+    }
+
     onChannelDeleted() {
         this.toast.warning("Channel deleted");
         this.$rootScope.username = null;
         this.$rootScope.channel = null;
         this.$location.path("/");
+    }
+
+    onReset() {
+
     }
 }
