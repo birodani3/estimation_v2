@@ -5,7 +5,7 @@ import resultsTemplate from "./components/results/results.html"
 import playTemplate from "./components/play/play.html"
 
 /*@ngInject*/
-export default function config($routeProvider, $cookiesProvider, $mdThemingProvider) {
+export default function config($routeProvider, $sceDelegateProvider, $cookiesProvider, $mdThemingProvider) {
     $routeProvider
         .when("/", {
             template: homeTemplate,
@@ -38,6 +38,11 @@ export default function config($routeProvider, $cookiesProvider, $mdThemingProvi
         .otherwise({
             redirectTo: "/"
         });
+
+    $sceDelegateProvider.resourceUrlWhitelist([
+        "self",
+        "https://jira.cas.de/**"
+    ]);
 
     $cookiesProvider.defaults.expires = "2030-12-30T12:00:00.000Z";
 

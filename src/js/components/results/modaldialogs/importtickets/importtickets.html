@@ -1,0 +1,39 @@
+<md-dialog aria-label="Import tickets" style="width: 800px">
+    <form name="importTicketsForm" novalidate ng-cloak>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Import tickets</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()" aria-label="Cancel">
+                    <md-icon md-font-icon="fa-times" class="fa"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <md-input-container class="md-block">
+                    <label>JIRA username</label>
+                    <input required md-no-asterisk name="username" ng-model="jira.username">
+                    <div ng-messages="importTicketsForm.username.$error">
+                        <div ng-message="required">This is required.</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block">
+                    <label>JIRA password</label>
+                    <input required md-no-asterisk name="password" type="password" ng-model="jira.password">
+                    <div ng-messages="importTicketsForm.password.$error">
+                        <div ng-message="required">This is required.</div>
+                    </div>
+                </md-input-container>
+                <md-button class="md-primary md-raised" aria-label="Login to JIRA" ng-click="getJiraSessionCookie(jira)">Login to JIRA</md-button>
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button ng-click="cancel()">Cancel</md-button>
+            <md-button type="submit" ng-disabled="importTicketsForm.$invalid" ng-click="save()">Save</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

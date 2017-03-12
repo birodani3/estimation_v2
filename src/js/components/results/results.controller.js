@@ -1,5 +1,7 @@
 import NewTicketController from "./modaldialogs/newticket/newticket.controller.js";
+import ImportTicketsController from "./modaldialogs/importtickets/importtickets.controller.js";
 import newTicketTemplate from "./modaldialogs/newticket/newticket.html";
+import importTicketsTemplate from "./modaldialogs/importtickets/importtickets.html";
 
 /*@ngInject*/
 export default class ResultController {
@@ -32,6 +34,10 @@ export default class ResultController {
         _.remove(this.users, u => u.id === user.id);
     }
 
+    openMenu($mdMenu, event) {
+        $mdMenu.open(event);
+    };
+
     openCreateNewTicket(event) {
         this.$mdDialog.show({
             template: newTicketTemplate,
@@ -44,7 +50,23 @@ export default class ResultController {
             this.tickets.push(ticket);
         })
         .catch(() => {
+            // Dialog cancelled
+        });
+    }
 
+    openImportTicketsDialog(event) {
+        this.$mdDialog.show({
+            template: importTicketsTemplate,
+            controller: ["$scope", "$http", "$mdDialog", ImportTicketsController],
+            parent: angular.element(document.body),
+            targetEvent: event,
+            clickOutsideToClose: true
+        })
+        .then((data) => {
+            console.log("data: ", data);
+        })
+        .catch(() => {
+            // Dialog cancelled
         });
     }
 }

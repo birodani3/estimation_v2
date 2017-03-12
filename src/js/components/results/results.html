@@ -9,14 +9,25 @@
         <md-toolbar class="md-theme-indigo">
             <div class="md-toolbar-tools">
                 <h2 flex md-truncate>Tickets</h2>
-                <md-button class="md-icon-button" ng-click="vm.openImportTicketsDialog($event)" aria-label="Import tickets">
-                    <md-icon><i class="fa fa-upload fa-lg"></i></md-icon>
-                    <md-tooltip md-direction="top">Import tickets</md-tooltip>
-                </md-button>
-                <md-button class="md-icon-button" ng-click="vm.openCreateNewTicket($event)" aria-label="New ticket">
-                    <md-icon><i class="fa fa-plus fa-lg"></i></md-icon>
-                    <md-tooltip md-direction="top">New ticket</md-tooltip>
-                </md-button>
+                <md-menu md-position-mode="target-left target">
+                    <md-button aria-label="Tickets menu" class="md-icon-button" ng-click="vm.openMenu($mdMenu, $event)">
+                        <md-icon md-menu-origin md-font-icon="fa-ellipsis-v" class="fa fa-lg"></i></md-icon>
+                    </md-button>
+                    <md-menu-content width="4">
+                        <md-menu-item>
+                            <md-button ng-click="vm.openImportTicketsDialog($event)" aria-label="Import tickets from JIRA">
+                                <md-icon md-menu-align-target md-font-icon="fa-upload" class="fa fa-lg"></md-icon>
+                                Import tickets from JIRA
+                            </md-button>
+                        </md-menu-item>
+                        <md-menu-item>
+                            <md-button ng-click="vm.openCreateNewTicket($event)" aria-label="Create new ticket">
+                                <md-icon md-font-icon="fa-plus" class="fa fa-lg"></md-icon>
+                                Create new ticket
+                            </md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
             </div>
         </md-toolbar>
 
