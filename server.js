@@ -71,6 +71,10 @@ io.on('connection', (socket) => {
         deleteChannel(socket, channel);
     });
 
+    socket.on("RESET", () => {
+        emit.toChannel("RESET");
+    });
+
     socket.on("disconnect", () => {
         console.log("disconnect, channel was: ", channel);
         leaveChannel(socket, channel);

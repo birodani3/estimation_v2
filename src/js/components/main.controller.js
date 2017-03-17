@@ -2,10 +2,11 @@ const resultsPath = "/results/:channel"
 
 /*@ngInject*/
 export default class MainController {
-    constructor($rootScope, $location, socket) {
+    constructor($rootScope, $location, socket, dragulaBagId) {
         this.$rootScope = $rootScope;
         this.$location = $location;
         this.socket = socket;
+        this.dragula = dragulaBagId;
 
         $rootScope.$on("$routeChangeSuccess", (event, current, prev = {}) => {
             if (prev.originalPath === resultsPath) {

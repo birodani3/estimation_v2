@@ -10,13 +10,13 @@
             <div class="md-toolbar-tools">
                 <h2 flex md-truncate>Tickets</h2>
                 <md-menu md-position-mode="target-left target">
-                    <md-button aria-label="Tickets menu" class="md-icon-button" ng-click="vm.openMenu($mdMenu, $event)">
+                    <md-button id="tickets-menu-button" aria-label="Tickets menu" class="md-icon-button" ng-click="vm.openMenu($mdMenu, $event)">
                         <md-icon md-menu-origin md-font-icon="fa-ellipsis-v" class="fa fa-lg"></i></md-icon>
                     </md-button>
                     <md-menu-content width="4">
                         <md-menu-item class="active">
                             <md-button ng-click="vm.openImportTicketsDialog($event)" aria-label="Import tickets from JIRA">
-                                <md-icon md-menu-align-target md-font-icon="fa-upload" class="fa fa-lg"></md-icon>
+                                <md-icon md-menu-align-target md-font-icon="fa-download" class="fa fa-lg"></md-icon>
                                 Import tickets from JIRA
                             </md-button>
                         </md-menu-item>
@@ -31,19 +31,19 @@
             </div>
         </md-toolbar>
 
-        <md-content flex layout-padding>
-            <md-list flex>
-                <md-list-item class="md-3-line" ng-repeat="ticket in vm.tickets track by $index" ng-click="null">
+        <md-content flex layout-padding >
+            <md-list layout-fill layout-align="center top" dragula="'ticket-container'">
+                <md-list-item class="md-3-line ticket" ng-class="{ 'selected': ticket.isSelected }" ng-repeat="ticket in vm.tickets track by $index" ng-click="vm.toggleTicketSelection(ticket)">
                     <div class="md-list-item-text" layout="column">
                         <h3 flex md-truncate>{{ ticket.title }}</h3>
                         <p>{{ ticket.description | limitTo: 65 }}{{ ticket.description.length > 65 ? "..." : "" }}</p>
                     </div>
-                </md-list-item>
+                    </md-list-item>
             </md-list>
         </md-content>
     </md-sidenav>
 
-    <div flex layout="column" style="backgroud-color: #f2f2f2">
+    <div flex layout="column">
         <md-toolbar class="md-theme-green">
             <div class="md-toolbar-tools">
                 <h2 flex md-truncate>Estimation</h2>
@@ -58,26 +58,54 @@
             </div>
         </md-toolbar>
 
-        <div layout="column">
-            <md-content class="result-container" flex layout-padding>
-                <div ng-repeat="card in vm.cards" class="card-container" ng-click="vm.selectCard(card)" ng-class="{ 'selected-card': card.isSelected }">
-                    <div class="front" ng-style="{ 'transition': settings.animation ? '0.6s' : '0.6s' }">
-                        <div class="card-value">
-                            <div ng-show="card.value == null">
-                                <div class="dots"><span>.</span><span>.</span><span>.</span></div>
+        <md-tabs md-border-bottom flex class="stretch-height">
+            <md-tab label="Estimate ticket">
+                <md-content class="result-container" flex layout-padding style="background-color: #f2f2f2">
+                    <div ng-repeat="card in vm.cards" class="card-container" ng-click="vm.selectCard(card)" ng-class="{ 'selected-card': card.isSelected }">
+                        <div class="front" ng-style="{ 'transition': settings.animation ? '0.6s' : '0.6s' }">
+                            <div class="card-value">
+                                <div ng-show="card.value == null">
+                                    <div class="dots"><span>.</span><span>.</span><span>.</span></div>
+                                </div>
+                                <span ng-show="card.value != null"><i class="fa fa-check"></i></span>
                             </div>
-                            <span ng-show="card.value != null"><i class="fa fa-check"></i></span>
+                            <div class="user-name">{{card.name}}</div>
                         </div>
-                        <div class="user-name">{{card.name}}</div>
+                        <div class="back" ng-style="{ 'transition': settings.animation ? '0.6s' : '0.6s' }">
+                            <div class="card-value">
+                                <span>{{card.value}}</span>
+                            </div>
+                            <div class="user-name">{{card.name}}</div>
+                        </div>
                     </div>
-                    <div class="back" ng-style="{ 'transition': settings.animation ? '0.6s' : '0.6s' }">
-                        <div class="card-value">
-                            <span>{{card.value}}</span>
+                </md-content>
+            </md-tab>
+
+            <md-tab label="Estimated tickets" flex layout="column">
+                <div flex layout="row" layout-fill>
+                    <div flex layout="column" ng-repeat="point in vm.storyPoints" style="border-left: 1px solid rgba(0, 0, 0, 0.117647);" layout-fill>
+                        <div class="md-toolbar-tools">
+                            <h2 flex md-truncate>{{point}}</h2>
+                            <md-menu md-position-mode="target-left target">
+                                <md-button id="storypoint-menu-button" aria-label="Storypoint menu" class="md-icon-button" ng-click="vm.openMenu($mdMenu, $event)">
+                                    <md-icon md-menu-origin md-font-icon="fa-ellipsis-v" class="fa fa-lg"></i></md-icon>
+                                </md-button>
+                                <md-menu-content width="4">
+                                    <md-menu-item class="active">
+                                        <md-button ng-click="vm.hideStoryPoint(point)" aria-label="Hide storypoint">
+                                            <md-icon md-menu-align-target md-font-icon="fa-eye-slash" class="fa fa-lg"></md-icon>
+                                            Hide
+                                        </md-button>
+                                    </md-menu-item>
+        
+                                </md-menu-content>
+                            </md-menu>
                         </div>
-                        <div class="user-name">{{card.name}}</div>
+                        <div flex layout="column" dragula="'ticket-container'" dragula-scope="$parent"></div>
                     </div>
                 </div>
-            </md-content>
-        </div>
+            </md-tab>
+            <div>5</div>
+        </md-tabs>
     </div>
 </div>

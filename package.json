@@ -11,6 +11,7 @@
     "angular-messages": "^1.6.2",
     "angular-route": "^1.6.2",
     "angular-toastr": "^2.1.1",
+    "angularjs-dragula": "^1.2.8",
     "bootstrap": "^3.3.7",
     "socket.io": "^1.7.3"
   },
