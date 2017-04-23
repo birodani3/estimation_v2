@@ -37,6 +37,14 @@ const config = {
           'less-loader',
         ]
       },
+      {
+        test: /\.jpg$/,
+        loader: 'file'
+      },
+      {
+        test: /\.png$/,
+        loader: "url-loader?mimetype=image/png"
+      },
       { 
         test: /\.json$/, 
         loader: "json-loader"

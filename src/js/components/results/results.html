@@ -6,20 +6,25 @@
         md-is-locked-open="true"
         md-whiteframe="4">
 
+        <!-- TICKETS TOOLBAR -->
         <md-toolbar class="md-theme-indigo">
             <div class="md-toolbar-tools">
                 <h2 flex md-truncate>Tickets</h2>
                 <md-menu md-position-mode="target-left target">
+                    <!-- TICKETS DROPDOWN BUTTON -->
                     <md-button id="tickets-menu-button" aria-label="Tickets menu" class="md-icon-button" ng-click="vm.openMenu($mdMenu, $event)">
                         <md-icon md-menu-origin md-font-icon="fa-ellipsis-v" class="fa fa-lg"></i></md-icon>
                     </md-button>
                     <md-menu-content width="4">
+                        <!-- IMPORT FROM JIRA MENU -->
                         <md-menu-item class="active">
                             <md-button ng-click="vm.openImportTicketsDialog($event)" aria-label="Import tickets from JIRA">
                                 <md-icon md-menu-align-target md-font-icon="fa-download" class="fa fa-lg"></md-icon>
                                 Import tickets from JIRA
                             </md-button>
                         </md-menu-item>
+
+                        <!-- CREATE NEW TICKET MENU-->
                         <md-menu-item>
                             <md-button ng-click="vm.openCreateNewTicket($event)" aria-label="Create new ticket">
                                 <md-icon md-font-icon="fa-plus" class="fa fa-lg"></md-icon>
@@ -31,6 +36,7 @@
             </div>
         </md-toolbar>
 
+        <!-- UNESTIMATED TICKETS LIST -->
         <md-content flex layout-padding >
             <md-list layout-fill layout-align="center top" dragula="'ticket-container'">
                 <md-list-item class="md-3-line ticket" ng-class="{ 'selected': ticket.isSelected }" ng-repeat="ticket in vm.tickets track by $index" ng-click="vm.toggleTicketSelection(ticket)">
@@ -44,13 +50,10 @@
     </md-sidenav>
 
     <div flex layout="column">
-        <md-toolbar class="md-theme-green">
+        <!-- ESTIMATION TOOLBAR -->
+        <md-toolbar>
             <div class="md-toolbar-tools">
                 <h2 flex md-truncate>Estimation</h2>
-                <md-button class="md-icon-button" ng-click="vm.reset()" aria-label="Reset">
-                    <md-icon md-font-icon="fa-reply-all" class="fa fa-lg"></md-icon>
-                    <md-tooltip md-direction="bottom">Reset</md-tooltip>
-                </md-button>
                 <md-button class="md-icon-button" ng-click="main.leaveChannel()" aria-label="Leave channel">
                     <md-icon md-font-icon="fa-sign-out" class="fa fa-lg"></md-icon>
                     <md-tooltip md-direction="bottom">Leave channel</md-tooltip>
@@ -58,7 +61,33 @@
             </div>
         </md-toolbar>
 
-        <md-tabs md-border-bottom flex class="stretch-height">
+        <!-- RESET BUTTON -->
+        <md-fab-speed-dial ng-show="vm.isResetFabVisible()" md-direction="down" class="fab-speed-dial md-scale">
+            <md-fab-trigger>
+                <md-button class="md-fab md-accent" aria-label="Hidden storyPoints" ng-click="vm.reset()">
+                    <md-icon md-font-icon="fa-reply-all" class="fa fa-lg"></md-icon>
+                </md-button>
+            </md-fab-trigger>
+        </md-fab-speed-dial>
+
+        <!-- HIDDEN STORYPOINTS FAB -->
+        <md-fab-speed-dial ng-show="vm.isHiddenPointsFabVisible()" md-direction="down" class="fab-speed-dial md-scale">
+            <md-fab-trigger>
+                <md-button class="md-fab md-accent" aria-label="Hidden storyPoints">
+                    <md-icon md-font-icon="fa-eye" class="fa fa-lg"></md-icon>
+                </md-button>
+            </md-fab-trigger>
+            <md-fab-actions>
+                <div ng-repeat="storyPoint in vm.hiddenStoryPoints">
+                    <md-button aria-label="{{storyPoint}}" class="md-fab md-raised md-mini" ng-click="vm.showStoryPoint(storyPoint)">
+                        <div>{{storyPoint}}</div>
+                    </md-button>
+                </div>
+            </md-fab-actions>
+        </md-fab-speed-dial>
+
+        <!-- ESTiMATE TICKET TAB -->
+        <md-tabs md-border-bottom flex class="stretch-height" md-selected="vm.activeTab">
             <md-tab label="Estimate ticket">
                 <md-content class="result-container" flex layout-padding style="background-color: #f2f2f2">
                     <div ng-repeat="card in vm.cards" class="card-container" ng-click="vm.selectCard(card)" ng-class="{ 'selected-card': card.isSelected }">
@@ -81,6 +110,7 @@
                 </md-content>
             </md-tab>
 
+            <!-- ESTIMATED_TICKETS TAB -->
             <md-tab label="Estimated tickets" flex layout="column">
                 <div flex layout="row" layout-fill>
                     <div flex layout="column" ng-repeat="point in vm.storyPoints" style="border-left: 1px solid rgba(0, 0, 0, 0.117647);" layout-fill>
@@ -94,7 +124,7 @@
                                     <md-menu-item class="active">
                                         <md-button ng-click="vm.hideStoryPoint(point)" aria-label="Hide storypoint">
                                             <md-icon md-menu-align-target md-font-icon="fa-eye-slash" class="fa fa-lg"></md-icon>
-                                            Hide
+                                            Hide column
                                         </md-button>
                                     </md-menu-item>
         
@@ -105,7 +135,6 @@
                     </div>
                 </div>
             </md-tab>
-            <div>5</div>
         </md-tabs>
     </div>
 </div>

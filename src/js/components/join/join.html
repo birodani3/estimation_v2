@@ -1,17 +1,46 @@
-<div class="loginmodal-container">
-    <md-button class="btn-left" ng-click="vm.back()">
-        <i class="fa fa-arrow-left"></i>&nbsp;Back
-    </md-button>
-    <h1 class="title">Join channel</h1>
-    <form name="userform">
-        <md-input-container class="md-block">
-            <label>Username</label>
-            <input required md-no-asterisk name="username" ng-model="vm.username">
-            <div ng-messages="userform.username.$error" role="alert">
-                <ng-message when="required">This is required.</ng-message>
+<div flex layout="column" layout-align="top center">
+    <md-toolbar class="md-tall md-primary">
+        <h2 class="md-toolbar-tools">
+            <md-button class="md-icon-button" ng-click="vm.back()" aria-label="Back">
+                <md-icon md-font-icon="fa-arrow-left" class="fa"></md-icon>
+            </md-button>
+        </h2>
+    </md-toolbar>
+    <md-card class="estimation-card">
+        <md-card-content>
+            <div flex layout="row">
+                <div flex layout="column">
+                    <h1>Join channel</h1>
+                        <form name="userform" class="user-form">
+                            <md-input-container class="md-block">
+                                <label>Username</label>
+                                <input required md-no-asterisk name="username" ng-model="vm.username">
+                                <div ng-messages="userform.username.$error" role="alert">
+                                    <ng-message when="required">This is required.</ng-message>
+                                </div>
+                            </md-input-container>
+                        </form>
+                    <div flex layout="row" layout-align="end center">
+                        <md-list flex>
+                            <md-subheader class="md-no-sticky">Channels</md-subheader>
+                            <md-list-item class="md-2-line" ng-repeat="channel in vm.channels" ng-click="userform.$valid && vm.joinChannel(vm.username, channel.name)">
+                                <md-icon class="channel-icon">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-stack-1x fa-inverse" ng-class="channel.hasPassword ? 'fa-lock' : 'fa-unlock-alt'"></i>
+                                    </span>
+                                </md-icon>
+                                <div class="md-list-item-text" layout="column">
+                                    <h3>{{ channel.name }}</h3>
+                                    <h4>{{ channel.hasPassword }}</h4>
+                                </div>
+                            </md-list-item>
+                            <div class="text-center channel-message" ng-show="!vm.channels.length">No channel available</div>
+                        </md-list>
+                    </div>
+                </div>
             </div>
-        </md-input-container>
-    </form>
-    <md-button class="md-primary md-raised btn-wide" ng-repeat="channel in vm.channels" ng-click="vm.joinChannel(vm.username, channel.name)">{{channel.name}}</md-button>
-    <div class="text-center channel-message" ng-show="!vm.channels.length">No channels available</div>
+        </md-card-content>
+    </md-card>
 </div>
+

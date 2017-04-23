@@ -1,8 +1,12 @@
+import SettingsController from "./modaldialogs/settings/settings.controller.js";
+import settingsTemplate from "./modaldialogs/settings/settings.html";
+
 /*@ngInject*/
 export default class CreateController {
-    constructor($rootScope, $location, $cookies, socket, toast) {
+    constructor($rootScope, $location, $mdDialog, $cookies, socket, toast) {
         this.$rootScope = $rootScope;
         this.$location = $location;
+        this.$mdDialog = $mdDialog;
         this.$cookies = $cookies;
         this.socket = socket;
         this.toast = toast;
@@ -26,6 +30,18 @@ export default class CreateController {
             } else {
                 this.toast.error("Something went wrong, can not create room");
             }
+        });
+    }
+
+    openSettings(event) {
+        this.$mdDialog.show({
+            template: settingsTemplate,
+            controller: ["$scope", "$mdDialog", SettingsController],
+            parent: angular.element(document.body),
+            targetEvent: event,
+            openFrom: "#settings-menu-button",
+            closeTo: "#settings-menu-button",
+            clickOutsideToClose: true
         });
     }
 

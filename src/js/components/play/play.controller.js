@@ -10,6 +10,8 @@ export default class PlayController {
         this.toast = toast;
         this.socket = socket;
 
+        this.settings = {};
+        this.isLoading = false;
         this.initSocket();
 
         if (!$rootScope.username) {
@@ -30,8 +32,9 @@ export default class PlayController {
         const channel = this.$route.current.params.channel;
 
         this.socket.emit("JOIN_CHANNEL", { channel, username }, (data) => {
-            console.log("join channel, data: ", data);
             if (!data.error) {
+                this.isLoading = true;
+                this.settings = data.settings;
                 this.$rootScope.channel = channel;
                 this.$rootScope.username = username;
                 this.$cookies.put("username", username);
@@ -63,6 +66,6 @@ export default class PlayController {
     }
 
     onReset() {
-
+        this.isLoading = false;
     }
 }

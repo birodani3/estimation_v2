@@ -1,6 +1,7 @@
 const path       = require('path');
 const _          = require("lodash");
 const JiraClient = require('jira-connector');
+const bodyParser = require('body-parser');
 const express    = require('express');
 const app        = express();
 const server     = require("http").createServer(app);
@@ -8,20 +9,33 @@ const io         = require("socket.io")(server);
 
 const port = 3008;
 
+app.use(bodyParser.json());
 app.use(express.static(__dirname));
 app.use("*/dist", express.static(__dirname + '/dist'));
-app.use("/*", (req, res) => {
+app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, '/index.html'));
 });
-/*app.get("/jira/auth", (req, res) => {
+
+app.post("/jira", (req, res) => {
+    if (!req.body.username || !req.body.password) {
+        res.send();
+        return;
+    }
+
+    console.log("JIRA");
+
     const Jira = new JiraClient({
         host: 'jira.cas.de',
         basic_auth: {
-            username: '',
-            password: ''
+            username: req.body.username,
+            password: req.body.password
         }
     });
-});*/
+
+    Jira.board.getBoard({ "rapidView": 306 }, (err, boards) => {
+        sendResponse(res, boards);
+    });
+});
 
 /* [{
  *     name: string,
@@ -162,6 +176,13 @@ const emit = {
         }
     }
 };
+
+/////////////////////////////////////// Http helpers ///////////////////////////////////////
+
+function sendResponse(res, data) {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify(data));
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 

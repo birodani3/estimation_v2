@@ -26,14 +26,13 @@
                         <div ng-message="required">This is required.</div>
                     </div>
                 </md-input-container>
-                <md-button class="md-primary md-raised" aria-label="Login to JIRA" ng-click="getJiraSessionCookie(jira)">Login to JIRA</md-button>
             </div>
         </md-dialog-content>
 
         <md-dialog-actions layout="row">
             <span flex></span>
             <md-button ng-click="cancel()">Cancel</md-button>
-            <md-button type="submit" ng-disabled="importTicketsForm.$invalid" ng-click="save()">Save</md-button>
+            <md-button type="submit" aria-label="Login to JIRA" ng-disabled="importTicketsForm.$invalid" ng-click="login(jira)">Login to JIRA</md-button>
         </md-dialog-actions>
     </form>
 </md-dialog>

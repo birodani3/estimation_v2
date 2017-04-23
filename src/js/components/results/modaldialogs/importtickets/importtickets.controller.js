@@ -14,21 +14,19 @@ export default function ImportTicketsController($scope, $http, $mdDialog) {
         $mdDialog.hide(tickets);
     };
 
-    $scope.getJiraSessionCookie = (credentials) => {
-        $http({
-            method: "GET",
-            url: `${jiraUrl}/rest/agile/1.0/board`,
-            data: credentials,
-            dataType: "JSON",
-            contentType: "application/json;",
-            headers: {
-                contentType: "application/json",
-            }
-        })
-        .then(data => {
-            console.log("data: ", data);
-        }).catch(err => {
-            console.log("err: ", err);
-        })
+    $scope.login = (credentials) => {
+        const config = {
+            method: "POST",
+            url: "/jira",
+            data: credentials
+        }
+
+        $http(config)
+            .then((a) => {
+                console.log("then: ", a);
+            })
+            .catch((c) => {
+                console.log("cat: ", c);
+            });
     }
 }

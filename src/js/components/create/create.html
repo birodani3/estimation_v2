@@ -1,54 +1,66 @@
-<div class="loginmodal-container">
-    <md-button class="btn-left" ng-click="vm.back()">
-        <i class="fa fa-arrow-left"></i>&nbsp;Back
-    </md-button>
-    <md-button class="btn-right" ng-click="vm.showSettings()">
-        <i class="fa fa-cog"></i>&nbsp;Settings
-    </md-button>
-    <h1 class="title">Create channel</h1>
-    <form name="channelform">
-        <md-input-container class="md-block">
-            <label>Channel name</label>
-            <input required md-no-asterisk name="channel" ng-model="vm.channel">
-            <div ng-messages="channelform.channel.$error" role="alert">
-                <ng-message when="required">This is required.</ng-message>
-            </div>
-        </md-input-container>
-    </form>
-    <md-button class="md-primary md-raised btn-wide" ng-click="vm.createChannel(vm.channel)">Create</md-button>
-    <form ng-switch="vm.state">
-        <div ng-switch-when="vm.states.SETTINGS">
-            <div class="checkbox checkbox-primary">
-                <input type="checkbox" id="undo-checkbox" ng-model="settings.undo">
-                <label for="undo-checkbox">Enable estimation undo (3sec)</label>
-            </div>
-            <div class="checkbox checkbox-primary">
-                <input type="checkbox" id="name-checkbox" ng-model="settings.showName">
-                <label for="name-checkbox">Show names</label>
-            </div>
-            <div class="checkbox checkbox-primary">
-                <input type="checkbox" id="animation-checkbox" ng-model="settings.animation">
-                <label for="animation-checkbox">Card flip animations</label>
-            </div>
-            <div class="form-group">
-                <label for="color-input">Card color</label>
-                <input class="form-control color-input" type="color" ng-model="settings.color" id="color-input">
-            </div>
-            <hr>
-            <div class="values-container clearfix">
-                <label class="values-label">Values</label>
-                <div class="checkbox-container">
-                    <div class="checkbox checkbox-primary" ng-repeat="(value, x) in settings.values">
-                        <input type="checkbox" id="value-{{$index}}-checkbox" ng-model="settings.values[value]">
-                        <label for="value-{{$index}}-checkbox">{{value}}</label>
+<div flex layout="column" layout-align="top center">
+    <md-toolbar class="md-tall md-primary">
+        <h2 class="md-toolbar-tools">
+            <md-button class="md-icon-button" ng-click="vm.back()" aria-label="Back">
+                <md-icon md-font-icon="fa-arrow-left" class="fa"></md-icon>
+            </md-button>
+        </h2>
+    </md-toolbar>
+    <md-card class="estimation-card">
+        <md-card-content>
+            <div flex layout="row">
+                <div flex layout="column">
+                    <h1>Create channel</h1>
+                    <form name="channelform" class="create-form">
+                        <md-input-container class="md-block">
+                            <label>Channel name</label>
+                            <input required md-no-asterisk name="channel" ng-model="vm.channel">
+                            <div ng-messages="channelform.channel.$error" role="alert">
+                                <ng-message when="required">This is required.</ng-message>
+                            </div>
+                        </md-input-container>
+                    </form>
+                    <div flex layout="row" layout-align="end center">
+                        <md-button id="settings-menu-button" class="md-primary md-raised" ng-click="vm.openSettings()">Settings</md-button>
+                        <md-button class="md-primary md-raised" ng-click="channelform.$valid && vm.createChannel(vm.channel)">Create</md-button>
                     </div>
                 </div>
             </div>
-            <hr>
-            <div class="button-container">
-                <div class="btn btn-default" ng-click="vm.saveSettingsToCookie()">Save settings to cookie&nbsp;<i class="fa fa-floppy-o"></i></div>
-                <div class="btn btn-default" ng-click="vm.loadDefaultSettings()">Restore default settings&nbsp;<i class="fa fa-reply-all"></i></div>
+        </md-card-content>
+    </md-card>
+</div>
+
+
+<!-- <div class="loginmodal-container">
+        <div class="checkbox checkbox-primary">
+            <input type="checkbox" id="undo-checkbox" ng-model="settings.undo">
+            <label for="undo-checkbox">Enable estimation undo (3sec)</label>
+        </div>
+        <div class="checkbox checkbox-primary">
+            <input type="checkbox" id="name-checkbox" ng-model="settings.showName">
+            <label for="name-checkbox">Show names</label>
+        </div>
+        <div class="checkbox checkbox-primary">
+            <input type="checkbox" id="animation-checkbox" ng-model="settings.animation">
+            <label for="animation-checkbox">Card flip animations</label>
+        </div>
+        <div class="form-group">
+            <label for="color-input">Card color</label>
+            <input class="form-control color-input" type="color" ng-model="settings.color" id="color-input">
+        </div>
+        <hr>
+        <div class="values-container clearfix">
+            <label class="values-label">Values</label>
+            <div class="checkbox-container">
+                <div class="checkbox checkbox-primary" ng-repeat="(value, x) in settings.values">
+                    <input type="checkbox" id="value-{{$index}}-checkbox" ng-model="settings.values[value]">
+                    <label for="value-{{$index}}-checkbox">{{value}}</label>
+                </div>
             </div>
         </div>
-    </form>
-</div>
+        <hr>
+        <div class="button-container">
+            <div class="btn btn-default" ng-click="vm.saveSettingsToCookie()">Save settings to cookie&nbsp;<i class="fa fa-floppy-o"></i></div>
+            <div class="btn btn-default" ng-click="vm.loadDefaultSettings()">Restore default settings&nbsp;<i class="fa fa-reply-all"></i></div>
+        </div>
+</div> -->

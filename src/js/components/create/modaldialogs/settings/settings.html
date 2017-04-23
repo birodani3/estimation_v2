@@ -1,0 +1,38 @@
+<md-dialog aria-label="Settings" style="width: 800px">
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Settings</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="close()" aria-label="Cancel">
+                    <md-icon md-font-icon="fa-times" class="fa"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <md-tabs md-border-bottom flex class="stretch-height" md-selected="vm.activeTab">
+                <md-tab label="Values">
+                    <md-content class="result-container" flex layout-padding>
+                        <div flex-xs flex="50">
+                            <md-checkbox aria-label="Select All"
+                                        ng-checked="isAllValuesChecked()"
+                                        md-indeterminate="isSomeValuesChecked()"
+                                        ng-click="toggleAllValues()">
+                            <span ng-if="isAllValuesChecked()">Un-</span>Select All
+                            </md-checkbox>
+                        </div>
+                        <div class="value-checkbox-wrapper" flex="25" ng-repeat="value in values">
+                            <md-checkbox ng-checked="value.checked" ng-click="value.checked = !value.checked">
+                            {{ value.label }}
+                            </md-checkbox>
+                        </div>
+                    </md-content>
+                </md-tab>
+            </md-tabs>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button aria-label="Close" ng-click="close()">Close</md-button>
+        </md-dialog-actions>
+</md-dialog>

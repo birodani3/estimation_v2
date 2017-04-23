@@ -11,8 +11,15 @@ export default class ResultController {
         this.socket = socket;
         this.$mdDialog = $mdDialog;
 
+        this.Tabs = {
+            "ESTIMATE_TICKET": 1,
+            "ESTIMATED_TICKETS": 2
+        };
+
         // TODO options
         this.storyPoints = [1,2,3,5,8,13,20,40];
+        this.hiddenStoryPoints = [];
+        this.activeTab = 0;
 
         //dragulaService
         /*hover.bag(dragulaBagId, $scope)
@@ -56,6 +63,21 @@ export default class ResultController {
 
     hideStoryPoint(point) {
         _.pull(this.storyPoints, point);
+        this.hiddenStoryPoints.push(point);
+    }
+
+    showStoryPoint(point) {
+         _.pull(this.hiddenStoryPoints, point);
+        this.storyPoints.push(point);
+        this.storyPoints.sort((a, b) => a - b);
+    }
+
+    isResetFabVisible() {
+        return this.activeTab === 0 && this.cards.length;
+    }
+
+    isHiddenPointsFabVisible() {
+        return this.activeTab === 1 && this.hiddenStoryPoints.length;
     }
 
     openCreateNewTicket(event) {
