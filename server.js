@@ -81,6 +81,12 @@ io.on('connection', (socket) => {
         }
     });
 
+    socket.on("LEAVE_CHANNEL", (data, callback) => {
+        leaveChannel(socket, channel);
+
+        channel = null;
+    });
+
     socket.on("VOTE", (data, callback) => {
         let payload = {
             value: data.value,

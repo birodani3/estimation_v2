@@ -14,6 +14,10 @@ export default class PlayController {
         this.isLoading = false;
         this.initSocket();
 
+        $scope.$on("$destroy", () => {
+            socket.emit("LEAVE_CHANNEL")
+        });
+
         if (!$rootScope.username) {
             this.openUsernameDialog()
                 .then(this.joinChannel.bind(this))
