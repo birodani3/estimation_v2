@@ -18,7 +18,6 @@ export default class StoreService {
                     { label: 13,  checked: true },
                     { label: 20,  checked: true },
                     { label: 40,  checked: true },
-                    { label: 100, checked: true },
                     { label: "?", checked: true },
                     { label: "∞", checked: true }
                 ]

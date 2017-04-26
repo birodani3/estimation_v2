@@ -1,6 +1,6 @@
 <div flex layout="row" layout-sm="column" layout-align="center center" ng-show="vm.isLoading">
     <md-progress-circular md-mode="indeterminate" md-diameter="300"></md-progress-circular>
 </div>
-<div ng-hide="vm.isLoading">
-    <md-button ng-repeat="value in vm.values" ng-click="vm.vote(value)" class="md-raised md-primary">{{value}}</md-button>
+<div ng-hide="vm.isLoading" class="card-pick-container">
+    <md-button ng-repeat="value in vm.values" ng-click="vm.vote(value)" class="card md-raised md-primary">{{value}}</md-button>
 </div>

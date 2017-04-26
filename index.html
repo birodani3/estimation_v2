@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=600"/>
+    <meta name="mobile-web-app-capable" content="yes"/>
 
+    <head>
         <link rel="manifest" href="/src/manifest.webmanifest"/>
         <link rel="icon" sizes="144x144" href="src/icon_144x144.png"/>
         <link rel="apple-touch-icon" sizes="144x144" href="src/icon_144x144.png"/>
         <link rel="apple-touch-icon-precomposed" sizes="144x144" href="src/icon_144x144.png"/>
-        
+
         <title>Estimation</title>
         <script src="dist/bundle.js"></script>
     </head>
+    
     <body ng-cloak ng-controller="MainController as main" layout="column"> 
         <div id="main-view" ng-view layout="column" flex></div>
     </body>

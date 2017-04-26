@@ -23,7 +23,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "../style/font-awesome.min.css"
 import "../style/angular-material.min.css"
 import "../style/dragula.css"
-import "../style/app.css";
+import "../style/app.less";
 
 const moduleName = "estimation";
 const settings = { strictDi: true };
