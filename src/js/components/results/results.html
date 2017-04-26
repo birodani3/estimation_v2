@@ -89,8 +89,8 @@
         <!-- ESTiMATE TICKET TAB -->
         <md-tabs md-border-bottom flex class="stretch-height" md-selected="vm.activeTab">
             <md-tab label="Estimate ticket">
-                <md-content class="result-container" flex layout-padding style="background-color: #f2f2f2">
-                    <div ng-repeat="card in vm.cards" class="card-container" ng-click="vm.selectCard(card)" ng-class="{ 'selected-card': card.isSelected }">
+                <md-content class="result-container" flex ng-class="{ 'flip': vm.isFlipped }" layout-padding style="background-color: #f2f2f2">
+                    <div ng-repeat="card in vm.cards" class="card-container" ng-click="vm.toggleCardSelection(card)" ng-class="{ 'selected-card': card.isSelected }">
                         <div class="front" ng-style="{ 'transition': settings.animation ? '0.6s' : '0.6s' }">
                             <div class="card-value">
                                 <div ng-show="card.value == null">

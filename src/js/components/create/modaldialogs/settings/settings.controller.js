@@ -1,24 +1,10 @@
-export default function SettingsController($scope, $mdDialog) {
-    $scope.values = [
-        { label: 0,   checked: false },
-        { label: "½", checked: false },
-        { label: 1,   checked: true },
-        { label: 2,   checked: true },
-        { label: 3,   checked: true },
-        { label: 5,   checked: true },
-        { label: 8,   checked: true },
-        { label: 13,  checked: true },
-        { label: 20,  checked: true },
-        { label: 40,  checked: true },
-        { label: 100, checked: true },
-        { label: "?", checked: true },
-        { label: "∞", checked: true },
-    ];
+export default function SettingsController($scope, $mdDialog, store) {
+    $scope.values = store.get("settings").values;
 
     $scope.close = () => {
         const settings = {
             values: $scope.values
-        }
+        };
 
         $mdDialog.hide(settings);
     };

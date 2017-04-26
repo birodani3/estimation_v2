@@ -39,7 +39,7 @@ app.post("/jira", (req, res) => {
 
 /* [{
  *     name: string,
- *     hasPassword: boolean,
+ *     settings: Object
  *     host: socket
  * }]
  */
@@ -49,12 +49,12 @@ io.on('connection', (socket) => {
     // String
     let channel = null;
 
-    socket.on('CREATE_CHANNEL', (name, callback) => {
-        console.log("create channel: ", name);
+    socket.on('CREATE_CHANNEL', (payload, callback) => {
+        let name = payload.name;
 
         if (!findChannelByName(name)) {
             channel = name;
-            createChannel(socket, name);
+            createChannel(socket, payload);
 
             callback({});
         } else {
@@ -64,14 +64,30 @@ io.on('connection', (socket) => {
 
     socket.on("JOIN_CHANNEL", (data, callback) => {
         console.log("join channel to: ", data.channel);
-        if (findChannelByName(data.channel)) {
-            channel = data.channel;
+
+        let channelToJoin = findChannelByName(data.channel);
+
+        if (channelToJoin) {
+            // TODO check password
+            channel = channelToJoin.name;
             joinChannel(socket, data);
 
-            callback({});
+            callback({
+                //settings: channelToJoin.settings
+                values: channelToJoin.values
+            });
         } else {
             callback({ error: "CHANNEL_NOT_FOUND" });
         }
+    });
+
+    socket.on("VOTE", (data, callback) => {
+        let payload = {
+            value: data.value,
+            id: socket.id
+        };
+
+        emit.toChannelHost(channel, "USER_VOTED", payload);
     });
 
     socket.on("GET_CHANNELS", (data, callback) => {
@@ -86,7 +102,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on("RESET", () => {
-        emit.toChannel("RESET");
+        emit.toChannel(channel, "RESET");
     });
 
     socket.on("disconnect", () => {
@@ -103,8 +119,8 @@ function findChannelByName(name) {
 
 function createChannel(socket, channel) {
     channels.push({
-        name: channel,
-        hasPassword: false,
+        name: channel.name,
+        values: channel.values,
         host: socket
     });
 

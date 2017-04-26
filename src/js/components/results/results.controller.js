@@ -6,20 +6,21 @@ import _ from "lodash";
 
 /*@ngInject*/
 export default class ResultController {
-    constructor($scope, socket, hover, $mdDialog, dragulaBagId, dragulaService) {
+    constructor($scope, socket, hover, $mdDialog, dragulaBagId, dragulaService, store) {
         this.$scope = $scope;
         this.socket = socket;
+        this.store = store;
         this.$mdDialog = $mdDialog;
 
         this.Tabs = {
-            "ESTIMATE_TICKET": 1,
-            "ESTIMATED_TICKETS": 2
+            "ESTIMATE_TICKET": 0,
+            "ESTIMATED_TICKETS": 1
         };
 
-        // TODO options
-        this.storyPoints = [1,2,3,5,8,13,20,40];
+        this.storyPoints = this.getStoryPoints();
         this.hiddenStoryPoints = [];
-        this.activeTab = 0;
+        this.isFlipped = false;
+        this.activeTab = this.Tabs.ESTIMATE_TICKET;
 
         //dragulaService
         /*hover.bag(dragulaBagId, $scope)
@@ -37,12 +38,17 @@ export default class ResultController {
             description: "Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás "
         }];
 
+        $scope.$watch(() => this.cards, () => {
+            this.isFlipped = this.cards.length && this.cards.every(card => card.value !== null);
+        }, true);
+
         this.initSocket();
     }
 
     initSocket() {
         this.socket.on("USER_JOINED", this.$scope, this.onUserJoined.bind(this));
         this.socket.on("USER_LEFT", this.$scope, this.onUserLeft.bind(this));
+        this.socket.on("USER_VOTED", this.$scope, this.onUserVoted.bind(this));
     }
 
     onUserJoined(user) {
@@ -55,6 +61,14 @@ export default class ResultController {
 
     onUserLeft(user) {
         _.remove(this.cards, card => card.id === user.id);
+    }
+
+    onUserVoted(data) {
+        let card = this.findCardById(data.id);
+
+        if (card) {
+            card.value = data.value;
+        }
     }
 
     openMenu($mdMenu, event) {
@@ -73,11 +87,11 @@ export default class ResultController {
     }
 
     isResetFabVisible() {
-        return this.activeTab === 0 && this.cards.length;
+        return this.activeTab === this.Tabs.ESTIMATE_TICKET && this.cards.length;
     }
 
     isHiddenPointsFabVisible() {
-        return this.activeTab === 1 && this.hiddenStoryPoints.length;
+        return this.activeTab === this.Tabs.ESTIMATED_TICKETS && this.hiddenStoryPoints.length;
     }
 
     openCreateNewTicket(event) {
@@ -92,9 +106,6 @@ export default class ResultController {
         })
         .then((ticket) => {
             this.tickets.push(ticket);
-        })
-        .catch(() => {
-            // Dialog cancelled
         });
     }
 
@@ -110,9 +121,6 @@ export default class ResultController {
         })
         .then((data) => {
             console.log("data: ", data);
-        })
-        .catch(() => {
-            // Dialog cancelled
         });
     }
 
@@ -135,7 +143,19 @@ export default class ResultController {
             .forEach((ticket) => ticket.isSelected = false);
     }
 
-    selectCard(card) {
-        card.isSelected = true;
+
+    toggleCardSelection(card) {
+        card.isSelected = !card.isSelected;
+    }
+
+    findCardById(id) {
+        return _.find(this.cards, card => card.id === id);
+    }
+
+    getStoryPoints() {
+        return this.store.get("settings")
+            .values
+            .filter(setting => setting.checked)
+            .map(value => value.label);
     }
 }

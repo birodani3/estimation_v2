@@ -10,14 +10,13 @@ import config from "./app.config.js";
 import SocketService from "./services/socket.service.js";
 import ToastService from "./services/toast.service.js";
 import HoverService from "./services/hover.service.js";
-import {
-    MainController,
-    HomeController,
-    CreateController,
-    JoinController,
-    ResultsController,
-    PlayController
-} from "./components/controllers.js";
+import StoreService from "./services/store.service.js";
+import MainController from "./components/main.controller.js";
+import HomeController from "./components/home/home.controller.js";
+import CreateController from "./components/create/create.controller.js";
+import JoinController from "./components/join/join.controller.js";
+import ResultsController from "./components/results/results.controller.js";
+import PlayController from "./components/play/play.controller.js";
 
 // Import styles
 import "bootstrap/dist/css/bootstrap.css";
@@ -38,7 +37,6 @@ const dependencies = [
     angularDragula(angular)
 ];
 
-
 /*
  * Estimator v2
  * 
@@ -50,6 +48,7 @@ angular
     .service("socket", SocketService)
     .service("toast", ToastService)
     .service("hover", HoverService)
+    .service("store", StoreService)
     .controller("MainController", MainController)
     .controller("HomeController", HomeController)
     .controller("CreateController", CreateController)
@@ -57,7 +56,7 @@ angular
     .controller("ResultsController", ResultsController)
     .controller("PlayController", PlayController)
     .value("dragulaBagId", "ticket-container")
-    .config(['$provide', function ($provide) {
+    .config(['$provide', ($provide) => {
         // DEBUG
 
         /*$provide.decorator('$rootScope', ["$delegate", function ($delegate) {

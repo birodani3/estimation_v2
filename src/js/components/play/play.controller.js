@@ -29,12 +29,15 @@ export default class PlayController {
     }
 
     joinChannel(username) {
+        this.isLoading = true;
+        this.username = username;
         const channel = this.$route.current.params.channel;
 
         this.socket.emit("JOIN_CHANNEL", { channel, username }, (data) => {
+            this.isLoading = false;
+
             if (!data.error) {
-                this.isLoading = true;
-                this.settings = data.settings;
+                this.values = data.values;
                 this.$rootScope.channel = channel;
                 this.$rootScope.username = username;
                 this.$cookies.put("username", username);
@@ -56,6 +59,16 @@ export default class PlayController {
         return this.$mdDialog
             .show(confirmDialog)
             .finally(() => confirmDialog = undefined);
+    }
+
+    vote(value) {
+        let payload = {
+            value,
+            name: this.username
+        };
+
+        this.socket.emit("VOTE", payload);
+        this.isLoading = true;
     }
 
     onChannelDeleted() {

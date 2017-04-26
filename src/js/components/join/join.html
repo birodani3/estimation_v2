@@ -32,7 +32,7 @@
                                 </md-icon>
                                 <div class="md-list-item-text" layout="column">
                                     <h3>{{ channel.name }}</h3>
-                                    <h4>{{ channel.hasPassword }}</h4>
+                                    <h4>{{ channel.settings.hasPassword }}</h4>
                                 </div>
                             </md-list-item>
                             <div class="text-center channel-message" ng-show="!vm.channels.length">No channel available</div>

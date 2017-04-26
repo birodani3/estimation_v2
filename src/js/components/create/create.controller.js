@@ -3,14 +3,16 @@ import settingsTemplate from "./modaldialogs/settings/settings.html";
 
 /*@ngInject*/
 export default class CreateController {
-    constructor($rootScope, $location, $mdDialog, $cookies, socket, toast) {
+    constructor($rootScope, $location, $mdDialog, $cookies, socket, toast, store) {
         this.$rootScope = $rootScope;
         this.$location = $location;
         this.$mdDialog = $mdDialog;
         this.$cookies = $cookies;
         this.socket = socket;
         this.toast = toast;
+        this.store = store;
         this.channel = $cookies.get("channel") || "";
+        this.settings = store.get("settings");
     }
 
     createChannel(channel) {
@@ -20,7 +22,16 @@ export default class CreateController {
             return;
         }
 
-        this.socket.emit("CREATE_CHANNEL", channel, (data) => {
+        let values = this.settings.values
+            .filter(value => value.checked)
+            .map(value => value.label);
+
+        let payload = {
+            name: channel,
+            values
+        };
+
+        this.socket.emit("CREATE_CHANNEL", payload, (data) => {
             if (!data.error) {
                 this.$cookies.put("channel", channel);
                 this.$rootScope.channel = channel;
@@ -36,12 +47,16 @@ export default class CreateController {
     openSettings(event) {
         this.$mdDialog.show({
             template: settingsTemplate,
-            controller: ["$scope", "$mdDialog", SettingsController],
+            controller: ["$scope", "$mdDialog", "store", SettingsController],
             parent: angular.element(document.body),
             targetEvent: event,
             openFrom: "#settings-menu-button",
             closeTo: "#settings-menu-button",
             clickOutsideToClose: true
+        })
+        .then(settings => {
+            this.settings = settings;
+            this.store.set("settings", settings);
         });
     }
 

@@ -5,18 +5,18 @@ export default class ToastService {
     }
 
     warning(text, delay) {
-        this.showToast_(text, "warning", delay);
+        this.showToast(text, "warning", delay);
     }
 
     success(text, delay) {
-        this.showToast_(text, "success", delay);
+        this.showToast(text, "success", delay);
     }
 
     error(text, delay) {
-        this.showToast_(text, "error", delay);
+        this.showToast(text, "error", delay);
     }
 
-    showToast_(text, theme, delay = 3000) {
+    showToast(text, theme, delay = 3000) {
         const toast = this.$mdToast.simple({
             textContent: text,
             position: "top right",
