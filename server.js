@@ -7,7 +7,7 @@ const app        = express();
 const server     = require("http").createServer(app);
 const io         = require("socket.io")(server);
 
-const port = 3008;
+const port = process.env.PORT || 3008;
 
 app.use(bodyParser.json());
 app.use(express.static(__dirname));
