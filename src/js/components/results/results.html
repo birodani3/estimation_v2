@@ -61,30 +61,41 @@
             </div>
         </md-toolbar>
 
-        <!-- RESET BUTTON -->
-        <md-fab-speed-dial ng-show="vm.isResetFabVisible()" md-direction="down" class="fab-speed-dial md-scale">
-            <md-fab-trigger>
-                <md-button class="md-fab md-accent" aria-label="Hidden storyPoints" ng-click="vm.reset()">
-                    <md-icon md-font-icon="fa-reply-all" class="fa fa-lg"></md-icon>
-                </md-button>
-            </md-fab-trigger>
-        </md-fab-speed-dial>
-
-        <!-- HIDDEN STORYPOINTS FAB -->
-        <md-fab-speed-dial ng-show="vm.isHiddenPointsFabVisible()" md-direction="down" class="fab-speed-dial md-scale">
-            <md-fab-trigger>
-                <md-button class="md-fab md-accent" aria-label="Hidden storyPoints">
-                    <md-icon md-font-icon="fa-eye" class="fa fa-lg"></md-icon>
-                </md-button>
-            </md-fab-trigger>
-            <md-fab-actions>
-                <div ng-repeat="storyPoint in vm.hiddenStoryPoints">
-                    <md-button aria-label="{{storyPoint}}" class="md-fab md-raised md-mini" ng-click="vm.showStoryPoint(storyPoint)">
-                        <div>{{storyPoint}}</div>
+        <div class="fab-container">
+            <!-- RESET FAB -->
+            <md-fab-speed-dial ng-show="vm.isResetFabVisible()" md-direction="down" class="fab-speed-dial md-scale">
+                <md-fab-trigger>
+                    <md-button class="md-fab md-accent" aria-label="Hidden storyPoints" ng-click="vm.reset()">
+                        <md-icon md-font-icon="fa-reply-all" class="fa fa-lg"></md-icon>
                     </md-button>
-                </div>
-            </md-fab-actions>
-        </md-fab-speed-dial>
+                </md-fab-trigger>
+            </md-fab-speed-dial>
+
+            <!-- REMOVE CARD FAB -->
+            <md-fab-speed-dial ng-show="vm.isRemoveCardFabVisible()" md-direction="down" class="fab-speed-dial md-scale">
+                <md-fab-trigger>
+                    <md-button class="md-fab md-accent" aria-label="Remove selected card" ng-click="vm.removeSelectedCard()">
+                        <md-icon md-font-icon="fa-ban" class="fa fa-lg"></md-icon>
+                    </md-button>
+                </md-fab-trigger>
+            </md-fab-speed-dial>
+
+            <!-- HIDDEN STORYPOINTS FAB -->
+            <md-fab-speed-dial ng-show="vm.isHiddenPointsFabVisible()" md-direction="down" class="fab-speed-dial md-scale">
+                <md-fab-trigger>
+                    <md-button class="md-fab md-accent" aria-label="Hidden storyPoints">
+                        <md-icon md-font-icon="fa-eye" class="fa fa-lg"></md-icon>
+                    </md-button>
+                </md-fab-trigger>
+                <md-fab-actions>
+                    <div ng-repeat="point in vm.storyPoints | filter: { isVisible: false }">
+                        <md-button aria-label="{{point.label}}" class="md-fab md-raised md-mini" ng-click="vm.showStoryPoint(point)">
+                            <div>{{point.label}}</div>
+                        </md-button>
+                    </div>
+                </md-fab-actions>
+            </md-fab-speed-dial>
+        </div>
 
         <!-- ESTiMATE TICKET TAB -->
         <md-tabs md-border-bottom flex class="stretch-height" md-selected="vm.activeTab">
@@ -113,9 +124,9 @@
             <!-- ESTIMATED_TICKETS TAB -->
             <md-tab label="Estimated tickets" flex layout="column">
                 <div flex layout="row" layout-fill>
-                    <div flex layout="column" ng-repeat="point in vm.storyPoints" style="border-left: 1px solid rgba(0, 0, 0, 0.117647);" layout-fill>
+                    <div flex layout="column" ng-repeat="point in vm.storyPoints" ng-show="point.isVisible" style="border-left: 1px solid rgba(0, 0, 0, 0.117647);" layout-fill>
                         <div class="md-toolbar-tools">
-                            <h2 flex md-truncate>{{point}}</h2>
+                            <h2 flex md-truncate>{{point.label}}</h2>
                             <md-menu md-position-mode="target-left target">
                                 <md-button id="storypoint-menu-button" aria-label="Storypoint menu" class="md-icon-button" ng-click="vm.openMenu($mdMenu, $event)">
                                     <md-icon md-menu-origin md-font-icon="fa-ellipsis-v" class="fa fa-lg"></i></md-icon>
@@ -127,11 +138,10 @@
                                             Hide column
                                         </md-button>
                                     </md-menu-item>
-        
                                 </md-menu-content>
                             </md-menu>
                         </div>
-                        <div flex layout="column" dragula="'ticket-container'" dragula-scope="$parent"></div>
+                        <div flex layout="column" story-point="{{point.label}}" dragula="'ticket-container'" dragula-scope="$parent"></div>
                     </div>
                 </div>
             </md-tab>

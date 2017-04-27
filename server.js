@@ -107,6 +107,10 @@ io.on('connection', (socket) => {
         deleteChannel(socket, channel);
     });
 
+    socket.on("REMOVE_USER", (card) => {
+        emit.toSocket(card.id, "REMOVE_USER");
+    });
+
     socket.on("RESET", () => {
         emit.toChannel(channel, "RESET");
     });
@@ -187,6 +191,10 @@ const emit = {
 
     toChannel: (channelName, event, data) => {
         io.to(channelName).emit(event, data);
+    },
+
+    toSocket: (socketId, event, data) => {
+        io.to(socketId).emit(event, data);
     },
 
     toChannelHost: (channelName, event, data) => {

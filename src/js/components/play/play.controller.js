@@ -15,7 +15,7 @@ export default class PlayController {
         this.initSocket();
 
         $scope.$on("$destroy", () => {
-            socket.emit("LEAVE_CHANNEL")
+            socket.emit("LEAVE_CHANNEL");
         });
 
         if (!$rootScope.username) {
@@ -29,6 +29,7 @@ export default class PlayController {
 
     initSocket(socket) {
         this.socket.on("CHANNEL_DELETED", this.$scope, this.onChannelDeleted.bind(this));
+        this.socket.on("REMOVE_USER", this.$scope, this.onUserRemoved.bind(this));
         this.socket.on("RESET", this.$scope, this.onReset.bind(this));
     }
 
@@ -77,6 +78,15 @@ export default class PlayController {
 
     onChannelDeleted() {
         this.toast.warning("Channel deleted");
+        this.back();
+    }
+
+    onUserRemoved() {
+        this.toast.warning("You got removed from the channel");
+        this.back();
+    }
+
+    back() {
         this.$rootScope.username = null;
         this.$rootScope.channel = null;
         this.$location.path("/");

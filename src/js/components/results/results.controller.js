@@ -6,7 +6,7 @@ import _ from "lodash";
 
 /*@ngInject*/
 export default class ResultController {
-    constructor($scope, socket, hover, $mdDialog, dragulaBagId, dragulaService, store) {
+    constructor($scope, socket, hover, $mdDialog, dragulaBagId, store) {
         this.$scope = $scope;
         this.socket = socket;
         this.store = store;
@@ -18,16 +18,18 @@ export default class ResultController {
         };
 
         this.storyPoints = this.getStoryPoints();
-        this.hiddenStoryPoints = [];
         this.isFlipped = false;
         this.activeTab = this.Tabs.ESTIMATE_TICKET;
 
-        //dragulaService
-        /*hover.bag(dragulaBagId, $scope)
-            .on("drop", (e, el) => {
-                console.log("drop!", e, el);
+        hover.bag(dragulaBagId, $scope)
+            .on("drop", (event, element, target, source) => {
+                let droppedTicket = element.scope().ticket;
+                let point = target.scope().point;
+                let newStoryPoint = point ? point.label : null;
+
+                droppedTicket.storyPoint = newStoryPoint;
             })
-            .use();*/
+            .use();
 
         this.cards = [];
         this.tickets = [{
@@ -38,17 +40,20 @@ export default class ResultController {
             description: "Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás "
         }];
 
-        $scope.$watch(() => this.cards, () => {
-            this.isFlipped = this.cards.length && this.cards.every(card => card.value !== null);
-        }, true);
-
         this.initSocket();
+        this.initWatchers();
     }
 
     initSocket() {
         this.socket.on("USER_JOINED", this.$scope, this.onUserJoined.bind(this));
         this.socket.on("USER_LEFT", this.$scope, this.onUserLeft.bind(this));
         this.socket.on("USER_VOTED", this.$scope, this.onUserVoted.bind(this));
+    }
+
+    initWatchers() {
+        this.$scope.$watch(() => this.cards, () => {
+            this.isFlipped = this.cards.every(card => card.value !== null);
+        }, true);
     }
 
     onUserJoined(user) {
@@ -76,14 +81,11 @@ export default class ResultController {
     };
 
     hideStoryPoint(point) {
-        _.pull(this.storyPoints, point);
-        this.hiddenStoryPoints.push(point);
+        point.isVisible = false;
     }
 
     showStoryPoint(point) {
-         _.pull(this.hiddenStoryPoints, point);
-        this.storyPoints.push(point);
-        this.storyPoints.sort((a, b) => a - b);
+        point.isVisible = true;
     }
 
     isResetFabVisible() {
@@ -91,7 +93,17 @@ export default class ResultController {
     }
 
     isHiddenPointsFabVisible() {
-        return this.activeTab === this.Tabs.ESTIMATED_TICKETS && this.hiddenStoryPoints.length;
+        const hasHiddenStoryPoint = this.storyPoints
+            .filter(point => !point.isVisible)
+            .length;
+
+        return this.activeTab === this.Tabs.ESTIMATED_TICKETS && hasHiddenStoryPoint
+    }
+
+    isRemoveCardFabVisible() {
+        return this.cards
+            .filter(card => card.isSelected)
+            .length;
     }
 
     openCreateNewTicket(event) {
@@ -143,9 +155,20 @@ export default class ResultController {
             .forEach((ticket) => ticket.isSelected = false);
     }
 
+    toggleCardSelection(cardToToggle) {
+        cardToToggle.isSelected = !cardToToggle.isSelected;
 
-    toggleCardSelection(card) {
-        card.isSelected = !card.isSelected;
+        this.cards
+            .filter(card => card !== cardToToggle)
+            .forEach(card => card.isSelected = false);
+    }
+
+    removeSelectedCard() {
+        let card = _.find(this.cards, card => card.isSelected);
+
+        this.socket.emit("REMOVE_USER", card);
+
+        _.pull(this.cards, card);
     }
 
     findCardById(id) {
@@ -156,6 +179,9 @@ export default class ResultController {
         return this.store.get("settings")
             .values
             .filter(setting => setting.checked)
-            .map(value => value.label);
+            .map(value => ({
+                label: value.label,
+                isVisible: true
+            }));
     }
 }
