@@ -22,7 +22,7 @@
                     </form>
                     <div flex layout="row" layout-align="end center">
                         <md-button id="settings-menu-button" class="md-primary md-raised" ng-click="vm.openSettings()">Settings</md-button>
-                        <md-button class="md-primary md-raised" ng-click="channelform.$valid && vm.createChannel(vm.channel)">Create</md-button>
+                        <md-button class="md-primary md-raised" ng-disabled="channelform.$invalid" ng-click="channelform.$valid && vm.createChannel(vm.channel)">Create</md-button>
                     </div>
                 </div>
             </div>
