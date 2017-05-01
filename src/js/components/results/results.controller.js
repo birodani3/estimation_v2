@@ -1,47 +1,39 @@
 import NewTicketController from "./modaldialogs/newticket/newticket.controller.js";
 import ImportTicketsController from "./modaldialogs/importtickets/importtickets.controller.js";
+import SetStoryPointController from "./modaldialogs/setstorypoint/setstorypoint.controller.js"
 import newTicketTemplate from "./modaldialogs/newticket/newticket.html";
 import importTicketsTemplate from "./modaldialogs/importtickets/importtickets.html";
+import setStoryPointTemplate from "./modaldialogs/setstorypoint/setstorypoint.html"
 import _ from "lodash";
+
+const Tabs = {
+    "ESTIMATE_TICKET": 0,
+    "ESTIMATED_TICKETS": 1
+};
 
 /*@ngInject*/
 export default class ResultController {
-    constructor($scope, socket, hover, $mdDialog, dragulaBagId, store) {
+    constructor($scope, $rootScope, socket, hover, $mdDialog, dragulaBagId, dragulaService, store) {
         this.$scope = $scope;
         this.socket = socket;
         this.store = store;
         this.$mdDialog = $mdDialog;
 
-        this.Tabs = {
-            "ESTIMATE_TICKET": 0,
-            "ESTIMATED_TICKETS": 1
-        };
+        /*dragulaService.options($rootScope, dragulaBagId, {
+            copy: true
+        });*/
 
         this.storyPoints = this.getStoryPoints();
         this.isFlipped = false;
-        this.activeTab = this.Tabs.ESTIMATE_TICKET;
-
-        hover.bag(dragulaBagId, $scope)
-            .on("drop", (event, element, target, source) => {
-                let droppedTicket = element.scope().ticket;
-                let point = target.scope().point;
-                let newStoryPoint = point ? point.label : null;
-
-                droppedTicket.storyPoint = newStoryPoint;
-            })
-            .use();
-
+        this.selectedTicket = null;
+        this.activeTab = Tabs.ESTIMATE_TICKET;   
         this.cards = [];
-        this.tickets = [{
-            title: "Ticket name",
-            description: "Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás "
-        }, {
-            title: "Ticket name",
-            description: "Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás Hosszú leírás "
-        }];
+        this.tickets = [{ title: "Test ticket", description: "description", storyPoint: null }];
 
         this.initSocket();
         this.initWatchers();
+
+        hover.bag(dragulaBagId, $scope) .on("drop", this.onTicketDropped.bind(this)).use();
     }
 
     initSocket() {
@@ -54,6 +46,18 @@ export default class ResultController {
         this.$scope.$watch(() => this.cards, () => {
             this.isFlipped = this.cards.every(card => card.value !== null);
         }, true);
+    }
+
+    onTicketDropped(event, element, target, source) {
+        let droppedTicket = element.scope().ticket;
+        let point = target.scope().point;
+        let newStoryPoint = point ? point.label : null;
+
+        droppedTicket.storyPoint = newStoryPoint;
+
+        if (droppedTicket === this.selectedTicket) {
+            this.selectedTicket = null;
+        }
     }
 
     onUserJoined(user) {
@@ -89,7 +93,7 @@ export default class ResultController {
     }
 
     isResetFabVisible() {
-        return this.activeTab === this.Tabs.ESTIMATE_TICKET && this.cards.length;
+        return this.activeTab === Tabs.ESTIMATE_TICKET && this.cards.length;
     }
 
     isHiddenPointsFabVisible() {
@@ -97,7 +101,7 @@ export default class ResultController {
             .filter(point => !point.isVisible)
             .length;
 
-        return this.activeTab === this.Tabs.ESTIMATED_TICKETS && hasHiddenStoryPoint
+        return this.activeTab === Tabs.ESTIMATED_TICKETS && hasHiddenStoryPoint
     }
 
     isRemoveCardFabVisible() {
@@ -118,7 +122,8 @@ export default class ResultController {
         })
         .then((ticket) => {
             this.tickets.push(ticket);
-        });
+        })
+        .catch(() => {});
     }
 
     openImportTicketsDialog(event) {
@@ -133,7 +138,28 @@ export default class ResultController {
         })
         .then((data) => {
             console.log("data: ", data);
-        });
+        })
+        .catch(() => {});
+    }
+
+    openSetStoryPointDialog() {
+        this.$mdDialog.show({
+            template: setStoryPointTemplate,
+            controller: ["$scope", "$http", "$mdDialog", "store", SetStoryPointController],
+            parent: angular.element(document.body),
+            targetEvent: event,
+            openFrom: "#set-story-points-button",
+            closeTo: "#set-story-points-button",
+            clickOutsideToClose: true,
+            locals: {
+                ticketName: this.selectedTicket.title
+            }
+        })
+        .then((storyPoint) => {
+            this.selectedTicket.storyPoint = storyPoint;
+            console.log("tickets: ", this.tickets);
+        })
+        .catch(() => {});
     }
 
     reset() {
@@ -145,9 +171,10 @@ export default class ResultController {
         ticket.isSelected = !ticket.isSelected;
 
         if (ticket.isSelected) {
+            this.selectedTicket = ticket;
             this.reset();
         } else {
-
+            this.selectedTicket = null;
         }
 
         this.tickets
@@ -166,9 +193,10 @@ export default class ResultController {
     removeSelectedCard() {
         let card = _.find(this.cards, card => card.isSelected);
 
-        this.socket.emit("REMOVE_USER", card);
-
-        _.pull(this.cards, card);
+        if (card) {
+            this.socket.emit("REMOVE_USER", card);
+            _.pull(this.cards, card);
+        }
     }
 
     findCardById(id) {

@@ -39,12 +39,16 @@
         <!-- UNESTIMATED TICKETS LIST -->
         <md-content flex layout-padding layout-fill>
             <md-list flex layout-fill layout-align="center center" dragula="'ticket-container'">
-                <md-list-item class="md-3-line ticket" ng-class="{ 'selected': ticket.isSelected }" ng-repeat="ticket in vm.tickets track by $index" ng-click="vm.toggleTicketSelection(ticket)">
+                <md-list-item class="md-3-line ticket"
+                              ng-class="{ 'selected': ticket.isSelected }"
+                              ng-repeat="ticket in vm.tickets track by $index"
+                              ng-click="vm.toggleTicketSelection(ticket)">
+
                     <div class="md-list-item-text" layout="column">
                         <h3 flex md-truncate>{{ ticket.title }}</h3>
                         <p>{{ ticket.description | limitTo: 65 }}{{ ticket.description.length > 65 ? "..." : "" }}</p>
                     </div>
-                    </md-list-item>
+                </md-list-item>
             </md-list>
         </md-content>
     </md-sidenav>
@@ -100,23 +104,34 @@
         <!-- ESTiMATE TICKET TAB -->
         <md-tabs md-border-bottom flex class="stretch-height" md-selected="vm.activeTab">
             <md-tab label="Estimate ticket">
-                <md-content class="result-container" flex ng-class="{ 'flip': vm.isFlipped }" layout-padding style="background-color: #f2f2f2">
-                    <div ng-repeat="card in vm.cards" class="card-container" ng-click="vm.toggleCardSelection(card)" ng-class="{ 'selected-card': card.isSelected }">
-                        <div class="front" ng-style="{ 'transition': settings.animation ? '0.6s' : '0.6s' }">
-                            <div class="card-value">
-                                <div ng-show="card.value == null">
-                                    <div class="dots"><span>.</span><span>.</span><span>.</span></div>
+                <md-content class="estimate-ticket-tab-content" layout-fill layout="column" layout-align="space-between stretch">
+                    <div class="result-container" ng-class="{ 'flip': vm.isFlipped }" layout-padding style="background-color: #f2f2f2">
+                        <div ng-repeat="card in vm.cards" class="card-container" ng-click="vm.toggleCardSelection(card)" ng-class="{ 'selected-card': card.isSelected }">
+                            <div class="front" ng-style="{ 'transition': settings.animation ? '0.6s' : '0.6s' }">
+                                <div class="card-value">
+                                    <div ng-show="card.value == null">
+                                        <div class="dots"><span>.</span><span>.</span><span>.</span></div>
+                                    </div>
+                                    <span ng-show="card.value != null"><i class="fa fa-check"></i></span>
                                 </div>
-                                <span ng-show="card.value != null"><i class="fa fa-check"></i></span>
+                                <div class="user-name">{{card.name}}</div>
                             </div>
-                            <div class="user-name">{{card.name}}</div>
-                        </div>
-                        <div class="back" ng-style="{ 'transition': settings.animation ? '0.6s' : '0.6s' }">
-                            <div class="card-value">
-                                <span>{{card.value}}</span>
+                            <div class="back" ng-style="{ 'transition': settings.animation ? '0.6s' : '0.6s' }">
+                                <div class="card-value">
+                                    <span>{{card.value}}</span>
+                                </div>
+                                <div class="user-name">{{card.name}}</div>
                             </div>
-                            <div class="user-name">{{card.name}}</div>
                         </div>
+                    </div>
+                     <div class="current-ticket-footer">
+                        <md-divider></md-divider>
+                        <span class="current-ticket-text" ng-hide="vm.selectedTicket">
+                            You are now estimating an unknown ticket. Select a ticket to estimate it.
+                        </span>
+                        <md-button id="#set-story-points-button" ng-show="vm.selectedTicket" class="md-primary" ng-click="vm.openSetStoryPointDialog()">
+                            Set story point to {{vm.selectedTicket.title}}
+                        </md-button>
                     </div>
                 </md-content>
             </md-tab>
@@ -141,7 +156,9 @@
                                 </md-menu-content>
                             </md-menu>
                         </div>
-                        <div flex layout="column" story-point="{{point.label}}" dragula="'ticket-container'" dragula-scope="$parent"></div>
+                        <div flex layout="column" story-point="{{point.label}}" dragula="'ticket-container'">
+
+                        </div>
                     </div>
                 </div>
             </md-tab>

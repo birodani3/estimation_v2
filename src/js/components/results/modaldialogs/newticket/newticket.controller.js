@@ -1,5 +1,5 @@
 export default function NewTicketController($scope, $mdDialog) {
-    $scope.ticket = {};
+    $scope.ticket = { storyPoint: null };
 
     $scope.hide = () => {
         $mdDialog.hide();
