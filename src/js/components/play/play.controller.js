@@ -27,10 +27,11 @@ export default class PlayController {
         }
     }
 
-    initSocket(socket) {
+    initSocket() {
         this.socket.on("CHANNEL_DELETED", this.$scope, this.onChannelDeleted.bind(this));
         this.socket.on("REMOVE_USER", this.$scope, this.onUserRemoved.bind(this));
         this.socket.on("RESET", this.$scope, this.onReset.bind(this));
+        this.socket.on("disconnect", this.$scope, this.onDisconnect.bind(this));
     }
 
     joinChannel(username) {
@@ -83,6 +84,11 @@ export default class PlayController {
 
     onUserRemoved() {
         this.toast.warning("You got removed from the channel");
+        this.back();
+    }
+
+    onDisconnect() {
+        this.toast.warning("Websocket connection lost");
         this.back();
     }
 

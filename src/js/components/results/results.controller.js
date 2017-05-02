@@ -13,27 +13,25 @@ const Tabs = {
 
 /*@ngInject*/
 export default class ResultController {
-    constructor($scope, $rootScope, socket, hover, $mdDialog, dragulaBagId, dragulaService, store) {
+    constructor($scope, $rootScope, $http, socket, hover, toast, $mdDialog, dragulaBagId, dragulaService, store) {
         this.$scope = $scope;
+        this.$http = $http;
         this.socket = socket;
+        this.toast = toast;
         this.store = store;
         this.$mdDialog = $mdDialog;
-
-        /*dragulaService.options($rootScope, dragulaBagId, {
-            copy: true
-        });*/
 
         this.storyPoints = this.getStoryPoints();
         this.isFlipped = false;
         this.selectedTicket = null;
         this.activeTab = Tabs.ESTIMATE_TICKET;   
         this.cards = [];
-        this.tickets = [{ title: "Test ticket", description: "description", storyPoint: null }];
+        this.tickets = [];
 
         this.initSocket();
         this.initWatchers();
 
-        hover.bag(dragulaBagId, $scope) .on("drop", this.onTicketDropped.bind(this)).use();
+        hover.bag(dragulaBagId, $scope).on("drop", this.onTicketDropped.bind(this)).use();
     }
 
     initSocket() {
@@ -110,6 +108,10 @@ export default class ResultController {
             .length;
     }
 
+    isExportStoryPointsFabVisible() {
+        return this.tickets.filter(tickets => tickets.storyPoint).length && this.activeTab === Tabs.ESTIMATED_TICKETS;
+    }
+
     openCreateNewTicket(event) {
         this.$mdDialog.show({
             template: newTicketTemplate,
@@ -138,30 +140,54 @@ export default class ResultController {
         })
         .then((tickets) => {
             if (tickets && tickets.length) {
+                tickets.forEach(ticket => ticket.isSelected = false);
+
                 this.tickets.push(...tickets);
             }
         })
         .catch(() => {});
     }
 
-    openSetStoryPointDialog() {
-        this.$mdDialog.show({
-            template: setStoryPointTemplate,
-            controller: ["$scope", "$http", "$mdDialog", "store", SetStoryPointController],
-            parent: angular.element(document.body),
-            targetEvent: event,
-            openFrom: "#set-story-points-button",
-            closeTo: "#set-story-points-button",
-            clickOutsideToClose: true,
-            locals: {
-                ticketName: this.selectedTicket.title
+    // Set story point dialog
+    /*this.$mdDialog.show({
+        template: setStoryPointTemplate,
+        controller: ["$scope", "$http", "$mdDialog", "store", SetStoryPointController],
+        parent: angular.element(document.body),
+        targetEvent: event,
+        openFrom: "#set-story-points-button",
+        closeTo: "#set-story-points-button",
+        clickOutsideToClose: true,
+        locals: {
+            ticketName: this.selectedTicket.title
+        }
+    })
+    .then((storyPoint) => {
+        this.selectedTicket.storyPoint = storyPoint;
+    })
+    .catch(() => {});*/
+
+    exportStoryPoints() {
+        const config = {
+            method: "POST",
+            url: "/jira/setStoryPoints",
+            data: {
+                tickets: this.tickets.filter(ticket => angular.isNumber(ticket.storyPoint))
             }
-        })
-        .then((storyPoint) => {
-            this.selectedTicket.storyPoint = storyPoint;
-            console.log("tickets: ", this.tickets);
-        })
-        .catch(() => {});
+        };
+
+        this.$http(config).then((response) => {
+            if (response.data) {
+                if (response.data === "SUCCESS") {
+                    this.toast.success("Export was successful");
+
+                    this.tickets = this.tickets.filter(ticket => !angular.isNumber(ticket.storyPoint))
+                } else {
+                    this.toast.error("Export was unsuccessful");
+                }
+            } else {
+                this.toast.error("Export was unsuccessful");
+            }
+        });
     }
 
     reset() {
@@ -208,7 +234,7 @@ export default class ResultController {
     getStoryPoints() {
         return this.store.get("settings")
             .values
-            .filter(setting => setting.checked)
+            .filter(setting => setting.checked && angular.isNumber(setting.label))
             .map(value => ({
                 label: value.label,
                 isVisible: true

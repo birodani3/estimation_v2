@@ -1,3 +1,4 @@
+const Q          = require('q');
 const path       = require('path');
 const _          = require("lodash");
 const JiraClient = require('jira-connector');
@@ -16,13 +17,15 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, '/index.html'));
 });
 
+let Jira;
+
 app.post("/jira", (req, res) => {
     if (!req.body.username || !req.body.password || !req.body.sprintId) {
         res.send();
         return;
     }
 
-    const Jira = new JiraClient({
+    Jira = new JiraClient({
         host: 'jira.cas.de',
         basic_auth: {
             username: req.body.username,
@@ -34,6 +37,30 @@ app.post("/jira", (req, res) => {
         sendResponse(res, issues);
     });
 });
+
+app.post("/jira/setStoryPoints", (req, res) => {
+    if (!req.body.tickets) {
+        res.send();
+        return;
+    }
+
+    if (Jira) {
+        let promises = req.body.tickets.map((ticket) => {
+            return Jira.issue.setIssueEstimation({ issueId: ticket.issueId, value: ticket.storyPoint, boardId: ticket.boardId });
+        });
+
+        Q.all(promises)
+            .then(() => {
+                sendResponse(res, "SUCCESS");
+            })
+            .catch(() => {
+                sendResponse(res, "ERROR");
+            });
+    } else {
+        console.log("JIRA not inited yet");
+    }
+});
+
 
 /* [{
  *     name: string,

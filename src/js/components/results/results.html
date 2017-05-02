@@ -66,6 +66,14 @@
             </div>
         </md-toolbar>
 
+         <md-fab-speed-dial class="exportStoryPointsFab" ng-show="vm.isExportStoryPointsFabVisible()" md-direction="down" class="fab-speed-dial md-scale">
+            <md-fab-trigger>
+                <md-button class="md-fab md-accent" aria-label="Export storypoints" ng-click="vm.exportStoryPoints()">
+                    <md-icon md-font-icon="fa-external-link" class="fa fa-lg"></md-icon>
+                </md-button>
+            </md-fab-trigger>
+        </md-fab-speed-dial>
+
         <div class="fab-container">
             <!-- RESET FAB -->
             <md-fab-speed-dial ng-show="vm.isResetFabVisible()" md-direction="down" class="fab-speed-dial md-scale">
@@ -125,20 +133,22 @@
                             </div>
                         </div>
                     </div>
-                     <div class="current-ticket-footer">
-                        <md-divider></md-divider>
-                        <span class="current-ticket-text" ng-hide="vm.selectedTicket">
-                            You are now estimating an unknown ticket. Select a ticket to estimate it.
-                        </span>
-                        <md-button id="#set-story-points-button" ng-show="vm.selectedTicket" class="md-primary" ng-click="vm.openSetStoryPointDialog()">
-                            Set story point to {{vm.selectedTicket.title}}
-                        </md-button>
-                    </div>
+                    <!-- TODO set sp button
+                        <div class="current-ticket-footer">
+                            <md-divider></md-divider>
+                            <span class="current-ticket-text" ng-hide="vm.selectedTicket">
+                                You are now estimating an unknown ticket. Select a ticket to estimate it.
+                            </span>
+                            <md-button id="#set-story-points-button" ng-show="vm.selectedTicket" class="md-primary" ng-click="vm.openSetStoryPointDialog()">
+                                Set story point to {{vm.selectedTicket.title}}
+                            </md-button>
+                        </div>
+                    -->
                 </md-content>
             </md-tab>
 
             <!-- ESTIMATED_TICKETS TAB -->
-            <md-tab label="Estimated tickets" flex layout="column">
+            <md-tab label="Estimated tickets" class="estimated-tickets-tab-content" flex layout="column">
                 <div flex layout="row" layout-fill>
                     <div flex layout="column" ng-repeat="point in vm.storyPoints" ng-show="point.isVisible" style="border-left: 1px solid rgba(0, 0, 0, 0.117647);" layout-fill>
                         <div class="md-toolbar-tools">
