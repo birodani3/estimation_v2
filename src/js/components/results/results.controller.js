@@ -136,8 +136,10 @@ export default class ResultController {
             closeTo: "#tickets-menu-button",
             clickOutsideToClose: true
         })
-        .then((data) => {
-            console.log("data: ", data);
+        .then((tickets) => {
+            if (tickets && tickets.length) {
+                this.tickets.push(...tickets);
+            }
         })
         .catch(() => {});
     }

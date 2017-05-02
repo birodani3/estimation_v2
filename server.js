@@ -17,12 +17,10 @@ app.get("/", (req, res) => {
 });
 
 app.post("/jira", (req, res) => {
-    if (!req.body.username || !req.body.password) {
+    if (!req.body.username || !req.body.password || !req.body.sprintId) {
         res.send();
         return;
     }
-
-    console.log("JIRA");
 
     const Jira = new JiraClient({
         host: 'jira.cas.de',
@@ -32,8 +30,8 @@ app.post("/jira", (req, res) => {
         }
     });
 
-    Jira.board.getBoard({ "rapidView": 306 }, (err, boards) => {
-        sendResponse(res, boards);
+    Jira.sprint.getSprintIssues({ "sprintId": req.body.sprintId, "maxResults": 99 }, (err, issues) => {
+        sendResponse(res, issues);
     });
 });
 

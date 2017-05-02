@@ -26,6 +26,13 @@
                         <div ng-message="required">This is required.</div>
                     </div>
                 </md-input-container>
+                 <md-input-container class="md-block">
+                    <label>Sprint id</label>
+                    <input required md-no-asterisk name="sprintId" type="number" ng-model="jira.sprintId">
+                    <div ng-messages="importTicketsForm.sprintId.$error">
+                        <div ng-message="required">This is required.</div>
+                    </div>
+                </md-input-container>
             </div>
         </md-dialog-content>
 
