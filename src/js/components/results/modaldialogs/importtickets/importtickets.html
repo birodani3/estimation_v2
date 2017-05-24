@@ -15,7 +15,7 @@
                 <div class="md-dialog-content">
                     <md-input-container class="md-block">
                         <label>JIRA username</label>
-                        <input required md-no-asterisk name="username" ng-model="jira.username">
+                        <input required md-no-asterisk name="username" type="username" ng-model="jira.username">
                         <div ng-messages="importTicketsForm.username.$error">
                             <div ng-message="required">This is required.</div>
                         </div>
@@ -40,11 +40,11 @@
                 <md-list flex>
                     <md-subheader class="md-no-sticky">Tickets</md-subheader>
                     <md-list-item ng-repeat="ticket in tickets" class="md-2-line" ng-click="ticket.isSelected = !ticket.isSelected">
-                        <div class="md-list-item-text" layout="column">
+                        <md-checkbox aria-label="Is selected ticket" style="float: right" ng-model="ticket.isSelected"></md-checkbox>
+                        <div class="md-list-item-text" class="md-offset" layout="column">
                             <h3>{{ ticket.title }}</h3>
                             <h4>{{ ticket.description }}</h4>
                         </div>
-                        <md-checkbox aria-label="Is selected ticket" style="float: right" ng-model="ticket.isSelected"></md-checkbox>
                     </md-list-item>
                     <md-divider></md-divider>
                 </md-list>

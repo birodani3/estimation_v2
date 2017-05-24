@@ -44,7 +44,6 @@
                               ng-repeat="ticket in vm.tickets track by $index"
                               ng-click="vm.toggleTicketSelection(ticket)">
 
-                    <md-tooltip md-direction="left">Test string</md-tooltip>
                     <div class="md-list-item-text" layout="column">
                         <h3 flex md-truncate>{{ ticket.title }}</h3>
                         <p>{{ ticket.description | limitTo: 65 }}{{ ticket.description.length > 65 ? "..." : "" }}</p>
@@ -75,6 +74,16 @@
         </md-fab-speed-dial>
 
         <div class="fab-container">
+            <!-- SHOW TICKET FAB -->
+            <md-fab-speed-dial ng-show="vm.isShowTicketFabVisible()" md-direction="down" class="fab-speed-dial md-scale">
+                <md-fab-trigger>
+                    <md-button id="show-ticket-menu-button" class="md-fab md-accent" aria-label="Show ticket" ng-click="vm.openShowTicketDialog()">
+                        <md-icon md-font-icon="fa-search" class="fa"></md-icon>
+                    </md-button>
+                </md-fab-trigger>
+            </md-fab-speed-dial>
+
+
             <!-- RESET FAB -->
             <md-fab-speed-dial ng-show="vm.isResetFabVisible()" md-direction="down" class="fab-speed-dial md-scale">
                 <md-fab-trigger>

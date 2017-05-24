@@ -1,9 +1,11 @@
 import NewTicketController from "./modaldialogs/newticket/newticket.controller.js";
 import ImportTicketsController from "./modaldialogs/importtickets/importtickets.controller.js";
 import SetStoryPointController from "./modaldialogs/setstorypoint/setstorypoint.controller.js"
+import ShowTicketController from "./modaldialogs/showticket/showticket.controller.js"
 import newTicketTemplate from "./modaldialogs/newticket/newticket.html";
 import importTicketsTemplate from "./modaldialogs/importtickets/importtickets.html";
 import setStoryPointTemplate from "./modaldialogs/setstorypoint/setstorypoint.html"
+import showTicketTemplate from "./modaldialogs/showticket/showticket.html";
 import _ from "lodash";
 
 const Tabs = {
@@ -90,6 +92,10 @@ export default class ResultController {
         point.isVisible = true;
     }
 
+    isShowTicketFabVisible() {
+        return this.selectedTicket;
+    }
+
     isResetFabVisible() {
         return this.activeTab === Tabs.ESTIMATE_TICKET && this.cards.length;
     }
@@ -145,6 +151,23 @@ export default class ResultController {
                 this.tickets.push(...tickets);
             }
         })
+        .catch(() => {});
+    }
+
+    openShowTicketDialog() {
+        this.$mdDialog.show({
+            template: showTicketTemplate,
+            controller: ["$scope", "$mdDialog", "ticket", ShowTicketController],
+            locals: { 
+                ticket: this.selectedTicket
+            },
+            parent: angular.element(document.body),
+            targetEvent: event,
+            openFrom: "#show-ticket-menu-button",
+            closeTo: "#show-ticket-menu-button",
+            clickOutsideToClose: true
+        })
+        .then(() => {})
         .catch(() => {});
     }
 
