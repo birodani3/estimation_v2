@@ -2,7 +2,7 @@
   "name": "estimation_v2",
   "version": "1.0.0",
   "description": "Story point estimator",
-  "main": "server.js",
+  "main": "server/main.js",
   "engines": {
     "node": "6.9.4"
   },
@@ -35,7 +35,7 @@
     "webpack": "^2.2.1"
   },
   "scripts": {
-    "start": "node server.js",
+    "start": "node server/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Daniel Biro",
