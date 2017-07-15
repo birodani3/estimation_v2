@@ -131,3 +131,30 @@
         }
     }
 }
+
+// Set story point dialog
+
+.set-story-point-dialog {
+    .sp {
+        min-width: 52px;
+        display: inline-block;
+        padding: 12px;
+        margin: 6px;
+        text-align: center;
+        box-sizing: border-box;
+        color: white;
+        font-size: 20px;
+        background: #3f51b5;
+        border: 2px solid transparent;
+        border-radius: 16%;
+
+        &:focus {
+            outline: none;
+        }
+
+        &.selected {
+            background: lighten(#3f51b5, 10%);
+            border: 2px solid #3f51b5;
+        }
+    }
+}

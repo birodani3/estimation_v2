@@ -41,7 +41,7 @@
             <md-list flex layout-fill layout-align="center center" dragula="'ticket-container'">
                 <md-list-item class="md-3-line ticket"
                               ng-class="{ 'selected': ticket.isSelected }"
-                              ng-repeat="ticket in vm.tickets track by $index"
+                              ng-repeat="ticket in vm.tickets | filter: { storyPoint: null } track by $index"
                               ng-click="vm.toggleTicketSelection(ticket)">
 
                     <div class="md-list-item-text" layout="column">
@@ -142,17 +142,15 @@
                             </div>
                         </div>
                     </div>
-                    <!-- TODO set sp button
-                        <div class="current-ticket-footer">
-                            <md-divider></md-divider>
-                            <span class="current-ticket-text" ng-hide="vm.selectedTicket">
-                                You are now estimating an unknown ticket. Select a ticket to estimate it.
-                            </span>
-                            <md-button id="#set-story-points-button" ng-show="vm.selectedTicket" class="md-primary" ng-click="vm.openSetStoryPointDialog()">
-                                Set story point to {{vm.selectedTicket.title}}
-                            </md-button>
-                        </div>
-                    -->
+                    <div class="current-ticket-footer">
+                        <md-divider></md-divider>
+                        <span class="current-ticket-text" ng-hide="vm.selectedTicket || !vm.tickets.length">
+                            Select a ticket to estimate it.
+                        </span>
+                        <md-button id="#set-story-points-button" ng-show="vm.selectedTicket" class="md-primary" ng-click="vm.openSetStoryPointDialog()">
+                            Set story point to selected ticket
+                        </md-button>
+                    </div>
                 </md-content>
             </md-tab>
 
@@ -177,7 +175,16 @@
                             </md-menu>
                         </div>
                         <div flex layout="column" story-point="{{point.label}}" dragula="'ticket-container'">
+                            <md-list-item class="md-3-line ticket"
+                                          ng-class="{ 'selected': ticket.isSelected }"
+                                          ng-repeat="ticket in vm.tickets | filter: { storyPoint: point.label }:true track by $index"
+                                          ng-click="vm.toggleTicketSelection(ticket)">
 
+                                <div class="md-list-item-text" layout="column">
+                                    <h3 flex md-truncate>{{ ticket.title }}</h3>
+                                    <p>{{ ticket.description | limitTo: 65 }}{{ ticket.description.length > 65 ? "..." : "" }}</p>
+                                </div>
+                            </md-list-item>
                         </div>
                     </div>
                 </div>

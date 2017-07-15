@@ -15,7 +15,7 @@ const Tabs = {
 
 /*@ngInject*/
 export default class ResultController {
-    constructor($scope, $rootScope, $http, socket, hover, toast, $mdDialog, dragulaBagId, dragulaService, store) {
+    constructor($scope, $rootScope, $timeout, $http, socket, hover, toast, $mdDialog, dragulaBagId, dragulaService, store) {
         this.$scope = $scope;
         this.$http = $http;
         this.socket = socket;
@@ -33,7 +33,9 @@ export default class ResultController {
         this.initSocket();
         this.initWatchers();
 
-        hover.bag(dragulaBagId, $scope).on("drop", this.onTicketDropped.bind(this)).use();
+        hover.bag(dragulaBagId, $scope)
+            .on("drop", this.onTicketDropped.bind(this))
+            .use();
     }
 
     initSocket() {
@@ -171,23 +173,25 @@ export default class ResultController {
         .catch(() => {});
     }
 
-    // Set story point dialog
-    /*this.$mdDialog.show({
-        template: setStoryPointTemplate,
-        controller: ["$scope", "$http", "$mdDialog", "store", SetStoryPointController],
-        parent: angular.element(document.body),
-        targetEvent: event,
-        openFrom: "#set-story-points-button",
-        closeTo: "#set-story-points-button",
-        clickOutsideToClose: true,
-        locals: {
-            ticketName: this.selectedTicket.title
-        }
-    })
-    .then((storyPoint) => {
-        this.selectedTicket.storyPoint = storyPoint;
-    })
-    .catch(() => {});*/
+    openSetStoryPointDialog() {
+        this.$mdDialog.show({
+            template: setStoryPointTemplate,
+            controller: ["$scope", "$http", "$mdDialog", "store", "ticket", "cards", SetStoryPointController],
+            parent: angular.element(document.body),
+            targetEvent: event,
+            openFrom: "#set-story-points-button",
+            closeTo: "#set-story-points-button",
+            clickOutsideToClose: true,
+            locals: {
+                ticket: this.selectedTicket,
+                cards: this.cards
+            }
+        })
+        .then((storyPoint) => {
+            this.selectedTicket.storyPoint = storyPoint;
+        })
+        .catch(() => {});
+    }
 
     exportStoryPoints() {
         const config = {
@@ -203,13 +207,13 @@ export default class ResultController {
                 if (response.data === "SUCCESS") {
                     this.toast.success("Export was successful");
 
-                    this.tickets = this.tickets.filter(ticket => !angular.isNumber(ticket.storyPoint))
-                } else {
-                    this.toast.error("Export was unsuccessful");
+                    this.tickets = this.tickets.filter(ticket => !angular.isNumber(ticket.storyPoint));
+
+                    return;
                 }
-            } else {
-                this.toast.error("Export was unsuccessful");
             }
+                
+            this.toast.error("Export was unsuccessful");
         });
     }
 

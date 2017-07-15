@@ -39,7 +39,7 @@ export default function ImportTicketsController($scope, $http, $mdDialog) {
                             title: ticket.fields.summary,
                             description: ticket.fields.description,
                             issueId: ticket.id,
-                            boardId: 306,
+                            boardId: ticket.fields.sprint.originBoardId,
                             isSelected: true,
                             storyPoint: null
                         }));
