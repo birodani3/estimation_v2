@@ -1,22 +1,23 @@
-import NewTicketController from "./modaldialogs/newticket/newticket.controller.js";
-import ImportTicketsController from "./modaldialogs/importtickets/importtickets.controller.js";
-import SetStoryPointController from "./modaldialogs/setstorypoint/setstorypoint.controller.js"
-import ShowTicketController from "./modaldialogs/showticket/showticket.controller.js"
-import newTicketTemplate from "./modaldialogs/newticket/newticket.html";
-import importTicketsTemplate from "./modaldialogs/importtickets/importtickets.html";
-import setStoryPointTemplate from "./modaldialogs/setstorypoint/setstorypoint.html"
-import showTicketTemplate from "./modaldialogs/showticket/showticket.html";
-import _ from "lodash";
+import NewTicketController from './modaldialogs/newticket/newticket.controller.js';
+import ImportTicketsController from './modaldialogs/importtickets/importtickets.controller.js';
+import SetStoryPointController from './modaldialogs/setstorypoint/setstorypoint.controller.js'
+import ShowTicketController from './modaldialogs/showticket/showticket.controller.js'
+import newTicketTemplate from './modaldialogs/newticket/newticket.html';
+import importTicketsTemplate from './modaldialogs/importtickets/importtickets.html';
+import setStoryPointTemplate from './modaldialogs/setstorypoint/setstorypoint.html'
+import showTicketTemplate from './modaldialogs/showticket/showticket.html';
+import _ from 'lodash';
 
 const Tabs = {
-    "ESTIMATE_TICKET": 0,
-    "ESTIMATED_TICKETS": 1
+    'ESTIMATE_TICKET': 0,
+    'ESTIMATED_TICKETS': 1
 };
 
 /*@ngInject*/
 export default class ResultController {
     constructor($scope, $rootScope, $timeout, $http, socket, hover, toast, $mdDialog, dragulaBagId, dragulaService, store) {
         this.$scope = $scope;
+        this.$rootScope = $rootScope;
         this.$http = $http;
         this.socket = socket;
         this.toast = toast;
@@ -34,14 +35,16 @@ export default class ResultController {
         this.initWatchers();
 
         hover.bag(dragulaBagId, $scope)
-            .on("drop", this.onTicketDropped.bind(this))
+            .on('drop', this.onTicketDropped.bind(this))
             .use();
     }
 
     initSocket() {
-        this.socket.on("USER_JOINED", this.$scope, this.onUserJoined.bind(this));
-        this.socket.on("USER_LEFT", this.$scope, this.onUserLeft.bind(this));
-        this.socket.on("USER_VOTED", this.$scope, this.onUserVoted.bind(this));
+        this.socket.on('USER_JOINED', this.$scope, this.onUserJoined.bind(this));
+        this.socket.on('USER_LEFT', this.$scope, this.onUserLeft.bind(this));
+        this.socket.on('USER_VOTED', this.$scope, this.onUserVoted.bind(this));
+        this.socket.on('connect', this.$scope, this.onClientReconnected.bind(this));
+        this.socket.on('disconnect', this.$scope, this.onClientDisconnected.bind(this));
     }
 
     initWatchers() {
@@ -80,6 +83,26 @@ export default class ResultController {
         if (card) {
             card.value = data.value;
         }
+    }
+
+    onClientReconnected() {
+        let values = this.store
+            .get('settings')
+            .values
+            .filter(value => value.checked)
+            .map(value => value.label);
+
+        let payload = {
+            name: this.$rootScope.channel,
+            values
+        };
+
+        this.socket.emit('CREATE_CHANNEL', payload);
+    }
+
+    onClientDisconnected() {
+        this.cards = [];
+        this.toast.warning('Connection lost, all users removed. Users will automatically rejoin after successful connection', 0);
     }
 
     openMenu($mdMenu, event) {
@@ -123,11 +146,11 @@ export default class ResultController {
     openCreateNewTicket(event) {
         this.$mdDialog.show({
             template: newTicketTemplate,
-            controller: ["$scope", "$mdDialog", NewTicketController],
+            controller: ['$scope', '$mdDialog', NewTicketController],
             parent: angular.element(document.body),
             targetEvent: event,
-            openFrom: "#tickets-menu-button",
-            closeTo: "#tickets-menu-button",
+            openFrom: '#tickets-menu-button',
+            closeTo: '#tickets-menu-button',
             clickOutsideToClose: true
         })
         .then((ticket) => {
@@ -139,11 +162,11 @@ export default class ResultController {
     openImportTicketsDialog(event) {
         this.$mdDialog.show({
             template: importTicketsTemplate,
-            controller: ["$scope", "$http", "$mdDialog", ImportTicketsController],
+            controller: ['$scope', '$http', '$mdDialog', ImportTicketsController],
             parent: angular.element(document.body),
             targetEvent: event,
-            openFrom: "#tickets-menu-button",
-            closeTo: "#tickets-menu-button",
+            openFrom: '#tickets-menu-button',
+            closeTo: '#tickets-menu-button',
             clickOutsideToClose: true
         })
         .then((tickets) => {
@@ -159,14 +182,14 @@ export default class ResultController {
     openShowTicketDialog() {
         this.$mdDialog.show({
             template: showTicketTemplate,
-            controller: ["$scope", "$mdDialog", "ticket", ShowTicketController],
+            controller: ['$scope', '$mdDialog', 'ticket', ShowTicketController],
             locals: { 
                 ticket: this.selectedTicket
             },
             parent: angular.element(document.body),
             targetEvent: event,
-            openFrom: "#show-ticket-menu-button",
-            closeTo: "#show-ticket-menu-button",
+            openFrom: '#show-ticket-menu-button',
+            closeTo: '#show-ticket-menu-button',
             clickOutsideToClose: true
         })
         .then(() => {})
@@ -176,11 +199,11 @@ export default class ResultController {
     openSetStoryPointDialog() {
         this.$mdDialog.show({
             template: setStoryPointTemplate,
-            controller: ["$scope", "$http", "$mdDialog", "store", "ticket", "cards", SetStoryPointController],
+            controller: ['$scope', '$http', '$mdDialog', 'store', 'ticket', 'cards', SetStoryPointController],
             parent: angular.element(document.body),
             targetEvent: event,
-            openFrom: "#set-story-points-button",
-            closeTo: "#set-story-points-button",
+            openFrom: '#set-story-points-button',
+            closeTo: '#set-story-points-button',
             clickOutsideToClose: true,
             locals: {
                 ticket: this.selectedTicket,
@@ -195,8 +218,8 @@ export default class ResultController {
 
     exportStoryPoints() {
         const config = {
-            method: "POST",
-            url: "/jira/setStoryPoints",
+            method: 'POST',
+            url: '/jira/setStoryPoints',
             data: {
                 tickets: this.tickets.filter(ticket => angular.isNumber(ticket.storyPoint))
             }
@@ -204,8 +227,8 @@ export default class ResultController {
 
         this.$http(config).then((response) => {
             if (response.data) {
-                if (response.data === "SUCCESS") {
-                    this.toast.success("Export was successful");
+                if (response.data === 'SUCCESS') {
+                    this.toast.success('Export was successful');
 
                     this.tickets = this.tickets.filter(ticket => !angular.isNumber(ticket.storyPoint));
 
@@ -213,13 +236,14 @@ export default class ResultController {
                 }
             }
                 
-            this.toast.error("Export was unsuccessful");
+            this.toast.error('Export was unsuccessful');
         });
     }
 
     reset() {
-        this.cards.forEach(card => card.value = null);
-        this.socket.emit("RESET");
+        this.socket.emit('RESET', () => {
+            this.cards.forEach(card => card.value = null);
+        });
     }
 
     toggleTicketSelection(ticket) {
@@ -249,8 +273,9 @@ export default class ResultController {
         let card = _.find(this.cards, card => card.isSelected);
 
         if (card) {
-            this.socket.emit("REMOVE_USER", card);
-            _.pull(this.cards, card);
+            this.socket.emit('REMOVE_USER', card, () => {
+                _.pull(this.cards, card);
+            });
         }
     }
 
@@ -259,7 +284,7 @@ export default class ResultController {
     }
 
     getStoryPoints() {
-        return this.store.get("settings")
+        return this.store.get('settings')
             .values
             .filter(setting => setting.checked && angular.isNumber(setting.label))
             .map(value => ({

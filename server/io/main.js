@@ -58,24 +58,27 @@ module.exports = (io) => {
             };
 
             emitToChannelHost(channel, 'USER_VOTED', payload);
+            callback && callback();
         });
 
         socket.on('GET_CHANNELS', (data, callback) => {
             let channelList = getChannelListForSending();
 
-            callback(channelList);
+            callback && callback(channelList);
         });
 
         socket.on('DELETE_CHANNEL', () => {
             deleteChannel(socket, channel);
         });
 
-        socket.on('REMOVE_USER', (card) => {
+        socket.on('REMOVE_USER', (card, callback) => {
             emit.toSocket(card.id, 'REMOVE_USER');
+            callback && callback();
         });
 
-        socket.on('RESET', () => {
+        socket.on('RESET', (callback) => {
             emit.toChannel(channel, 'RESET');
+            callback && callback();
         });
 
         socket.on('disconnect', () => {
