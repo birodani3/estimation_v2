@@ -1,58 +1,58 @@
-import homeTemplate from "./components/home/home.html"
-import createTemplate from "./components/create/create.html"
-import joinTemplate from "./components/join/join.html"
-import resultsTemplate from "./components/results/results.html"
-import playTemplate from "./components/play/play.html"
+import homeTemplate from './components/home/home.html'
+import createTemplate from './components/create/create.html'
+import joinTemplate from './components/join/join.html'
+import resultsTemplate from './components/results/results.html'
+import playTemplate from './components/play/play.html'
 
 /*@ngInject*/
 export default function config($routeProvider, $sceDelegateProvider, $cookiesProvider, $mdThemingProvider) {
     $routeProvider
-        .when("/", {
+        .when('/', {
             template: homeTemplate,
-            controller: "HomeController",
-            controllerAs: "vm"
+            controller: 'HomeController',
+            controllerAs: 'vm'
         })
-        .when("/create", {
+        .when('/create', {
             template: createTemplate,
-            controller: "CreateController",
-            controllerAs: "vm"
+            controller: 'CreateController',
+            controllerAs: 'vm'
         })
-        .when("/join", {
+        .when('/join', {
             template: joinTemplate,
-            controller: "JoinController",
-            controllerAs: "vm"
+            controller: 'JoinController',
+            controllerAs: 'vm'
         })
-        .when("/results/:channel", {
+        .when('/results/:channel', {
             template: resultsTemplate,
-            controller: "ResultsController",
-            controllerAs: "vm",
+            controller: 'ResultsController',
+            controllerAs: 'vm',
             resolve: {
-                access: ["$rootScope", "$location", access]
+                access: ['$rootScope', '$location', access]
             }
         })
-        .when("/play/:channel", {
+        .when('/play/:channel', {
             template: playTemplate,
-            controller: "PlayController",
-            controllerAs: "vm"
+            controller: 'PlayController',
+            controllerAs: 'vm'
         })
         .otherwise({
-            redirectTo: "/"
+            redirectTo: '/'
         });
 
     $sceDelegateProvider.resourceUrlWhitelist([
-        "self",
-        "https://jira.cas.de/**"
+        'self',
+        'https://jira.cas.de/**'
     ]);
 
-    $cookiesProvider.defaults.expires = "2030-12-30T12:00:00.000Z";
+    $cookiesProvider.defaults.expires = '2030-12-30T12:00:00.000Z';
 
-    $mdThemingProvider.theme("success");
-    $mdThemingProvider.theme("error");
-    $mdThemingProvider.theme("warning");
+    $mdThemingProvider.theme('success');
+    $mdThemingProvider.theme('error');
+    $mdThemingProvider.theme('warning');
 
     function access($rootScope, $location) {
         if (!$rootScope.channel) {
-            $location.path("/");
+            $location.path('/');
         }
     }
 };

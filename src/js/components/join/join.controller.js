@@ -8,21 +8,21 @@ export default class JoinController {
         this.toast = toast;
         
         this.channels = [];
-        this.username = $cookies.get("username") || "";
+        this.username = $cookies.get('username') || '';
 
         this.initSocket();
     }
 
     initSocket() {
-        this.socket.emit("GET_CHANNELS", null, this.onChannelListChanged.bind(this));
-        this.socket.on("CHANNEL_LIST", this.$scope, this.onChannelListChanged.bind(this));
+        this.socket.emit('GET_CHANNELS', null, this.onChannelListChanged.bind(this));
+        this.socket.on('CHANNEL_LIST', this.$scope, this.onChannelListChanged.bind(this));
     }
 
     joinChannel(username, channel) {
         username = username.trim();
 
         if (!username) {
-            this.toast.warning("Username can not be empty!");
+            this.toast.warning('Username can not be empty!');
             return;
         }
 
@@ -31,7 +31,7 @@ export default class JoinController {
     }
 
     back() {
-        this.$location.path("/");
+        this.$location.path('/');
     }
 
     onChannelListChanged(channels) {

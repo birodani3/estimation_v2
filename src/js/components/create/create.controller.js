@@ -1,5 +1,5 @@
-import SettingsController from "./modaldialogs/settings/settings.controller.js";
-import settingsTemplate from "./modaldialogs/settings/settings.html";
+import SettingsController from './modaldialogs/settings/settings.controller.js';
+import settingsTemplate from './modaldialogs/settings/settings.html';
 
 /*@ngInject*/
 export default class CreateController {
@@ -11,8 +11,8 @@ export default class CreateController {
         this.socket = socket;
         this.toast = toast;
         this.store = store;
-        this.channel = $cookies.get("channel") || "";
-        this.settings = store.get("settings");
+        this.channel = $cookies.get('channel') || '';
+        this.settings = store.get('settings');
     }
 
     createChannel(channel) {
@@ -31,15 +31,15 @@ export default class CreateController {
             values
         };
 
-        this.socket.emit("CREATE_CHANNEL", payload, (data) => {
+        this.socket.emit('CREATE_CHANNEL', payload, (data) => {
             if (!data.error) {
-                this.$cookies.put("channel", channel);
+                this.$cookies.put('channel', channel);
                 this.$rootScope.channel = channel;
                 this.$location.path(`/results/${channel}`);
-            } else if (data.error === "NAME_ALREADY_EXISTS") {
-                this.toast.warning("Room already exists with this name!");
+            } else if (data.error === 'NAME_ALREADY_EXISTS') {
+                this.toast.warning('Room already exists with this name!');
             } else {
-                this.toast.error("Something went wrong, can not create room");
+                this.toast.error('Something went wrong, can not create room');
             }
         });
     }
@@ -47,20 +47,20 @@ export default class CreateController {
     openSettings(event) {
         this.$mdDialog.show({
             template: settingsTemplate,
-            controller: ["$scope", "$mdDialog", "store", SettingsController],
+            controller: ['$scope', '$mdDialog', 'store', SettingsController],
             parent: angular.element(document.body),
             targetEvent: event,
-            openFrom: "#settings-menu-button",
-            closeTo: "#settings-menu-button",
+            openFrom: '#settings-menu-button',
+            closeTo: '#settings-menu-button',
             clickOutsideToClose: true
         })
         .then(settings => {
             this.settings = settings;
-            this.store.set("settings", settings);
+            this.store.set('settings', settings);
         });
     }
 
     back() {
-        this.$location.path("/");
+        this.$location.path('/');
     }
 }

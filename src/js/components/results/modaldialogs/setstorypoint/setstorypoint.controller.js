@@ -1,8 +1,8 @@
 export default function SetStoryPointController($scope, $http, $mdDialog, store, ticket, cards) {
-    const jiraUrl = "https://jira.cas.de";
+    const jiraUrl = 'https://jira.cas.de';
 
     $scope.ticketName = ticket.title;
-    $scope.storyPoints = store.get("settings")
+    $scope.storyPoints = store.get('settings')
         .values
         .filter(value => value.checked && angular.isNumber(value.label));
 
@@ -46,7 +46,7 @@ export default function SetStoryPointController($scope, $http, $mdDialog, store,
         }
 
         const groups = _(cards)
-            .groupBy("value")
+            .groupBy('value')
             .map((cards, value) => ({
                 count: cards.length,
                 value: +value

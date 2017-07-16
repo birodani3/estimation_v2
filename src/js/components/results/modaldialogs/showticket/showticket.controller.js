@@ -1,4 +1,4 @@
-import _ from "lodash";
+import _ from 'lodash';
 
 export default function ShowTicketController($scope, $mdDialog, ticket) {
     $scope.ticket = ticket;

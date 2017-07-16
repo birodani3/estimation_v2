@@ -1,5 +1,5 @@
 export default function SettingsController($scope, $mdDialog, store) {
-    $scope.values = store.get("settings").values;
+    $scope.values = store.get('settings').values;
 
     $scope.close = () => {
         const settings = {

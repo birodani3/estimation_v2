@@ -1,4 +1,4 @@
-const resultsPath = "/results/:channel"
+const resultsPath = '/results/:channel'
 
 /*@ngInject*/
 export default class MainController {
@@ -9,9 +9,9 @@ export default class MainController {
         this.socket = socket;
         this.dragula = dragulaBagId;
 
-        $rootScope.$on("$routeChangeSuccess", (event, current, prev = {}) => {
+        $rootScope.$on('$routeChangeSuccess', (event, current, prev = {}) => {
             if (prev.originalPath === resultsPath) {
-                socket.emit("DELETE_CHANNEL");
+                socket.emit('DELETE_CHANNEL');
             }
         });
     }
@@ -30,6 +30,6 @@ export default class MainController {
 
     leaveChannel() {
         this.$rootScope.channel = null;
-        this.$location.path("/");
+        this.$location.path('/');
     }
 }

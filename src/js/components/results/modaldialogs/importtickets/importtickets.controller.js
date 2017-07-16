@@ -1,6 +1,6 @@
 export default function ImportTicketsController($scope, $http, $mdDialog) {
-    const jiraUrl = "https://jira.cas.de";
-    const storyPointField = "customfield_10004";
+    const jiraUrl = 'https://jira.cas.de';
+    const storyPointField = 'customfield_10004';
     let tickets = [];
 
     $scope.isTicketListMode = false;
@@ -19,8 +19,8 @@ export default function ImportTicketsController($scope, $http, $mdDialog) {
 
     $scope.login = (credentials) => {
         const config = {
-            method: "POST",
-            url: "/jira",
+            method: 'POST',
+            url: '/jira',
             data: credentials
         };
 

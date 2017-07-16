@@ -1,4 +1,4 @@
-import _ from "lodash";
+import _ from 'lodash';
 
 /*@ngInject*/
 export default class HoverService {

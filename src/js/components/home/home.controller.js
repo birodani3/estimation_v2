@@ -6,10 +6,10 @@ export default class HomeController {
     }
 
     createChannel() {
-        this.$location.path("/create");
+        this.$location.path('/create');
     }
 
     joinChannel() {
-        this.$location.path("/join");
+        this.$location.path('/join');
     }
 }
