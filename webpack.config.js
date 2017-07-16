@@ -1,7 +1,6 @@
 'use strict';
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 const extractCSS = new ExtractTextPlugin('bundle.css');
 
@@ -88,13 +87,7 @@ const config = {
       },
       test: /bundle.js$/
     }),
-    extractCSS,
-    new OptimizeCssAssetsPlugin({
-      assetNameRegExp: /bundle-*.css$/g,
-      cssProcessor: require('cssnano'),
-      cssProcessorOptions: { discardComments: { removeAll: true } },
-      canPrint: true
-    })
+    extractCSS
   ],
   devtool: "source-map" 
 };
