@@ -1,10 +1,24 @@
 'use strict';
 const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+
+const extractCSS = new ExtractTextPlugin('bundle.css');
 
 const config = {
   context: __dirname + '/src',
   entry: {
     app: './js/app.module.js',
+    vendor: [
+        'lodash',
+        'angular',
+        'angular-route',
+        'angular-cookies',
+        'angular-animate',
+        'angular-aria',
+        'angular-material',
+        'angular-messages'
+    ]
   },
   output: {
     path: __dirname + '/dist',
@@ -30,12 +44,11 @@ const config = {
         ]
       },
       {
-        test: /\.(less|css)$/,
-        use: [
-          'style-loader',
-          'css-loader',
-          'less-loader',
-        ]
+        test: /\.(css|less)$/,
+        use: extractCSS.extract([
+          { loader: 'css-loader', options: { sourceMap: true } },
+          { loader: 'less-loader', options: { sourceMap: true } }
+        ])     
       },
       {
         test: /\.jpg$/,
@@ -59,7 +72,30 @@ const config = {
       }
     ]
   },
-
+  plugins: [
+    new webpack.optimize.CommonsChunkPlugin({ name: "vendor", filename: "vendor.bundle.js" }),
+    new webpack.optimize.UglifyJsPlugin({
+      mangle: true,
+      compress: {
+        warnings: false,
+        pure_getters: true,
+        unsafe: true,
+        unsafe_comps: true,
+        screw_ie8: true
+      },
+      output: {
+        comments: false,
+      },
+      test: /bundle.js$/
+    }),
+    extractCSS,
+    new OptimizeCssAssetsPlugin({
+      assetNameRegExp: /bundle-*.css$/g,
+      cssProcessor: require('cssnano'),
+      cssProcessorOptions: { discardComments: { removeAll: true } },
+      canPrint: true
+    })
+  ],
   devtool: "source-map" 
 };
 

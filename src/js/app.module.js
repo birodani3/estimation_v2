@@ -20,13 +20,11 @@ import PlayController from "./components/play/play.controller.js";
 
 // Import styles
 import "bootstrap/dist/css/bootstrap.css";
-import "../style/font-awesome.min.css"
-import "../style/angular-material.min.css"
-import "../style/dragula.css"
+import "../style/angular-material.min.css";
+import "../style/dragula.css";
 import "../style/app.less";
 
 const moduleName = "estimation";
-const settings = { strictDi: true };
 const dependencies = [
     ngRoute,
     ngCookies,
@@ -59,10 +57,10 @@ angular
     .config(['$provide', ($provide) => {
         // DEBUG
 
-        /*$provide.decorator('$rootScope', ["$delegate", function ($delegate) {
-            var emit = $delegate.$emit;
+        /*$provide.decorator('$rootScope', ["$delegate", ($delegate) => {
+            const emit = $delegate.$emit;
 
-            $delegate.$emit = function () {
+            $delegate.$emit = () => {
                 console.log.apply(console, arguments);
                 emit.apply(this, arguments);
             };
@@ -72,5 +70,12 @@ angular
     }]);
 
 angular.element(() => {
-    angular.bootstrap(document, [moduleName], settings);
+    angular.bootstrap(document, [moduleName]);
+
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./service-worker.js')
+            .then(() => { 
+                console.log("SW Registered"); 
+            });
+    }
 });

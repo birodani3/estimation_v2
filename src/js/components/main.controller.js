@@ -2,8 +2,9 @@ const resultsPath = "/results/:channel"
 
 /*@ngInject*/
 export default class MainController {
-    constructor($rootScope, $location, socket, dragulaBagId) {
+    constructor($rootScope, $scope, $location, socket, dragulaBagId) {
         this.$rootScope = $rootScope;
+        this.$scope = $scope;
         this.$location = $location;
         this.socket = socket;
         this.dragula = dragulaBagId;

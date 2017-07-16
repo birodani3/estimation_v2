@@ -1,0 +1,14 @@
+{
+    "staticFileGlobs": [
+        "index.html",
+        "manifest.json",
+        "dist/vendor.bundle.js",
+        "dist/bundle.js",
+        "dist/*.css",
+        "fonts/*.{eot,svg,ttf,woff,woff2,otf}"
+    ],
+    "runtimeCaching": [{
+        "urlPattern": "/*.(woff|ttf|woff2|svg|eot)/",
+        "handler": "cacheFirst"
+    }]
+}
