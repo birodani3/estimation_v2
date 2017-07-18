@@ -18,6 +18,12 @@ export default class SocketService {
             setIsOnline(false);
         });
 
+        this.socket.on('reconnect_attempt', () => {
+            if (this.isOnline !== false) {
+                setIsOnline(false);
+            }
+        });
+
         const setIsOnline = (isOnline) => {
             this.isOnline = isOnline;
 

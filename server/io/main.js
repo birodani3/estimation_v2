@@ -76,7 +76,7 @@ module.exports = (io) => {
             callback && callback();
         });
 
-        socket.on('RESET', (callback) => {
+        socket.on('RESET', (data, callback) => {
             emit.toChannel(channel, 'RESET');
             callback && callback();
         });

@@ -74,7 +74,7 @@ export default class ResultController {
     }
 
     onUserLeft(user) {
-        _.remove(this.cards, card => card.id === user.id);
+        _.remove(this.cards, this.findCardById(user.id));
     }
 
     onUserVoted(data) {
@@ -241,7 +241,7 @@ export default class ResultController {
     }
 
     reset() {
-        this.socket.emit('RESET', () => {
+        this.socket.emit('RESET', null, () => {
             this.cards.forEach(card => card.value = null);
         });
     }

@@ -112,7 +112,6 @@ export default class PlayController {
                 this.isLoading = false;
                 this.toast.success(`Successfully rejoined to channel  ${channel}`);
             } else {
-                this.$location.path('/join');
                 this.toast.error(`Could not rejoin to channel ${channel}, retrying after 1sec`);
 
                 this.$timeout(() => {
