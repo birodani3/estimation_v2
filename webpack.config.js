@@ -5,9 +5,8 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const extractCSS = new ExtractTextPlugin('bundle.css');
 
 const config = {
-  context: __dirname + '/src',
   entry: {
-    app: './js/app.module.js',
+    app: __dirname + '/src/app/app.module.ts',
     vendor: [
         'lodash',
         'angular',
@@ -26,20 +25,15 @@ const config = {
     devtoolLineToLine: true
   },
   resolve: {
-      alias: {
-
-      }
+    extensions: ['.js', '.ts']
   },
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.ts$/,
         use: [
           { loader: 'ng-annotate-loader' },
-          {
-            loader: 'babel-loader',
-            options: { presets: ['es2015'] }
-          }
+          { loader: 'ts-loader' }
         ]
       },
       {

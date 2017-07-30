@@ -1,16 +1,16 @@
 {
-  "name": "Estimation_v2",
-  "short_name": "Estimation_v2",
-  "start_url": "../index.html",
-  "display": "standalone",
-  "orientation": "portrait",
-  "background_color": "#f2f2f2",
-  "description": "Story point estimator app",
-  "lang": "en-US",
-  "icons": [{
-    "src": "../src/icon_144x144.png",
-    "sizes": "144x144",
-    "type": "image/png"
-  }],
-  "related_applications": []
+    "name": "Estimation_v2",
+    "short_name": "Estimation_v2",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#f2f2f2",
+    "description": "Story point estimator app",
+    "lang": "en-US",
+    "icons": [{
+        "src": "./src/icon_144x144.png",
+        "sizes": "144x144",
+        "type": "image/png"
+    }],
+    "related_applications": []
 }

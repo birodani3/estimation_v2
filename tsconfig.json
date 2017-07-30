@@ -1,0 +1,21 @@
+{
+    "baseUrl": "./src",
+    "exclude": [
+        "node_modules"
+    ],
+    "compileOnSave": false,
+    "compilerOptions": {
+        "outDir": "./dist/out-tsc",
+        "baseUrl": "./src",
+        "sourceMap": true,
+        "declaration": false,
+        "target": "es5",
+        "typeRoots": [
+            "node_modules/@types"
+        ],
+        "lib": [
+            "es6",
+            "dom"
+        ]
+    }
+}
