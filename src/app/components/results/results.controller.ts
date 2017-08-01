@@ -20,7 +20,7 @@ interface StoryPoint {
     isVisible: boolean; 
 }
 
-/*@ngInject*/
+/* @ngInject */
 export class ResultsController {
     public Tab: typeof Tab = Tab;
     public storyPoints: StoryPoint[];
@@ -134,6 +134,22 @@ export class ResultsController {
 
     showStoryPoint(point: StoryPoint): void {
         point.isVisible = true;
+    }
+
+    moveTicketsLeft(point: StoryPoint): void {
+        const ticketsToMove: Ticket[] = this.tickets.filter(ticket => ticket.storyPoint === point.label);
+        const currentStoryPointIndex: number = this.storyPoints.findIndex(p => p === point);
+        const desiredStoryPointIndex: number = currentStoryPointIndex ? currentStoryPointIndex - 1 : this.storyPoints.length - 1;
+
+        ticketsToMove.forEach(ticket => ticket.storyPoint = this.storyPoints[desiredStoryPointIndex].label);
+    }
+
+    moveTicketsRight(point: StoryPoint): void {
+        const ticketsToMove: Ticket[] = this.tickets.filter(ticket => ticket.storyPoint === point.label);
+        const currentStoryPointIndex: number = this.storyPoints.findIndex(p => p === point);
+        const desiredStoryPointIndex: number = (currentStoryPointIndex === this.storyPoints.length - 1) ? 0 : currentStoryPointIndex + 1;
+
+        ticketsToMove.forEach(ticket => ticket.storyPoint = this.storyPoints[desiredStoryPointIndex].label);
     }
 
     isShowTicketFabVisible(): boolean {
@@ -298,7 +314,7 @@ export class ResultsController {
         }
     }
 
-    findCardById(id: string): any {
+    findCardById(id: string): Card {
         return _.find(this.cards, card => card.id === id);
     }
 
