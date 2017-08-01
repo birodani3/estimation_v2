@@ -1,4 +1,4 @@
-export function NewTicketController($scope: ng.IScope, $mdDialog: ng.material.IDialogService) {
+export function NewTicketController($scope, $mdDialog: ng.material.IDialogService) {
     $scope.ticket = { storyPoint: null };
 
     $scope.hide = () => {

@@ -1,6 +1,6 @@
 import { IStoreService } from 'app/services';
 
-export function SettingsController($scope: ng.IScope, $mdDialog: ng.material.IDialogService, store: IStoreService) {
+export function SettingsController($scope, $mdDialog: ng.material.IDialogService, store: IStoreService) {
     $scope.values = store.get('settings.values');
 
     $scope.close = () => {

@@ -9,7 +9,7 @@ interface Suggestion {
 }
 
 export function SetStoryPointController(
-    $scope: ng.IScope,
+    $scope,
     $http: ng.IHttpService,
     $mdDialog: ng.material.IDialogService,
     store: IStoreService,

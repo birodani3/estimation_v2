@@ -1,12 +1,13 @@
 import { ISocketService } from 'app/services'; 
+import { IEstimationRootScope } from 'app/models';
 
 const resultsPath = '/results/:channel'
 
 /* @ngInject */
 export class MainController {
     constructor(
-        private $rootScope: ng.IRootScopeService,
-        private $scope: ng.IScope,
+        private $rootScope: IEstimationRootScope,
+        private $scope,
         private $location: ng.ILocationService,
         private socket: ISocketService
     ) {

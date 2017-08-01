@@ -7,7 +7,7 @@ import { NewTicketController } from './modaldialogs/newticket/newticket.controll
 import { ImportTicketsController } from './modaldialogs/importtickets/importtickets.controller';
 import { SetStoryPointController } from './modaldialogs/setstorypoint/setstorypoint.controller'
 import { ShowTicketController } from './modaldialogs/showticket/showticket.controller';
-import { Card, Ticket } from 'app/models'; 
+import { IEstimationRootScope, Card, Ticket } from 'app/models'; 
 import { ISocketService, IHoverService, IToastService, IStoreService } from 'app/services'; 
 
 enum Tab {
@@ -31,8 +31,8 @@ export class ResultsController {
     public tickets: Ticket[];
 
     constructor(
-        private $rootScope: ng.IRootScopeService,
-        private $scope: ng.IScope,
+        private $rootScope: IEstimationRootScope,
+        private $scope,
         private $timeout: ng.ITimeoutService,
         private $http: ng.IHttpService,
         private socket: ISocketService,

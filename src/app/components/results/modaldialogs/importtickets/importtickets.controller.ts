@@ -1,6 +1,6 @@
 import { Ticket } from 'app/models';
 
-export function ImportTicketsController($scope: ng.IScope, $http: ng.IHttpService, $mdDialog: ng.material.IDialogService) {
+export function ImportTicketsController($scope, $http: ng.IHttpService, $mdDialog: ng.material.IDialogService) {
     const jiraUrl = 'https://jira.cas.de';
     const storyPointField = 'customfield_10004';
     let tickets: Ticket[] = [];

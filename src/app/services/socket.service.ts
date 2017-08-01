@@ -1,6 +1,7 @@
 import * as io from 'socket.io-client';
 import { noop } from 'lodash';
 
+import { IEstimationRootScope } from 'app/models'; 
 import { IToastService } from './toast.service';
 
 export interface ISocketService {
@@ -14,7 +15,7 @@ export class SocketService implements ISocketService {
     isOnline: boolean;
     socket: SocketIOClient.Socket;
 
-    constructor(private $rootScope: ng.IRootScopeService, private toast: IToastService) {
+    constructor(private $rootScope: IEstimationRootScope, private toast: IToastService) {
         this.socket = io.connect();
 
         this.socket.on('connect', () => {

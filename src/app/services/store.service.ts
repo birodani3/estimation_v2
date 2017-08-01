@@ -9,7 +9,7 @@ export interface IStoreService {
 export class StoreService implements IStoreService {
     private store: { [key: string]: any };
 
-    constructor(private $rootScope: ng.IRootScopeService) {
+    constructor() {
         this.store = {
             settings: {
                 values: [

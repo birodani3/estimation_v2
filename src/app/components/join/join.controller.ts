@@ -1,5 +1,5 @@
 import { ISocketService, IToastService } from '../../services';
-import { Channel } from '../../models';
+import { IEstimationRootScope, Channel } from '../../models';
 
 /* @ngInject */
 export class JoinController {
@@ -7,8 +7,8 @@ export class JoinController {
     public username: string;
 
     constructor(
-        private $rootScope: ng.IRootScopeService,
-        private $scope: ng.IScope,
+        private $rootScope: IEstimationRootScope,
+        private $scope,
         private $location: ng.ILocationService,
         private $cookies: ng.cookies.ICookiesService,
         private socket: ISocketService,

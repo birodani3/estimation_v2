@@ -1,3 +1,4 @@
+import { IEstimationRootScope } from 'app/models/rootscope.model';
 import { IToastService, ISocketService } from '../../services';
 
 const MAX_REJOIN_ATTEMPTS = 3;
@@ -10,8 +11,8 @@ export class PlayController {
     private username: string;
 
     constructor(
-        private $rootScope: ng.IRootScopeService,
-        private $scope: ng.IScope,
+        private $rootScope: IEstimationRootScope,
+        private $scope,
         private $route: ng.route.IRouteService,
         private $timeout: ng.ITimeoutService,
         private $cookies: ng.cookies.ICookiesService,
