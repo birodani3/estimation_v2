@@ -129,6 +129,10 @@ export class ResultsController {
     };
 
     hideStoryPoint(point: StoryPoint): void {
+        if (this.tickets.filter(ticket => ticket.storyPoint === point.label).length) {
+            this.toast.warning('Warning: some tickets are not visible in the current board!');
+        }
+
         point.isVisible = false;
     }
 
@@ -141,6 +145,10 @@ export class ResultsController {
         const currentStoryPointIndex: number = this.storyPoints.findIndex(p => p === point);
         const desiredStoryPointIndex: number = currentStoryPointIndex ? currentStoryPointIndex - 1 : this.storyPoints.length - 1;
 
+        if (ticketsToMove.length && !this.storyPoints[desiredStoryPointIndex].isVisible) {
+            this.toast.warning('Warning: some tickets are not visible in the current board!');
+        }
+
         ticketsToMove.forEach(ticket => ticket.storyPoint = this.storyPoints[desiredStoryPointIndex].label);
     }
 
@@ -149,7 +157,15 @@ export class ResultsController {
         const currentStoryPointIndex: number = this.storyPoints.findIndex(p => p === point);
         const desiredStoryPointIndex: number = (currentStoryPointIndex === this.storyPoints.length - 1) ? 0 : currentStoryPointIndex + 1;
 
+        if (ticketsToMove.length && !this.storyPoints[desiredStoryPointIndex].isVisible) {
+            this.toast.warning('Warning: some tickets are not visible in the current board!');
+        }
+
         ticketsToMove.forEach(ticket => ticket.storyPoint = this.storyPoints[desiredStoryPointIndex].label);
+    }
+
+    isColumnEmpty(point: StoryPoint): boolean {
+        return !this.tickets.filter(ticket => ticket.storyPoint === point.label).length;
     }
 
     isShowTicketFabVisible(): boolean {

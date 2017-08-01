@@ -7,7 +7,7 @@ export interface IStoreService {
 
 /* @ngInject */
 export class StoreService implements IStoreService {
-    store: { [key: string]: any };
+    private store: { [key: string]: any };
 
     constructor(private $rootScope: ng.IRootScopeService) {
         this.store = {
@@ -35,7 +35,7 @@ export class StoreService implements IStoreService {
     }
 
     get(key: string): any {
-        let data = this.store[key];
+        const data = this.store[key];
 
         if (!angular.isDefined(data)) {
             throw `No store entry found with key ${key}`;
