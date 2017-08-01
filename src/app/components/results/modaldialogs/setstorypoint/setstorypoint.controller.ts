@@ -3,6 +3,11 @@ import * as _ from 'lodash';
 import { IStoreService } from 'app/services';
 import { Card, Ticket } from 'app/models';
 
+interface Suggestion {
+    value: number;
+    count: number;
+}
+
 export function SetStoryPointController(
     $scope: ng.IScope,
     $http: ng.IHttpService,
@@ -14,13 +19,13 @@ export function SetStoryPointController(
     const jiraUrl = 'https://jira.cas.de';
 
     $scope.ticketName = ticket.title;
-    $scope.storyPoints = store.get('settings')
-        .values
-        .filter(value => value.checked && angular.isNumber(value.label));
+    $scope.storyPoints = store.get('settings.values').filter(value => {
+        return value.checked && angular.isNumber(value.label)
+    });
 
     $scope.suggestedStoryPoint = getSuggestion();
     
-    if ($scope.suggestedStoryPoint) {
+    if (angular.isNumber($scope.suggestedStoryPoint)) {
         $scope.storyPoint = $scope.suggestedStoryPoint;
 
         const storyPointToSelect = _.find<any>($scope.storyPoints, { label: $scope.suggestedStoryPoint });
@@ -57,7 +62,7 @@ export function SetStoryPointController(
             return null;
         }
 
-        const groups = _(cards)
+        const groups: Suggestion[] = _(cards)
             .groupBy('value')
             .map((cards, value) => ({
                 count: cards.length,
@@ -68,9 +73,11 @@ export function SetStoryPointController(
         // Maximum number of cards with the same value
         const maxCount = Math.max(...groups.map(group => group.count));
         // Value(s) with maxCount
-        const suggestions = groups.filter(group => group.count === maxCount);
+        const suggestions: Suggestion[] = groups.filter(group => group.count === maxCount);
 
-        if (suggestions.length === 1) {
+        if (suggestions.length === 0) {
+            return null;
+        } else if (suggestions.length === 1) {
             return suggestions.pop().value;
         } else {
             // Suggestion is the closest one to the average

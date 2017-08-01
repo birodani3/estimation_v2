@@ -106,8 +106,7 @@ export class ResultsController {
 
     onClientReconnected(): void {
         const values = this.store
-            .get('settings')
-            .values
+            .get('settings.values')
             .filter(value => value.checked)
             .map(value => value.label);
 
@@ -335,8 +334,7 @@ export class ResultsController {
     }
 
     getStoryPoints(): StoryPoint[] {
-        return this.store.get('settings')
-            .values
+        return this.store.get('settings.values')
             .filter(setting => setting.checked && angular.isNumber(setting.label))
             .map(value => ({
                 label: value.label,

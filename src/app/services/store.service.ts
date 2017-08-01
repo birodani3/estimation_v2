@@ -35,11 +35,16 @@ export class StoreService implements IStoreService {
     }
 
     get(key: string): any {
-        const data = this.store[key];
+        const path = key.split('.');
+        let data = this.store;
 
-        if (!angular.isDefined(data)) {
-            throw `No store entry found with key ${key}`;
-        }
+        path.forEach(pathKey => {
+            data = data[pathKey];
+
+            if (!angular.isDefined(data)) {
+                throw `No store entry found with key ${key}`;
+            }
+        });
 
         return data;
     }

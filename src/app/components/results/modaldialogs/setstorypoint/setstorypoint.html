@@ -23,9 +23,9 @@
         </md-dialog-content>
 
         <md-dialog-actions layout="row">
-            <span flex>Suggested: {{suggestedStoryPoint || "-"}}</span>
+            <span flex>Suggested: {{ suggestedStoryPoint === null ? '-' : suggestedStoryPoint }}</span>
             <md-button ng-click="cancel()">Cancel</md-button>
-            <md-button type="submit" ng-disabled="!storyPoint" ng-click="set()">Set</md-button>
+            <md-button type="submit" ng-disabled="storyPoint == null" ng-click="set()">Set</md-button>
         </md-dialog-actions>
     </form>
 </md-dialog>
