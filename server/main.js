@@ -1,7 +1,7 @@
 const express    = require('express');
 const app        = express();
 const server     = require("http").createServer(app);
-const io         = require("socket.io")(server);
+const io         = require("socket.io").listen(server, { pingTimeout: 4000, pingInterval: 2000 });
 const port = process.env.PORT || 3008;
 
 require('./config/environment')(app, express);

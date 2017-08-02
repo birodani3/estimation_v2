@@ -58,9 +58,9 @@ angular
         /*$provide.decorator('$rootScope', ['$delegate', ($delegate) => {
             const emit = $delegate.$emit;
 
-            $delegate.$emit = () => {
-                console.log.apply(console, arguments);
-                emit.apply(this, arguments);
+            $delegate.$emit = (...args) => {
+                console.log.apply(console, args);
+                emit.apply(this, args);
             };
 
             return $delegate;

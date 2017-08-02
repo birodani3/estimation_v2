@@ -22,17 +22,20 @@ export class PlayController {
         private socket: ISocketService
     ) {
         this.settings = {};
-        this.initSocket();
-
+    
         $scope.$on('$destroy', () => {
             this.socket.emit('LEAVE_CHANNEL');
         });
 
         if (!$rootScope.username) {
             this.openUsernameDialog()
-                .then(this.joinChannel.bind(this))
+                .then(username => {
+                    this.initSocket();
+                    this.joinChannel(username);
+                })
                 .catch(() => $location.path('/join'));
         } else {
+            this.initSocket();
             this.joinChannel($rootScope.username);
         }
     }
@@ -64,7 +67,7 @@ export class PlayController {
         });
     }
 
-    openUsernameDialog(): ng.IPromise<void> {
+    openUsernameDialog(): ng.IPromise<string> {
         let confirmDialog = this.$mdDialog.prompt()
             .title('Type in your username')
             .placeholder('Username')

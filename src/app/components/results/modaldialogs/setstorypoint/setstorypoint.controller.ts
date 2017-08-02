@@ -68,6 +68,7 @@ export function SetStoryPointController(
                 count: cards.length,
                 value: +value
             }))
+            .filter(s =>!isNaN(s.value))
             .value();
 
         // Maximum number of cards with the same value

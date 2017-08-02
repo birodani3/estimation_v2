@@ -11,7 +11,7 @@ module.exports = (io) => {
     */
     let channels = [];
 
-    io.on('connection', (socket) => {
+    io.sockets.on('connection', (socket) => {
         // String
         let channel = null;
 
