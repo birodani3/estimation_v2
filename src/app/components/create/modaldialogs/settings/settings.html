@@ -15,15 +15,43 @@
                     <md-content class="result-container" flex layout-padding>
                         <div flex-xs flex="50">
                             <md-checkbox aria-label="Select All"
-                                        ng-checked="isAllValuesChecked()"
-                                        md-indeterminate="isSomeValuesChecked()"
-                                        ng-click="toggleAllValues()">
-                            <span ng-if="isAllValuesChecked()">Un-</span>Select All
+                                         ng-checked="isAllValuesChecked('general')"
+                                         md-indeterminate="isSomeValuesChecked('general')"
+                                         ng-click="toggleValues('general')">
+                                <span ng-if="isAllValuesChecked('general')">Un-</span>Select All General Values
                             </md-checkbox>
                         </div>
-                        <div class="value-checkbox-wrapper" flex="25" ng-repeat="value in values">
+                        <div class="value-checkbox-wrapper" flex="25" ng-repeat="value in generalValues">
+                            <md-checkbox ng-checked="value.checked" ng-click="value.checked = !value.checked">
+                                {{ value.label }}
+                            </md-checkbox>
+                        </div>
+
+                        <div flex-xs flex="50">
+                            <md-checkbox aria-label="Select All"
+                                        ng-checked="isAllValuesChecked('number')"
+                                        md-indeterminate="isSomeValuesChecked('number')"
+                                        ng-click="toggleValues('number')">
+                            <span ng-if="isAllValuesChecked('number')">Un-</span>Select All Numbers
+                            </md-checkbox>
+                        </div>
+                        <div class="value-checkbox-wrapper" flex="25" ng-repeat="value in numberValues">
                             <md-checkbox ng-checked="value.checked" ng-click="value.checked = !value.checked">
                             {{ value.label }}
+                            </md-checkbox>
+                        </div>
+
+                        <div flex-xs flex="50">
+                            <md-checkbox aria-label="Select All"
+                                         ng-checked="isAllValuesChecked('t-shirt')"
+                                         md-indeterminate="isSomeValuesChecked('t-shirt')"
+                                         ng-click="toggleValues('t-shirt')">
+                                <span ng-if="isAllValuesChecked('t-shirt')">Un-</span>Select All T-Shirt Sizes
+                            </md-checkbox>
+                        </div>
+                        <div class="value-checkbox-wrapper" flex="25" ng-repeat="value in tshirtValues">
+                            <md-checkbox ng-checked="value.checked" ng-click="value.checked = !value.checked">
+                                {{ value.label }}
                             </md-checkbox>
                         </div>
                     </md-content>
