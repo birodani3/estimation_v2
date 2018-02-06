@@ -13,18 +13,25 @@ export class StoreService implements IStoreService {
         this.store = {
             settings: {
                 values: [
-                    { label: 0,   checked: false },
-                    { label: '½', checked: false },
-                    { label: 1,   checked: true },
-                    { label: 2,   checked: true },
-                    { label: 3,   checked: true },
-                    { label: 5,   checked: true },
-                    { label: 8,   checked: true },
-                    { label: 13,  checked: true },
-                    { label: 20,  checked: true },
-                    { label: 40,  checked: true },
-                    { label: '?', checked: true },
-                    { label: '∞', checked: true }
+                    {label: 0, checked: false, type: 'number'},
+                    {label: '½', checked: false, type: 'number'},
+                    {label: 1, checked: true, type: 'number'},
+                    {label: 2, checked: true, type: 'number'},
+                    {label: 3, checked: true, type: 'number'},
+                    {label: 5, checked: true, type: 'number'},
+                    {label: 8, checked: true, type: 'number'},
+                    {label: 13, checked: true, type: 'number'},
+                    {label: 20, checked: true, type: 'number'},
+                    {label: 40, checked: true, type: 'number'},
+                    {label: '?', checked: true, type: 'general'},
+                    {label: '∞', checked: true, type: 'general'},
+                    {label: 'XXS', checked: false, type: 't-shirt'},
+                    {label: 'XS', checked: false, type: 't-shirt'},
+                    {label: 'S', checked: false, type: 't-shirt'},
+                    {label: 'M', checked: false, type: 't-shirt'},
+                    {label: 'L', checked: false, type: 't-shirt'},
+                    {label: 'XL', checked: false, type: 't-shirt'},
+                    {label: 'XXL', checked: false, type: 't-shirt'}
                 ]
             }
         };
