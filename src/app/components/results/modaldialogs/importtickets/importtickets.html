@@ -1,4 +1,4 @@
-<md-dialog aria-label="Import tickets" style="width: 800px">
+<md-dialog aria-label="Import tickets" class="import-tickets-dialog">
     <form name="importTicketsForm" novalidate ng-cloak>
         <md-toolbar>
             <div class="md-toolbar-tools">
@@ -28,18 +28,57 @@
                         </div>
                     </md-input-container>
                     <md-input-container class="md-block">
-                        <label>Sprint id</label>
-                        <input required md-no-asterisk name="sprintId" type="number" ng-model="jira.sprintId">
-                        <div ng-messages="importTicketsForm.sprintId.$error">
+                        <label>Project id</label>
+                        <input required md-no-asterisk name="projectId" type="text" ng-model="jira.projectId">
+                        <div ng-messages="importTicketsForm.projectId.$error">
                             <div ng-message="required">This is required.</div>
                         </div>
                     </md-input-container>
                 </div>
             </div>
             <div ng-show="isTicketListMode">
+                <div class="ticket-filter-container">
+                    <div flex-xs flex="100">
+                        <md-checkbox aria-label="Select All"
+                                    ng-checked="isAllTicketsChecked()"
+                                    md-indeterminate="isSomeTicketsChecked()"
+                                    ng-click="toggleTickets()">
+                            <span ng-if="isAllTicketsChecked()">Un-</span>Select All Tickets
+                        </md-checkbox>
+                        <md-checkbox aria-label="Select All"
+                            ng-checked="isSettingsShown"
+                            ng-click="isSettingsShown = !isSettingsShown">
+                            <span ng-if="!isSettingsShown">Show</span><span ng-if="isSettingsShown">Hide</span> filters
+                        </md-checkbox>
+                    </div>
+                </div>
+                <div ng-show="isSettingsShown">
+                    <div class="ticket-filter-container">
+                        <md-checkbox aria-label="Story filter"
+                                    ng-checked="filter.issuetype.story"
+                                    ng-click="filter.issuetype.story = !filter.issuetype.story">
+                            Story
+                        </md-checkbox>
+                        <md-checkbox aria-label="Task filter"
+                                    ng-checked="filter.issuetype.task"
+                                    ng-click="filter.issuetype.task = !filter.issuetype.task">
+                            Task
+                        </md-checkbox>
+                        <md-checkbox aria-label="Bug filter"
+                                    ng-checked="filter.issuetype.bug"
+                                    ng-click="filter.issuetype.bug = !filter.issuetype.bug">
+                            Bug
+                        </md-checkbox>
+                        <md-checkbox aria-label="Epic filter"
+                                    ng-checked="filter.issuetype.epic"
+                                    ng-click="filter.issuetype.epic = !filter.issuetype.epic">
+                            Epic
+                        </md-checkbox>
+                    </div>
+                </div>
                 <md-list flex>
                     <md-subheader class="md-no-sticky">Tickets</md-subheader>
-                    <md-list-item ng-repeat="ticket in tickets" class="md-2-line" ng-click="ticket.isSelected = !ticket.isSelected">
+                    <md-list-item ng-repeat="ticket in tickets | filter:ticketFilter" class="md-2-line" ng-click="ticket.isSelected = !ticket.isSelected">
                         <md-checkbox aria-label="Is selected ticket" style="float: right" ng-model="ticket.isSelected"></md-checkbox>
                         <div class="md-list-item-text" class="md-offset" layout="column">
                             <h3>{{ ticket.title }}</h3>

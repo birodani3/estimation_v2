@@ -12,6 +12,8 @@
     <md-dialog-content>
         <div class="md-dialog-content">
             <h2>{{ticket.title}}</h2>
+            <h4>Asignee: {{ ticket.asignee }}</h4>
+            <h4>Type: {{ ticket.type }}</h4>
             <pre ng-show="ticket.description">{{ticket.description}}</pre>
         </div>
     </md-dialog-content>

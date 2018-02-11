@@ -26511,6 +26511,12 @@ hr {
 .result-container .dots span:nth-child(3) {
   animation-delay: .4s;
 }
+.import-tickets-dialog {
+  width: 800px;
+}
+.import-tickets-dialog .ticket-filter-container {
+  padding: 20px 20px 0 20px;
+}
 .set-story-point-dialog .sp {
   min-width: 52px;
   display: inline-block;

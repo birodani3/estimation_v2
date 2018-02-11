@@ -10,7 +10,7 @@ module.exports = (app) => {
     };
 
     app.post("/jira", (req, res) => {
-        if (!req.body.username || !req.body.password || !req.body.sprintId) {
+        if (!req.body.username || !req.body.password || !req.body.projectId) {
             res.send();
             return;
         }
@@ -23,7 +23,7 @@ module.exports = (app) => {
             }
         });
 
-        Jira.sprint.getSprintIssues({ "sprintId": req.body.sprintId, "maxResults": 99 }, (err, issues) => {
+        Jira.search.search({ jql: `project="${ req.body.projectId }"`, maxResults: 199 }, (err, issues) => {
             sendResponse(res, issues);
         });
     });
@@ -36,7 +36,7 @@ module.exports = (app) => {
 
         if (Jira) {
             let promises = req.body.tickets.map((ticket) => {
-                return Jira.issue.setIssueEstimation({ issueId: ticket.issueId, value: ticket.storyPoint, boardId: ticket.boardId });
+                return Jira.issue.setIssueEstimation({ issueId: ticket.issueId, value: ticket.storyPoint, boardId: ticket.boardId || 687 });
             });
 
             Q.all(promises)
@@ -47,7 +47,7 @@ module.exports = (app) => {
                     sendResponse(res, "ERROR");
                 });
         } else {
-            console.log("JIRA not inited yet");
+            sendResponse(res, "ERROR");
         }
     });
 }
