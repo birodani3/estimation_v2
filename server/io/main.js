@@ -144,10 +144,11 @@ module.exports = (io) => {
     }
 
     function emitToChannelHost(channelName, event, data) {
-        const hostChannel = _.find(channels, (channel) => channel.name === channelName);
+        const channel = _.find(channels, (channel) => channel.name === channelName);
+        const channelHost = channel && channel.host;
 
-        if (hostChannel) {
-            emit.toChannel(hostChannel, event, data);
+        if (channelHost) {
+            emit.toSocket(channelHost.id, event, data);
         }
     }
 
