@@ -7,12 +7,16 @@ export interface IHoverService {
     bag: (name: string, scope: ng.IScope) => any;
 }
 
+/*
+ * Usage: hoverService.bag('bagName').on('drag', this.dragHandler).on('drop', this.dropHandler).use();
+ */
+
 /* @ngInject */
 export class HoverService implements IHoverService {
     constructor() { }
 
     bag(name: string, scope) {
-        let callbacks: HoverCallback[] = [];
+        const callbacks: HoverCallback[] = [];
 
         const api = {
             on: (event: string, callback) => {

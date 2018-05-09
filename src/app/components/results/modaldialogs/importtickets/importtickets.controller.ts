@@ -66,7 +66,7 @@ export function ImportTicketsController($scope, $http: ng.IHttpService, $mdDialo
         $http(config)
             .then((response: any) => {
                 if (response.data) {
-                    let rawTickets = response.data.issues || [];
+                    const rawTickets = response.data.issues || [];
 
                     $scope.isTicketListMode = true;
 

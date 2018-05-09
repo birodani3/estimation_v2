@@ -10,14 +10,14 @@ module.exports = (io) => {
     *     host: socket;
     * }]
     */
-    let channels = [];
+    const channels = [];
 
     io.sockets.on('connection', (socket) => {
         // String
         let channel = null;
 
         socket.on('CREATE_CHANNEL', (payload, callback) => {
-            let name = payload.name;
+            const name = payload.name;
 
             if (!findChannelByName(name)) {
                 channel = name;
@@ -30,7 +30,7 @@ module.exports = (io) => {
         });
 
         socket.on('JOIN_CHANNEL', (data, callback) => {
-            let channelToJoin = findChannelByName(data.channel);
+            const channelToJoin = findChannelByName(data.channel);
 
             if (channelToJoin) {
                 if (!channelToJoin.password || channelToJoin.password === data.password) {
@@ -56,7 +56,7 @@ module.exports = (io) => {
         });
 
         socket.on('VOTE', (data, callback) => {
-            let payload = {
+            const payload = {
                 value: data.value,
                 id: socket.id
             };
@@ -66,7 +66,7 @@ module.exports = (io) => {
         });
 
         socket.on('GET_CHANNELS', (data, callback) => {
-            let channelList = getChannelListForSending();
+            const channelList = getChannelListForSending();
 
             callback && callback(channelList);
         });
@@ -139,7 +139,7 @@ module.exports = (io) => {
     }
 
     function sendChannelList() {
-        let channelList = getChannelListForSending();
+        const channelList = getChannelListForSending();
 
         emit.toAll('CHANNEL_LIST', channelList);
     }

@@ -35,9 +35,11 @@ module.exports = (app) => {
         }
 
         if (Jira) {
-            let promises = req.body.tickets.map((ticket) => {
-                return Jira.issue.setIssueEstimation({ issueId: ticket.issueId, value: ticket.storyPoint, boardId: ticket.boardId || 687 });
-            });
+            const promises = req.body.tickets
+                .filter(ticket => ticket.boardId)
+                .map((ticket) => {
+                    return Jira.issue.setIssueEstimation({ issueId: ticket.issueId, value: ticket.storyPoint, boardId: ticket.boardId });
+                });
 
             Q.all(promises)
                 .then(() => {

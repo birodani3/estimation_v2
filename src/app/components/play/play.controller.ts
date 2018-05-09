@@ -85,7 +85,7 @@ export class PlayController {
     }
 
     vote(value: string | number): void {
-        let payload = {
+        const payload = {
             value,
             name: this.username
         };
@@ -137,6 +137,7 @@ export class PlayController {
 
     back(): void {
         this.$rootScope.username = null;
+        this.$rootScope.password = null;
         this.$rootScope.channel = null;
         this.$location.path('/');
     }

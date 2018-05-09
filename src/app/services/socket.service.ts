@@ -16,7 +16,7 @@ export class SocketService implements ISocketService {
     socket: SocketIOClient.Socket;
 
     constructor(private $rootScope: IEstimationRootScope, private serverUrl: string, private toast: IToastService) {
-        this.socket = io(serverUrl);
+        this.socket = io.connect();
 
         this.socket.on('connect', () => {
             this.setIsOnline(true);

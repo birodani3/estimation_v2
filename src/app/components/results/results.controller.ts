@@ -7,7 +7,7 @@ import { NewTicketController } from './modaldialogs/newticket/newticket.controll
 import { ImportTicketsController } from './modaldialogs/importtickets/importtickets.controller';
 import { SetStoryPointController } from './modaldialogs/setstorypoint/setstorypoint.controller'
 import { ShowTicketController } from './modaldialogs/showticket/showticket.controller';
-import { IEstimationRootScope, Card, Ticket } from 'app/models'; 
+import { IEstimationRootScope, Card, Ticket, User } from 'app/models'; 
 import { ISocketService, IHoverService, IToastService, IStoreService } from 'app/services'; 
 
 enum Tab {
@@ -72,9 +72,9 @@ export class ResultsController {
     }
 
     onTicketDropped(event: Event, element, target, source): void {
-        let droppedTicket = element.scope().ticket;
-        let point = target.scope().point;
-        let newStoryPoint = point ? point.label : null;
+        const droppedTicket = element.scope().ticket;
+        const point = target.scope().point;
+        const newStoryPoint = point ? point.label : null;
 
         droppedTicket.storyPoint = newStoryPoint;
 
@@ -83,7 +83,7 @@ export class ResultsController {
         }
     }
 
-    onUserJoined(user): void {
+    onUserJoined(user: User): void {
         this.cards.push({
             name: user.name,
             id: user.id,
@@ -92,12 +92,12 @@ export class ResultsController {
         });
     }
 
-    onUserLeft(user): void {
+    onUserLeft(user: User): void {
         _.remove(this.cards, this.findCardById(user.id));
     }
 
     onUserVoted(data): void {
-        let card = this.findCardById(data.id);
+        const card = this.findCardById(data.id);
 
         if (card) {
             card.value = data.value;
