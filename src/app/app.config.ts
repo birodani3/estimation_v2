@@ -1,4 +1,5 @@
 declare function require(string): string;
+
 import { ToastTheme } from './services';
 
 /* @ngInject */

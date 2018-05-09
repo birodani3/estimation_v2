@@ -29,14 +29,14 @@ export class PlayController {
 
         if (!$rootScope.username) {
             this.openUsernameDialog()
-                .then(username => {
+                .then(([username, password]) => {
                     this.initSocket();
-                    this.joinChannel(username);
+                    this.joinChannel(username, password);
                 })
                 .catch(() => $location.path('/join'));
         } else {
             this.initSocket();
-            this.joinChannel($rootScope.username);
+            this.joinChannel($rootScope.username, $rootScope.password);
         }
     }
 
@@ -47,13 +47,13 @@ export class PlayController {
         this.socket.on('connect', this.$scope, this.onClientReconnected.bind(this));
     }
 
-    joinChannel(username: string): void {
+    joinChannel(username: string, password: string): void {
         const channel = this.$route.current.params.channel;
 
         this.isLoading = true;
         this.username = username;
 
-        this.socket.emit('JOIN_CHANNEL', { channel, username }, (data) => {
+        this.socket.emit('JOIN_CHANNEL', { channel, password, username }, (data) => {
             this.isLoading = false;
 
             if (!data.error) {
@@ -62,12 +62,16 @@ export class PlayController {
                 this.$rootScope.username = username;
                 this.$cookies.put('username', username);
             } else {
+                if (data.error = 'WRONG_PASWORD') {
+                    this.toast.error('Incorrect password');
+                }
+
                 this.$location.path('/join');
             }
         });
     }
 
-    openUsernameDialog(): ng.IPromise<string> {
+    openUsernameDialog(): ng.IPromise<[string, string]> {
         let confirmDialog = this.$mdDialog.prompt()
             .title('Type in your username')
             .placeholder('Username')

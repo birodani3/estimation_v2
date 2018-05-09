@@ -16,13 +16,13 @@ import { JoinController } from './components/join/join.controller';
 import { ResultsController } from './components/results/results.controller';
 import { PlayController } from './components/play/play.controller';
 
-// Import styles
 import 'bootstrap/dist/css/bootstrap.css';
 import '../style/angular-material.min.css';
 import '../style/dragula.css';
 import '../style/app.less';
 
 const moduleName = 'estimation';
+const serverUrl = 'localhost:3008';
 const dependencies = [
     ngRoute,
     ngCookies,
@@ -51,6 +51,7 @@ angular
     .controller('JoinController', JoinController)
     .controller('ResultsController', ResultsController)
     .controller('PlayController', PlayController)
+    .value('serverUrl', serverUrl)
     .value('dragulaBagId', 'ticket-container')
     .config(['$provide', ($provide) => {
         // DEBUG

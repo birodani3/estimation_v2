@@ -5,6 +5,7 @@ module.exports = (io) => {
 
     /* [{
     *     name: string;
+    *     password?: string;
     *     settings: Object;
     *     host: socket;
     * }]
@@ -32,14 +33,17 @@ module.exports = (io) => {
             let channelToJoin = findChannelByName(data.channel);
 
             if (channelToJoin) {
-                // TODO check password
-                channel = channelToJoin.name;
-                joinChannel(socket, data);
-
-                callback({
-                    //settings: channelToJoin.settings
-                    values: channelToJoin.values
-                });
+                if (!channelToJoin.password || channelToJoin.password === data.password) {
+                    channel = channelToJoin.name;
+                    joinChannel(socket, data);
+    
+                    callback({
+                        //settings: channelToJoin.settings
+                        values: channelToJoin.values
+                    });
+                } else {
+                    callback({error: 'WRONG_PASSWORD'});
+                }
             } else {
                 callback({ error: 'CHANNEL_NOT_FOUND' });
             }
@@ -95,6 +99,7 @@ module.exports = (io) => {
     function createChannel(socket, channel) {
         channels.push({
             name: channel.name,
+            password: channel.password,
             values: channel.values,
             host: socket
         });

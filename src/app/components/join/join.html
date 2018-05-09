@@ -19,20 +19,23 @@
                                     <ng-message when="required">This is required.</ng-message>
                                 </div>
                             </md-input-container>
+                            <md-input-container class="md-block">
+                                <label>Password</label>
+                                <input md-no-asterisk name="password" type="password" ng-model="vm.password">
+                            </md-input-container>
                         </form>
                     <div flex layout="row" layout-align="end center">
                         <md-list flex>
                             <md-subheader class="md-no-sticky">Channels</md-subheader>
-                            <md-list-item class="md-2-line" ng-repeat="channel in vm.channels" ng-click="userform.$valid && vm.joinChannel(vm.username, channel.name)">
+                            <md-list-item class="md-2-line" ng-repeat="channel in vm.channels" ng-click="userform.$valid && vm.joinChannel(vm.username, vm.password, channel.name)">
                                 <md-icon class="channel-icon">
                                     <span class="fa-stack fa-lg">
                                         <i class="fa fa-circle fa-stack-2x"></i>
-                                        <i class="fa fa-stack-1x fa-inverse" ng-class="channel.hasPassword ? 'fa-lock' : 'fa-unlock-alt'"></i>
+                                        <i class="fa fa-stack-1x fa-inverse" ng-class="channel.password ? 'fa-lock' : 'fa-unlock-alt'"></i>
                                     </span>
                                 </md-icon>
                                 <div class="md-list-item-text" layout="column">
                                     <h3>{{ channel.name }}</h3>
-                                    <h4>{{ channel.settings.hasPassword }}</h4>
                                 </div>
                             </md-list-item>
                             <div class="text-center channel-message" ng-show="!vm.channels.length">No channel available</div>

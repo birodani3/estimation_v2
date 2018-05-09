@@ -23,10 +23,10 @@ export class CreateController {
         this.settings = store.get('settings');
     }
 
-    createChannel(channel: string): void {
-        channel = channel.trim();
+    createChannel(name: string, password: string): void {
+        name = name.trim();
 
-        if (!channel) {
+        if (!name) {
             return;
         }
 
@@ -34,16 +34,13 @@ export class CreateController {
             .filter(value => value.checked)
             .map(value => value.label);
 
-        const payload = {
-            name: channel,
-            values
-        };
+        const payload = { name, password, values };
 
         this.socket.emit('CREATE_CHANNEL', payload, (data) => {
             if (!data.error) {
-                this.$cookies.put('channel', channel);
-                this.$rootScope.channel = channel;
-                this.$location.path(`/results/${channel}`);
+                this.$cookies.put('channel', name);
+                this.$rootScope.channel = name;
+                this.$location.path(`/results/${name}`);
             } else if (data.error === 'NAME_ALREADY_EXISTS') {
                 this.toast.warning('Room already exists with this name!');
             } else {

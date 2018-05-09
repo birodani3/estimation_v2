@@ -19,10 +19,14 @@
                                 <ng-message when="required">This is required.</ng-message>
                             </div>
                         </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>Password (optional)</label>
+                            <input md-no-asterisk name="password" type="password" ng-model="vm.password">
+                        </md-input-container>
                     </form>
                     <div flex layout="row" layout-align="end center">
                         <md-button id="settings-menu-button" class="md-primary md-raised" ng-click="vm.openSettings()">Settings</md-button>
-                        <md-button class="md-primary md-raised" ng-disabled="channelform.$invalid" ng-click="channelform.$valid && vm.createChannel(vm.channel)">Create</md-button>
+                        <md-button class="md-primary md-raised" ng-disabled="channelform.$invalid" ng-click="channelform.$valid && vm.createChannel(vm.channel, vm.password)">Create</md-button>
                     </div>
                 </div>
             </div>
