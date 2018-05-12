@@ -1,5 +1,7 @@
 import * as angular from 'angular';
 
+import { ValueType } from '../models';
+
 export interface IStoreService {
     set: (key: string, data: any) => void;
     get: (key: string) => any;
@@ -13,25 +15,25 @@ export class StoreService implements IStoreService {
         this.store = {
             settings: {
                 values: [
-                    {label: 0, checked: false, type: 'number'},
-                    {label: '½', checked: false, type: 'number'},
-                    {label: 1, checked: true, type: 'number'},
-                    {label: 2, checked: true, type: 'number'},
-                    {label: 3, checked: true, type: 'number'},
-                    {label: 5, checked: true, type: 'number'},
-                    {label: 8, checked: true, type: 'number'},
-                    {label: 13, checked: true, type: 'number'},
-                    {label: 20, checked: true, type: 'number'},
-                    {label: 40, checked: true, type: 'number'},
-                    {label: '?', checked: true, type: 'general'},
-                    {label: '∞', checked: true, type: 'general'},
-                    {label: 'XXS', checked: false, type: 't-shirt'},
-                    {label: 'XS', checked: false, type: 't-shirt'},
-                    {label: 'S', checked: false, type: 't-shirt'},
-                    {label: 'M', checked: false, type: 't-shirt'},
-                    {label: 'L', checked: false, type: 't-shirt'},
-                    {label: 'XL', checked: false, type: 't-shirt'},
-                    {label: 'XXL', checked: false, type: 't-shirt'}
+                    { label: 0,     checked: false, type: ValueType.Number  },
+                    { label: '½',   checked: false, type: ValueType.Number  },
+                    { label: 1,     checked: true,  type: ValueType.Number  },
+                    { label: 2,     checked: true,  type: ValueType.Number  },
+                    { label: 3,     checked: true,  type: ValueType.Number  },
+                    { label: 5,     checked: true,  type: ValueType.Number  },
+                    { label: 8,     checked: true,  type: ValueType.Number  },
+                    { label: 13,    checked: true,  type: ValueType.Number  },
+                    { label: 20,    checked: true,  type: ValueType.Number  },
+                    { label: 40,    checked: true,  type: ValueType.Number  },
+                    { label: '?',   checked: true,  type: ValueType.General },
+                    { label: '∞',   checked: true,  type: ValueType.General },
+                    { label: 'XXS', checked: false, type: ValueType.TShirt  },
+                    { label: 'XS',  checked: false, type: ValueType.TShirt  },
+                    { label: 'S',   checked: false, type: ValueType.TShirt  },
+                    { label: 'M',   checked: false, type: ValueType.TShirt  },
+                    { label: 'L',   checked: false, type: ValueType.TShirt  },
+                    { label: 'XL',  checked: false, type: ValueType.TShirt  },
+                    { label: 'XXL', checked: false, type: ValueType.TShirt  }
                 ]
             }
         };

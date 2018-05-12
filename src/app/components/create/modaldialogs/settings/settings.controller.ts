@@ -1,10 +1,12 @@
 import { IStoreService } from 'app/services';
+import { ValueType } from '../../../../models';
 
 export function SettingsController($scope, $mdDialog: ng.material.IDialogService, store: IStoreService) {
     $scope.values = store.get('settings.values');
-    $scope.numberValues = $scope.values.filter(value => value.type === 'number');
-    $scope.generalValues = $scope.values.filter(value => value.type === 'general');
-    $scope.tshirtValues = $scope.values.filter(value => value.type === 't-shirt');
+    $scope.ValueType = ValueType;
+    $scope.numberValues = $scope.values.filter(value => value.type === ValueType.Number);
+    $scope.generalValues = $scope.values.filter(value => value.type === ValueType.General);
+    $scope.tshirtValues = $scope.values.filter(value => value.type === ValueType.TShirt);
 
     $scope.close = () => {
         const settings = {
@@ -14,13 +16,13 @@ export function SettingsController($scope, $mdDialog: ng.material.IDialogService
         $mdDialog.hide(settings);
     };
 
-    $scope.isAllValuesChecked = (type: string) => {
+    $scope.isAllValuesChecked = (type: ValueType) => {
         return $scope.values
             .filter(value => value.type === type)
             .every(value => value.checked);
     };
 
-    $scope.isSomeValuesChecked = (type: string) => {
+    $scope.isSomeValuesChecked = (type: ValueType) => {
         return $scope.isAllValuesChecked(type)
             ? false
             : $scope.values
@@ -28,11 +30,11 @@ export function SettingsController($scope, $mdDialog: ng.material.IDialogService
                 .some(value => value.checked);
     };
 
-    $scope.toggleValues = (type: string) => {
+    $scope.toggleValues = (type: ValueType) => {
         const checked = !$scope.isAllValuesChecked(type);
 
         $scope.values
             .filter(value => value.type === type)
-            .forEach(value => value.checked = checked)
+            .forEach(value => value.checked = checked);
     };
 }
