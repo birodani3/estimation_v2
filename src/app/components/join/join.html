@@ -24,11 +24,11 @@
                         <div flex layout="row" layout-align="end center">
                             <md-list flex>
                                 <md-subheader class="md-no-sticky">Channels</md-subheader>
-                                <md-list-item class="md-2-line" ng-repeat="channel in vm.channels" ng-click="userform.$valid && vm.joinChannel(vm.username, channel.name)">
+                                <md-list-item class="md-2-line" ng-repeat="channel in vm.channels" ng-click="userform.$valid && vm.joinChannel(vm.username, channel)">
                                     <md-icon class="channel-icon">
                                         <span class="fa-stack fa-lg">
                                             <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-stack-1x fa-inverse" ng-class="channel.password ? 'fa-lock' : 'fa-unlock-alt'"></i>
+                                            <i class="fa fa-stack-1x fa-inverse" ng-class="channel.hasPassword ? 'fa-lock' : 'fa-unlock-alt'"></i>
                                         </span>
                                     </md-icon>
                                     <div class="md-list-item-text" layout="column">

@@ -8,6 +8,7 @@ export interface ISocketService {
     on: (event: string, scope: ng.IScope, callback: Function) => void;
     off: (event: string, listener: Function) => void;
     emit: (event: string, data?: any, callback?: Function) => void;
+    emitWhenOnline: (event: string, data?: any, callback?: Function, tries?: number) => void;
 }
 
 /* @ngInject */
@@ -57,6 +58,18 @@ export class SocketService implements ISocketService {
                 callback.apply(this.socket, args);
             });
         });
+    }
+
+    emitWhenOnline(event: string, data: any, callback = noop, tries = 0): void {
+        if (this.isOnline) {
+            this.emit(event, data, callback);
+        } else {
+            if (tries < 30) {
+                setTimeout(() => {
+                    this.emitWhenOnline(event, data, callback, ++tries);
+                }, 100)
+            }
+        }
     }
 
     private setIsOnline(isOnline: boolean): void {

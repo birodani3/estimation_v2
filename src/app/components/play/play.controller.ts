@@ -1,4 +1,7 @@
-import { IEstimationRootScope } from 'app/models/rootscope.model';
+import * as q from 'q';
+import * as _ from 'lodash';
+
+import { IEstimationRootScope, Channel } from 'app/models';
 import { IToastService, ISocketService } from '../../services';
 
 const MAX_REJOIN_ATTEMPTS = 3;
@@ -24,16 +27,30 @@ export class PlayController {
         this.settings = {};
     
         $scope.$on('$destroy', () => {
+            this.resetState();
             this.socket.emit('LEAVE_CHANNEL');
         });
 
+        // Coming via direct link
         if (!$rootScope.username) {
-            this.openUsernameDialog()
-                .then((username) => {
-                    this.initSocket();
-                    this.joinChannel(username);
-                })
-                .catch(() => $location.path('/join'));
+            this.socket.emitWhenOnline('GET_CHANNELS', null, (channelList) => {
+                const channel = _.find(channelList, (channel: Channel) => channel.name === this.$route.current.params.channel);
+
+                if (channel) {
+                    this.$rootScope.passwordPrompt = channel.hasPassword;
+
+                    this.openUsernameDialog()
+                        .then((username) => {
+                            this.initSocket();
+                            this.joinChannel(username);
+                        })
+                        .catch(() => $location.path('/join'));
+                } else {
+                    this.toast.error('Channel does not exists.');
+                    $location.path('/join');
+                }
+            });
+        // Coming from join page
         } else {
             this.initSocket();
             this.joinChannel($rootScope.username);
@@ -48,31 +65,32 @@ export class PlayController {
     }
 
     joinChannel(username: string): void {
-        this.openPasswordDialog()
-            .then(password => {
-                const channel = this.$route.current.params.channel;
+        const prompt = this.$rootScope.passwordPrompt ? this.openPasswordDialog() : q.resolve();
 
-                this.isLoading = true;
-                this.username = username;
+        prompt.then(password => {
+            const channel = this.$route.current.params.channel;
 
-                this.socket.emit('JOIN_CHANNEL', { channel, password, username }, (data) => {
-                    this.isLoading = false;
+            this.isLoading = true;
+            this.username = username;
 
-                    if (!data.error) {
-                        this.values = data.values;
-                        this.$rootScope.channel = channel;
-                        this.$rootScope.username = username;
-                        this.$cookies.put('username', username);
-                    } else {
-                        if (data.error = 'WRONG_PASWORD') {
-                            this.toast.error('Incorrect password');
-                        }
+            this.socket.emit('JOIN_CHANNEL', { channel, password, username }, (data) => {
+                this.isLoading = false;
 
-                        this.$location.path('/join');
+                if (!data.error) {
+                    this.values = data.values;
+                    this.$rootScope.channel = channel;
+                    this.$rootScope.username = username;
+                    this.$cookies.put('username', username);
+                } else {
+                    if (data.error = 'WRONG_PASWORD') {
+                        this.toast.error('Incorrect password');
                     }
-                });
-            })
-            .catch(() => this.$location.path('/join'));
+
+                    this.$location.path('/join');
+                }
+            });
+        })
+        .catch(() => this.$location.path('/join'));
     }
 
     openUsernameDialog(): ng.IPromise<string> {
@@ -153,9 +171,14 @@ export class PlayController {
     }
 
     back(): void {
+        this.resetState();
+        this.$location.path('/');
+    }
+
+    resetState(): void {
         this.$rootScope.username = null;
         this.$rootScope.channel = null;
-        this.$location.path('/');
+        this.$rootScope.passwordPrompt = false;
     }
 
     onReset(): void {

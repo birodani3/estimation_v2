@@ -1,5 +1,6 @@
 import * as angular from 'angular';
 import * as _ from 'lodash';
+
 import { IStoreService } from 'app/services';
 import { Card, Ticket } from 'app/models';
 

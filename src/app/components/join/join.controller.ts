@@ -25,7 +25,7 @@ export class JoinController {
         this.socket.on('CHANNEL_LIST', this.$scope, this.onChannelListChanged.bind(this));
     }
 
-    joinChannel(username: string, channel: string): void {
+    joinChannel(username: string, channel: Channel): void {
         username = username.trim();
 
         if (!username) {
@@ -33,8 +33,9 @@ export class JoinController {
             return;
         }
 
+        this.$rootScope.passwordPrompt = channel.hasPassword;
         this.$rootScope.username = username;
-        this.$location.path(`/play/${channel}`);
+        this.$location.path(`/play/${channel.name}`);
     }
 
     back(): void {

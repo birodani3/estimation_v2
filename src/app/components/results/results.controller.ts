@@ -120,7 +120,7 @@ export class ResultsController {
 
     onClientDisconnected(): void {
         this.cards = [];
-        this.toast.warning('Connection lost, all users removed. Users will automatically rejoin after successful connection', 0);
+        this.toast.error('Connection lost, all users removed. Users will automatically rejoin after successful connection', 0);
     }
 
     openMenu($mdMenu, event: Event): void {

@@ -1,4 +1,5 @@
 export interface Channel {
     name: string;
-    values: (number | string)[]
+    hasPassword: boolean;
+    values: (number | string)[];
 }
