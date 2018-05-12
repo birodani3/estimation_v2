@@ -8,8 +8,10 @@ module.exports = (app, express) => {
     app.use('/manifest.json', express.static(__dirname + '/../../manifest.json'));
     app.use('/dist', express.static(__dirname + '/../../dist'));
     app.use('/fonts', express.static(__dirname + '/../../fonts'));
+    app.use('/images', express.static(__dirname + '/../../images'));
+    app.use('favicon.ico', express.static(__dirname + '/../../favicon.ico'));
 
-    app.get("/", (req, res) => {
+    app.get('/', (req, res) => {
         res.sendFile(path.join(__dirname, '/../../index.html'));
     });
 }

@@ -8,7 +8,7 @@
     "description": "Story point estimator app",
     "lang": "en-US",
     "icons": [{
-        "src": "./src/icon_144x144.png",
+        "src": "images/icon_144x144.png",
         "sizes": "144x144",
         "type": "image/png"
     }],
