@@ -6,30 +6,40 @@
             </md-button>
         </h2>
     </md-toolbar>
-    <md-card class="estimation-card">
-        <md-card-content>
-            <div flex layout="row">
-                <div flex layout="column">
-                    <h1>Create channel</h1>
-                    <form name="channelform" class="create-form">
-                        <md-input-container class="md-block">
-                            <label>Channel name</label>
-                            <input required md-no-asterisk name="channel" ng-model="vm.channel">
-                            <div ng-messages="channelform.channel.$error" role="alert">
-                                <ng-message when="required">This is required.</ng-message>
-                            </div>
-                        </md-input-container>
-                        <md-input-container class="md-block">
-                            <label>Password (optional)</label>
-                            <input md-no-asterisk name="password" type="password" ng-model="vm.password">
-                        </md-input-container>
-                    </form>
-                    <div flex layout="row" layout-align="end center">
-                        <md-button id="settings-menu-button" class="md-primary md-raised" ng-click="vm.openSettings()">Settings</md-button>
-                        <md-button class="md-primary md-raised" ng-disabled="channelform.$invalid" ng-click="channelform.$valid && vm.createChannel(vm.channel, vm.password)">Create</md-button>
+    <div>
+        <md-card class="estimation-card">
+            <md-card-content>
+                <div flex layout="row">
+                    <div flex layout="column">
+                        <h1>Create channel</h1>
+                        <form name="channelform" class="create-form">
+                            <md-input-container class="md-block">
+                                <label>Channel name</label>
+                                <input required md-no-asterisk name="channel" ng-model="vm.channel">
+                                <div ng-messages="channelform.channel.$error" role="alert">
+                                    <ng-message when="required">This is required.</ng-message>
+                                </div>
+                            </md-input-container>
+                            <md-input-container class="md-block">
+                                <md-checkbox ng-model="vm.isPrivate" aria-label="Private channel">
+                                    Private channel
+                                </md-checkbox>
+                            </md-input-container>
+                            <md-input-container ng-if="vm.isPrivate" class="md-block">
+                                <label>Password</label>
+                                <input required md-no-asterisk name="password" type="password" ng-model="vm.password">
+                                <div ng-messages="channelform.password.$error" role="alert">
+                                    <ng-message when="required">This is required.</ng-message>
+                                </div>
+                            </md-input-container>
+                        </form>
+                        <div flex layout="row" layout-align="end center">
+                            <md-button id="settings-menu-button" class="md-primary md-raised" ng-click="vm.openSettings()">Settings</md-button>
+                            <md-button class="md-primary md-raised" ng-disabled="channelform.$invalid" ng-click="channelform.$valid && vm.createChannel()">Create</md-button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </md-card-content>
-    </md-card>
+            </md-card-content>
+        </md-card>
+    </div>
 </div>

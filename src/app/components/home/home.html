@@ -1,24 +1,26 @@
 <div flex layout="column" layout-align="top center">
     <md-toolbar class="md-tall md-primary">
     </md-toolbar>
-    <md-card class="estimation-card">
-        <md-card-content>
-            <div flex layout="row">
-                <div flex layout="column">
-                    <h1>Estimation</h1>
-                    <h4>Create a new estimation channel, or join to an existing one.</h4>
-                    <div flex layout="row">
-                        <md-button class="md-primary md-raised" ng-click="vm.createChannel()">
-                            Create channel
-                            <md-icon md-font-icon="fa-plus" class="fa"></md-icon>
-                        </md-button>
-                        <md-button class="md-primary md-raised" ng-click="vm.joinChannel()">
-                            Join channel
-                            <md-icon md-font-icon="fa-sign-in" class="fa"></md-icon>
-                        </md-button>
+    <div>
+        <md-card class="estimation-card">
+            <md-card-content>
+                <div flex layout="row">
+                    <div flex layout="column">
+                        <h1>Estimation</h1>
+                        <h4>Create a new estimation channel, or join to an existing one.</h4>
+                        <div flex layout="row">
+                            <md-button class="md-primary md-raised" ng-click="vm.createChannel()">
+                                Create channel
+                                <md-icon md-font-icon="fa-plus" class="fa"></md-icon>
+                            </md-button>
+                            <md-button class="md-primary md-raised" ng-click="vm.joinChannel()">
+                                Join channel
+                                <md-icon md-font-icon="fa-sign-in" class="fa"></md-icon>
+                            </md-button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </md-card-content>
-    </md-card>
+            </md-card-content>
+        </md-card>
+    </div>
 </div>

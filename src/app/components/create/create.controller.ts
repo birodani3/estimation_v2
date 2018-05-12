@@ -8,6 +8,8 @@ import { ISocketService, IToastService, IStoreService } from '../../services';
 /* @ngInject */
 export class CreateController {
     channel: string;
+    isPrivate: boolean;
+    password: string;
     settings: any;
 
     constructor(
@@ -23,10 +25,10 @@ export class CreateController {
         this.settings = store.get('settings');
     }
 
-    createChannel(name: string, password: string): void {
-        name = name.trim();
+    createChannel(): void {
+        this.channel = this.channel.trim();
 
-        if (!name) {
+        if (!this.channel) {
             return;
         }
 
@@ -34,13 +36,17 @@ export class CreateController {
             .filter(value => value.checked)
             .map(value => value.label);
 
-        const payload = { name, password, values };
+        const payload = {
+            name: this.channel,
+            password: this.isPrivate ? this.password : null,
+            values
+        };
 
         this.socket.emit('CREATE_CHANNEL', payload, (data) => {
             if (!data.error) {
-                this.$cookies.put('channel', name);
-                this.$rootScope.channel = name;
-                this.$location.path(`/results/${name}`);
+                this.$cookies.put('channel', this.channel);
+                this.$rootScope.channel = this.channel;
+                this.$location.path(`/results/${this.channel}`);
             } else if (data.error === 'NAME_ALREADY_EXISTS') {
                 this.toast.warning('Room already exists with this name!');
             } else {

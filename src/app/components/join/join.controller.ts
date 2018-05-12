@@ -5,7 +5,6 @@ import { IEstimationRootScope, Channel } from '../../models';
 export class JoinController {
     public channels: Channel[];
     public username: string;
-    public password: string;
 
     constructor(
         private $rootScope: IEstimationRootScope,
@@ -26,7 +25,7 @@ export class JoinController {
         this.socket.on('CHANNEL_LIST', this.$scope, this.onChannelListChanged.bind(this));
     }
 
-    joinChannel(username: string, password: string, channel: string): void {
+    joinChannel(username: string, channel: string): void {
         username = username.trim();
 
         if (!username) {
@@ -35,7 +34,6 @@ export class JoinController {
         }
 
         this.$rootScope.username = username;
-        this.$rootScope.password = password;
         this.$location.path(`/play/${channel}`);
     }
 

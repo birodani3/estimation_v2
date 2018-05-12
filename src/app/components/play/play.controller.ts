@@ -29,14 +29,14 @@ export class PlayController {
 
         if (!$rootScope.username) {
             this.openUsernameDialog()
-                .then(([username, password]) => {
+                .then((username) => {
                     this.initSocket();
-                    this.joinChannel(username, password);
+                    this.joinChannel(username);
                 })
                 .catch(() => $location.path('/join'));
         } else {
             this.initSocket();
-            this.joinChannel($rootScope.username, $rootScope.password);
+            this.joinChannel($rootScope.username);
         }
     }
 
@@ -47,35 +47,52 @@ export class PlayController {
         this.socket.on('connect', this.$scope, this.onClientReconnected.bind(this));
     }
 
-    joinChannel(username: string, password: string): void {
-        const channel = this.$route.current.params.channel;
+    joinChannel(username: string): void {
+        this.openPasswordDialog()
+            .then(password => {
+                const channel = this.$route.current.params.channel;
 
-        this.isLoading = true;
-        this.username = username;
+                this.isLoading = true;
+                this.username = username;
 
-        this.socket.emit('JOIN_CHANNEL', { channel, password, username }, (data) => {
-            this.isLoading = false;
+                this.socket.emit('JOIN_CHANNEL', { channel, password, username }, (data) => {
+                    this.isLoading = false;
 
-            if (!data.error) {
-                this.values = data.values;
-                this.$rootScope.channel = channel;
-                this.$rootScope.username = username;
-                this.$cookies.put('username', username);
-            } else {
-                if (data.error = 'WRONG_PASWORD') {
-                    this.toast.error('Incorrect password');
-                }
+                    if (!data.error) {
+                        this.values = data.values;
+                        this.$rootScope.channel = channel;
+                        this.$rootScope.username = username;
+                        this.$cookies.put('username', username);
+                    } else {
+                        if (data.error = 'WRONG_PASWORD') {
+                            this.toast.error('Incorrect password');
+                        }
 
-                this.$location.path('/join');
-            }
-        });
+                        this.$location.path('/join');
+                    }
+                });
+            })
+            .catch(() => this.$location.path('/join'));
     }
 
-    openUsernameDialog(): ng.IPromise<[string, string]> {
+    openUsernameDialog(): ng.IPromise<string> {
         let confirmDialog = this.$mdDialog.prompt()
-            .title('Type in your username')
+            .title('Username: ')
             .placeholder('Username')
             .initialValue(this.$cookies.get('username') || '')
+            .ok('Ok')
+            .cancel('Cancel');
+
+        return this.$mdDialog
+            .show(confirmDialog)
+            .finally(() => confirmDialog = undefined);
+    }
+
+    openPasswordDialog(): ng.IPromise<string> {
+        let confirmDialog = this.$mdDialog.prompt()
+            .title('Channel password: ')
+            .placeholder('Password')
+            .initialValue('')
             .ok('Ok')
             .cancel('Cancel');
 
@@ -137,7 +154,6 @@ export class PlayController {
 
     back(): void {
         this.$rootScope.username = null;
-        this.$rootScope.password = null;
         this.$rootScope.channel = null;
         this.$location.path('/');
     }

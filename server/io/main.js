@@ -42,7 +42,7 @@ module.exports = (io) => {
                         values: channelToJoin.values
                     });
                 } else {
-                    callback({error: 'WRONG_PASSWORD'});
+                    callback({ error: 'WRONG_PASSWORD' });
                 }
             } else {
                 callback({ error: 'CHANNEL_NOT_FOUND' });
@@ -145,7 +145,11 @@ module.exports = (io) => {
     }
 
     function getChannelListForSending() {
-        return _.map(channels, (channel) => _.omit(channel, 'host'));
+        return _.map(channels, (channel) => ({
+            name: channel.name,
+            settings: channel.settings,
+            hasPassword: !!channel.password
+        }));
     }
 
     function emitToChannelHost(channelName, event, data) {
