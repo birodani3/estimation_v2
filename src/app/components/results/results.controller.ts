@@ -291,7 +291,9 @@ export class ResultsController {
     }
 
     reset(): void {
-        this.socket.emit('RESET', null, () => {
+        const currentTicketTitle = this.selectedTicket ? this.selectedTicket.title : '';
+
+        this.socket.emit('RESET', { currentTicketTitle }, () => {
             this.cards.forEach(card => card.value = null);
         });
     }
@@ -301,10 +303,11 @@ export class ResultsController {
 
         if (ticket.isSelected) {
             this.selectedTicket = ticket;
-            this.reset();
         } else {
             this.selectedTicket = null;
         }
+
+        this.reset();
 
         this.tickets
             .filter(ticket_ => ticket_ !== ticket)

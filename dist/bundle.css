@@ -26564,6 +26564,11 @@ md-tabs.stretch-height md-tab-content > div {
 .md-subheader {
   background-color: #ffffff;
 }
+.current-ticket-title {
+  padding-top: 10px;
+  font-size: 2.8rem;
+  text-align: center;
+}
 .card-pick-container {
   padding: 6px;
   text-align: center;

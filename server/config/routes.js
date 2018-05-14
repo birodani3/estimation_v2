@@ -9,7 +9,7 @@ module.exports = (app) => {
         res.send(JSON.stringify(data));
     };
 
-    app.post("/jira", (req, res) => {
+    app.post('/jira', (req, res) => {
         if (!req.body.username || !req.body.password || !req.body.projectId) {
             res.send();
             return;
@@ -28,7 +28,7 @@ module.exports = (app) => {
         });
     });
 
-    app.post("/jira/setStoryPoints", (req, res) => {
+    app.post('/jira/setStoryPoints', (req, res) => {
         if (!req.body.tickets) {
             res.send();
             return;
@@ -43,13 +43,13 @@ module.exports = (app) => {
 
             Q.all(promises)
                 .then(() => {
-                    sendResponse(res, "SUCCESS");
+                    sendResponse(res, 'SUCCESS');
                 })
                 .catch(() => {
-                    sendResponse(res, "ERROR");
+                    sendResponse(res, 'ERROR');
                 });
         } else {
-            sendResponse(res, "ERROR");
+            sendResponse(res, 'ERROR');
         }
     });
 }

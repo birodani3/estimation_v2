@@ -12,6 +12,7 @@ export class PlayController {
     public values: (string | number)[];
     private settings: any;
     private username: string;
+    private currentTicketTitle: string;
 
     constructor(
         private $rootScope: IEstimationRootScope,
@@ -78,6 +79,7 @@ export class PlayController {
 
                 if (!data.error) {
                     this.values = data.values;
+                    this.currentTicketTitle = data.currentTicketTitle;
                     this.$rootScope.channel = channel;
                     this.$rootScope.username = username;
                     this.$cookies.put('username', username);
@@ -159,6 +161,7 @@ export class PlayController {
         this.socket.emit('JOIN_CHANNEL', { channel, username }, (data) => {
             if (!data.error) {
                 this.isLoading = false;
+                this.currentTicketTitle = data.currentTicketTitle;
                 this.toast.success(`Successfully rejoined to channel  ${channel}`);
             } else {
                 this.toast.error(`Could not rejoin to channel ${channel}, retrying after 1sec`);
@@ -181,7 +184,8 @@ export class PlayController {
         this.$rootScope.passwordPrompt = false;
     }
 
-    onReset(): void {
+    onReset(data): void {
         this.isLoading = false;
+        this.currentTicketTitle = data.currentTicketTitle;
     }
 }

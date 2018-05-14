@@ -8,19 +8,20 @@ module.exports = (io) => {
     *     password?: string;
     *     settings: Object;
     *     host: socket;
+    *     currentTicketTitle: string;
     * }]
     */
     const channels = [];
 
     io.sockets.on('connection', (socket) => {
         // String
-        let channel = null;
+        let currentChannelName = null;
 
         socket.on('CREATE_CHANNEL', (payload, callback) => {
             const name = payload.name;
 
             if (!findChannelByName(name)) {
-                channel = name;
+                currentChannelName = name;
                 createChannel(socket, payload);
 
                 callback({});
@@ -34,12 +35,13 @@ module.exports = (io) => {
 
             if (channelToJoin) {
                 if (!channelToJoin.password || channelToJoin.password === data.password) {
-                    channel = channelToJoin.name;
+                    currentChannelName = channelToJoin.name;
                     joinChannel(socket, data);
     
                     callback({
                         //settings: channelToJoin.settings
-                        values: channelToJoin.values
+                        values: channelToJoin.values,
+                        currentTicketTitle: channelToJoin.currentTicketTitle
                     });
                 } else {
                     callback({ error: 'WRONG_PASSWORD' });
@@ -50,9 +52,9 @@ module.exports = (io) => {
         });
 
         socket.on('LEAVE_CHANNEL', (data, callback) => {
-            leaveChannel(socket, channel);
+            leaveChannel(socket, currentChannelName);
 
-            channel = null;
+            currentChannelName = null;
         });
 
         socket.on('VOTE', (data, callback) => {
@@ -61,7 +63,7 @@ module.exports = (io) => {
                 id: socket.id
             };
 
-            emitToChannelHost(channel, 'USER_VOTED', payload);
+            emitToChannelHost(currentChannelName, 'USER_VOTED', payload);
             callback && callback();
         });
 
@@ -72,23 +74,30 @@ module.exports = (io) => {
         });
 
         socket.on('DELETE_CHANNEL', () => {
-            deleteChannel(socket, channel);
+            deleteChannel(socket, currentChannelName);
         });
 
         socket.on('REMOVE_USER', (card, callback) => {
             emit.toSocket(card.id, 'REMOVE_USER');
+            
             callback && callback();
         });
 
         socket.on('RESET', (data, callback) => {
-            emit.toChannel(channel, 'RESET');
+            const channel = _.find(channels, (ch) => ch.name === currentChannelName);
+            channel.currentTicketTitle = data.currentTicketTitle;
+
+            emit.toChannel(currentChannelName, 'RESET', {
+                currentTicketTitle: data.currentTicketTitle
+            });
+
             callback && callback();
         });
 
         socket.on('disconnect', () => {
-            leaveChannel(socket, channel);
+            leaveChannel(socket, currentChannelName);
 
-            channel = null;
+            currentChannelName = null;
         });
     });
 

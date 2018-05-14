@@ -21,7 +21,7 @@ export class JoinController {
     }
 
     initSocket(): void {
-        this.socket.emit('GET_CHANNELS', null, this.onChannelListChanged.bind(this));
+        this.socket.emitWhenOnline('GET_CHANNELS', null, this.onChannelListChanged.bind(this));
         this.socket.on('CHANNEL_LIST', this.$scope, this.onChannelListChanged.bind(this));
     }
 
