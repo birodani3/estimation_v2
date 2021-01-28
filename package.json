@@ -19,7 +19,7 @@
     "body-parser": "^1.17.2",
     "bootstrap": "^4.1.2",
     "express": "^4.15.3",
-    "https-proxy-agent": "^2.2.0",
+    "https-proxy-agent": "^2.2.3",
     "jira-connector": "^2.6.0",
     "lodash": "^4.17.4",
     "q": "^1.5.0",
