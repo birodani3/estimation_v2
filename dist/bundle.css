@@ -27821,6 +27821,10 @@ hr {
   top: 30px;
   right: 150px;
 }
+.result-container {
+  display: flex;
+  flex-wrap: wrap;
+}
 .result-container.flip .card-container .card-container-inner {
   transform: rotateY(180deg);
 }

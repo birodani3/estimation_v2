@@ -172,7 +172,7 @@ export class ResultsController {
     }
 
     isResetFabVisible(): boolean {
-        return this.activeTab === Tab.EstimateTicket && this.cards.some(card => card.value);
+        return this.activeTab === Tab.EstimateTicket && this.cards.some(card => !!card.value);
     }
 
     isHiddenPointsFabVisible(): boolean {
