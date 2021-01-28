@@ -23,7 +23,7 @@
     "jira-connector": "^2.6.0",
     "lodash": "^4.17.4",
     "q": "^1.5.0",
-    "socket.io": "^2.2.0",
+    "socket.io": "^2.4.0",
     "ts-loader": "^2.3.0",
     "typescript": "^2.4.1"
   },
