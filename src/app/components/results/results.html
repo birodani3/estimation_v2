@@ -58,16 +58,15 @@
         <md-toolbar>
             <div class="md-toolbar-tools">
                 <h2 flex md-truncate>Estimation</h2>
-                <md-button class="md-icon-button" ng-click="main.leaveChannel()" aria-label="Leave channel">
+                <md-button title="Leave channel" class="md-icon-button" ng-click="main.leaveChannel()" aria-label="Leave channel">
                     <md-icon md-font-icon="fa-sign-out" class="fa fa-lg"></md-icon>
-                    <md-tooltip md-direction="bottom">Leave channel</md-tooltip>
                 </md-button>
             </div>
         </md-toolbar>
 
          <md-fab-speed-dial class="exportStoryPointsFab" ng-show="vm.isExportStoryPointsFabVisible()" md-direction="down" class="fab-speed-dial md-scale">
             <md-fab-trigger>
-                <md-button class="md-fab md-accent" aria-label="Export storypoints" ng-click="vm.exportStoryPoints()">
+                <md-button title="Export Story Points" class="md-fab md-accent" aria-label="Export storypoints" ng-click="vm.exportStoryPoints()">
                     <md-icon md-font-icon="fa-external-link" class="fa fa-lg"></md-icon>
                 </md-button>
             </md-fab-trigger>
@@ -77,7 +76,7 @@
             <!-- SHOW TICKET FAB -->
             <md-fab-speed-dial ng-show="vm.isShowTicketFabVisible()" md-direction="down" class="fab-speed-dial md-scale">
                 <md-fab-trigger>
-                    <md-button id="show-ticket-menu-button" class="md-fab md-accent" aria-label="Show ticket" ng-click="vm.openShowTicketDialog()">
+                    <md-button title="Export Story Points" id="show-ticket-menu-button" class="md-fab md-accent" aria-label="Show ticket" ng-click="vm.openShowTicketDialog()">
                         <md-icon md-font-icon="fa-search" class="fa"></md-icon>
                     </md-button>
                 </md-fab-trigger>
@@ -87,7 +86,7 @@
             <!-- RESET FAB -->
             <md-fab-speed-dial ng-show="vm.isResetFabVisible()" md-direction="down" class="fab-speed-dial md-scale">
                 <md-fab-trigger>
-                    <md-button class="md-fab md-accent" aria-label="Hidden storyPoints" ng-click="vm.reset()">
+                    <md-button title="Flip all cards" class="md-fab md-accent" aria-label="Flip all cards" ng-click="vm.reset()">
                         <md-icon md-font-icon="fa-reply-all" class="fa fa-lg"></md-icon>
                     </md-button>
                 </md-fab-trigger>
@@ -96,7 +95,7 @@
             <!-- REMOVE CARD FAB -->
             <md-fab-speed-dial ng-show="vm.isRemoveCardFabVisible()" md-direction="down" class="fab-speed-dial md-scale">
                 <md-fab-trigger>
-                    <md-button class="md-fab md-accent" aria-label="Remove selected card" ng-click="vm.removeSelectedCard()">
+                    <md-button title="Kick selected player" class="md-fab md-accent" aria-label="Remove selected card" ng-click="vm.removeSelectedCard()">
                         <md-icon md-font-icon="fa-ban" class="fa fa-lg"></md-icon>
                     </md-button>
                 </md-fab-trigger>
@@ -125,6 +124,7 @@
                 <md-content class="estimate-ticket-tab-content" layout-fill layout="column" layout-align="space-between stretch">
                     <div class="result-container" ng-class="{ 'flip': vm.isFlipped }" layout-padding style="background-color: #f2f2f2">
                         <div ng-repeat="card in vm.cards" class="card-container" ng-click="vm.toggleCardSelection(card)" ng-class="{ 'selected-card': card.isSelected }">
+                          <div class="card-container-inner">
                             <div class="front" ng-style="{ 'transition': settings.animation ? '0.6s' : '0.6s' }">
                                 <div class="card-value">
                                     <div ng-show="card.value == null">
@@ -140,6 +140,7 @@
                                 </div>
                                 <div class="user-name">{{card.name}}</div>
                             </div>
+                          </div>
                         </div>
                     </div>
                     <div class="current-ticket-footer">

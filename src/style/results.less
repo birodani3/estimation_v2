@@ -31,30 +31,37 @@
 }
 
 .result-container {
-	perspective: 1000px;
-	transform-style: preserve-3d;
-
 	&.flip .card-container {
-		.front {
-			transform: rotateY(180deg);
-		}
-
-		.back {
-			transform: rotateY(0deg);
-		}
+    .card-container-inner {
+      transform: rotateY(180deg);
+    }
 	}
 
 	.card-container {
 		height: 300px;
 		margin: 10px;
 		width: 200px;
-		float: left;
-		position: relative;
+    position: relative;
+    background-color: transparent;
+    perspective: 1000px;
+
+    &:focus {
+      outline: none;
+    }
 
 		&.selected-card .front,
 		&.selected-card .back {
 			box-shadow: 0 4px 8px 0 rgba(255, 0, 0, 1);
-		}
+    }
+    
+    .card-container-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+    }
 	}
 
 	.front,
@@ -62,13 +69,12 @@
 		width: 100%;
 		height: 100%;
 		border-radius: 5px;
-		box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    -webkit-backface-visibility: hidden;
 		backface-visibility: hidden;
-		transition: 0s;
-		transform-style: preserve-3d;
 		position: absolute;
 		top: 0;
-		left: 0;
+    left: 0;
 
 		&:hover {
 			box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
@@ -105,7 +111,7 @@
 	}
 
 	.back {
-		transform: rotateY(-180deg);
+    transform: rotateY(180deg);
 
 		span {
 			font-size: 72px;

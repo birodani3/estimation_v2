@@ -93,7 +93,7 @@ export class ResultsController {
     }
 
     onUserLeft(user: User): void {
-        _.remove(this.cards, this.findCardById(user.id));
+      _.pull(this.cards, this.findCardById(user.id));
     }
 
     onUserVoted(data): void {
@@ -172,7 +172,7 @@ export class ResultsController {
     }
 
     isResetFabVisible(): boolean {
-        return this.activeTab === Tab.EstimateTicket && !!this.cards.length;
+        return this.activeTab === Tab.EstimateTicket && this.cards.some(card => card.value);
     }
 
     isHiddenPointsFabVisible(): boolean {
